@@ -1,3 +1,4 @@
+/* abonnement.component.css */
 .subscription-container {
   display: flex;
   flex-direction: column;
@@ -6,6 +7,35 @@
   background-color: #f9fafb;
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   padding: 40px 20px;
+}
+.pricing-smalltitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #6c6d6f;
+  text-align: center;
+  margin-bottom: 40px;
+  position: relative; 
+  display: inline-block;
+  padding: 0 2px; 
+}
+
+.pricing-smalltitle::before,
+.pricing-smalltitle::after {
+  content: '';
+  position: absolute;
+  top: 50%; /* Center the lines vertically */
+  transform: translateY(-50%); /* Adjust for the height of the line */
+  width: 40px; /* Length of each line */
+  height: 2px; /* Thickness of the line */
+  background-color: #00CED1; /* Cyan color matching the image */
+}
+
+.pricing-smalltitle::before {
+  left: -60px; /* Position the left line */
+}
+
+.pricing-smalltitle::after {
+  right: -60px; /* Position the right line */
 }
 
 .pricing-title {
@@ -18,11 +48,11 @@
 
 .plans-container {
   display: flex;
-  justify-content: center;
+  justify-content: space-between; /* Distribute cards evenly across the page */
   gap: 24px;
-  max-width: 1200px;
-  width: 100%;
-  flex-wrap: nowrap;
+  width: 100%; /* Full width of the container */
+  max-width: 1400px; /* Optional: Increase max-width for larger screens */
+  flex-wrap: nowrap; /* Keep cards in a single row by default */
 }
 
 .plan-card {
@@ -30,7 +60,8 @@
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   padding: 24px;
-  width: 220px;
+  flex: 1; /* Each card takes equal width to fill the container */
+  min-width: 220px; /* Ensure cards don’t shrink too much */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   position: relative;
   transition: transform 0.3s;
@@ -76,6 +107,8 @@
   font-weight: 700;
   color: #1f2937;
   margin: 0 0 8px 0;
+  display: flex;
+  align-items: baseline;
 }
 
 .price span {
@@ -139,13 +172,16 @@ hr {
   margin: 20px 0;
 }
 
+/* Responsive Design */
 @media (max-width: 1000px) {
   .plans-container {
-    flex-wrap: wrap;
+    flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
+    justify-content: center; /* Center cards when wrapping */
   }
 
   .plan-card {
-    width: 300px;
+    flex: 1 1 300px; /* Allow cards to grow but with a minimum width */
+    max-width: 350px; /* Limit max width for wrapped cards */
   }
 }
 
@@ -155,7 +191,7 @@ hr {
     align-items: center;
     gap: 32px;
   }
-  
+
   .plan-card {
     width: 100%;
     max-width: 350px;
@@ -166,7 +202,7 @@ hr {
   }
 }
 
-/* Modal Styling */
+/* Modal Styling (unchanged) */
 .modal {
   position: fixed;
   top: 0;
@@ -351,8 +387,9 @@ hr {
   background: #e5e7eb;
   padding: 4px 8px;
   border-radius: 4px;
+}
 
-  /* Style for the renewal option toggle switch */
+/* Style for the renewal option toggle switch */
 .renewal-option {
   margin: 15px 0;
   text-align: center;
@@ -419,5 +456,4 @@ hr {
 
 .toggle-switch input:checked ~ .toggle-label.on {
   color: #007bff; /* Highlight the "On" label when on */
-}
 }

@@ -1,4 +1,5 @@
 <div class="subscription-container">
+  <h6 class="pricing-smalltitle"><span>Notre Grille tarifaire</span></h6>
   <h2 class="pricing-title">Choisir votre Plan d'abonnement</h2>
   <div class="plans-container">
     <div *ngFor="let plan of subscriptionPlans; let i = index" class="plan-card" [class.recommended]="plan.type === 'SEMESTRIEL'">
@@ -6,7 +7,7 @@
       <p class="description">{{ plan.description }}</p>
       <br/>
       <br/>
-      <div class="price">{{ plan.monthlyCost.toFixed(2) }} Dt<span></span></div>
+      <div class="price">{{ plan.monthlyCost.toFixed(2) }} Dt<span>/Mois</span></div>
       
       <div class="renewal-option">
         <label class="toggle-switch">
@@ -17,7 +18,7 @@
         </label>
       </div>
 
-      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.monthlyCost, plan.renouvellementAutomatique)">Démarrer</button>
+      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.monthlyCost, plan.renouvellementAutomatique)">Choisir Plan</button>
       <br/>
       <br/>
       <hr/>
