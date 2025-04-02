@@ -5,13 +5,17 @@ import { AddReclamationComponent } from './add-reclamation/add-reclamation.compo
 import { UserReclamationsComponent } from './user-reclamations/user-reclamations.component';
 import { AuthRoutingModule } from './Auth-routing.module';
 import { GestionUsersComponent } from './gestion-users/gestion-users.component';
+import { AbonnementComponent } from './abonnement/abonnement.component';
+import { PaymentConfirmationComponent } from './payment-confirmation/payment-confirmation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'profile', component: ProfileComponent },
-  { path: 'add-reclamation', component: AddReclamationComponent },   
+  { path: 'add-reclamation', component: AddReclamationComponent },
   { path: 'user-reclamations', component: UserReclamationsComponent },
-  { path: 'gestionuser', component: GestionUsersComponent}
+  { path: 'gestionuser', component: GestionUsersComponent },
+  { path: 'abonnement', component: AbonnementComponent },
+  { path: 'abonnement/payment-confirmation', component: PaymentConfirmationComponent },
 ];
 
 @NgModule({

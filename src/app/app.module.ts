@@ -25,6 +25,8 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { AuthRoutingModule } from './Auth-routing.module';
 import { GestionUsersComponent } from './gestion-users/gestion-users.component';
+import { AbonnementComponent } from './abonnement/abonnement.component';
+import { PaymentConfirmationComponent } from './payment-confirmation/payment-confirmation.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,7 +40,9 @@ import { GestionUsersComponent } from './gestion-users/gestion-users.component';
     UserReclamationsComponent,
     HeaderComponent,
     FooterComponent,
-    GestionUsersComponent
+    GestionUsersComponent,
+    AbonnementComponent,
+    PaymentConfirmationComponent
   ],
   imports: [
     BrowserModule,

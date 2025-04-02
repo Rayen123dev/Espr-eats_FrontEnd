@@ -1,0 +1,34 @@
+<div class="subscription-container">
+  <h2 class="pricing-title">Choisir votre Plan d'abonnement</h2>
+  <div class="plans-container">
+    <div *ngFor="let plan of subscriptionPlans; let i = index" class="plan-card" [class.recommended]="plan.type === 'SEMESTRIEL'">
+      <h3>{{ plan.type | titlecase }}</h3>
+      <p class="description">{{ plan.description }}</p>
+      <br/>
+      <br/>
+      <div class="price">{{ plan.monthlyCost.toFixed(2) }} Dt<span></span></div>
+      
+      <div class="renewal-option">
+        <label class="toggle-switch">
+          <span class="toggle-label off">Off</span>
+          <input type="checkbox" [(ngModel)]="plan.renouvellementAutomatique" [ngModelOptions]="{standalone: true}">
+          <span class="toggle-slider"></span>
+          <span class="toggle-label on">On</span>
+        </label>
+      </div>
+
+      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.monthlyCost, plan.renouvellementAutomatique)">Démarrer</button>
+      <br/>
+      <br/>
+      <hr/>
+      <div class="features">
+        <h4>{{ i === 0 ? (plan.type | titlecase) + ' includes' : 'Everything in ' + (subscriptionPlans[i - 1].type | titlecase) + ', plus:' }}</h4>
+        <ul>
+          <li *ngFor="let feature of plan.features">{{ feature }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<router-outlet></router-outlet>

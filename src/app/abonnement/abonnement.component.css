@@ -1,0 +1,423 @@
+.subscription-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  padding: 40px 20px;
+}
+
+.pricing-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #1f2937;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.plans-container {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  max-width: 1200px;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+.plan-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+  width: 220px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative;
+  transition: transform 0.3s;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+}
+
+.plan-card.recommended {
+  border: 2px solid #3b82f6;
+}
+
+.plan-card.recommended::before {
+  content: 'Recommended';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #3b82f6;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.plan-card h3 {
+  font-size: 24px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
+}
+
+.price {
+  font-size: 32px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.price span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #6b7280;
+  margin-left: 4px;
+  display: block;
+}
+
+.subscribe-button {
+  width: 100%;
+  padding: 12px;
+  background: #e5eefe;
+  color: #3b82f6;
+  border: 1px solid #3b82f6;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.subscribe-button:hover {
+  background: #b8d7ff;
+  color: #2563eb;
+}
+
+.features h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 16px 0 12px 0;
+}
+
+.features ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.features ul li {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.features ul li:before {
+  content: '✔';
+  color: #3b82f6;
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid #e5e7eb;
+  margin: 20px 0;
+}
+
+@media (max-width: 1000px) {
+  .plans-container {
+    flex-wrap: wrap;
+  }
+
+  .plan-card {
+    width: 300px;
+  }
+}
+
+@media (max-width: 600px) {
+  .plans-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+  
+  .plan-card {
+    width: 100%;
+    max-width: 350px;
+  }
+
+  .pricing-title {
+    font-size: 28px;
+  }
+}
+
+/* Modal Styling */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 8px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.modal-header {
+  background: #f9fafb;
+  padding: 16px 24px;
+  position: relative;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.modal-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 4px 0;
+}
+
+.modal-header p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 20px;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-body h4 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.modal-plan {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
+}
+
+.modal-body label {
+  font-size: 13px;
+  color: #1f2937;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.modal-body input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #1f2937;
+  margin-bottom: 16px;
+  box-sizing: border-box;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-with-icon input {
+  padding-right: 40px;
+}
+
+.input-with-icon .card-icon,
+.input-with-icon .calendar-icon,
+.input-with-icon .lock-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.input-group {
+  display: flex;
+  gap: 16px;
+}
+
+.input-half {
+  flex: 1;
+}
+
+.security-note {
+  display: flex;
+  align-items: center;
+  background: #f9fafb;
+  padding: 10px;
+  border-radius: 6px;
+  margin: 16px 0;
+}
+
+.security-note .shield-icon {
+  font-size: 16px;
+  color: #3b82f6;
+  margin-right: 8px;
+}
+
+.security-note p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.pay-button {
+  width: 100%;
+  padding: 12px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.pay-button:hover {
+  background: #2563eb;
+}
+
+.pay-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modal-footer p {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.modal-footer .payment-icons {
+  display: flex;
+  gap: 8px;
+}
+
+.modal-footer .payment-icons span {
+  font-size: 12px;
+  color: #6b7280;
+  background: #e5e7eb;
+  padding: 4px 8px;
+  border-radius: 4px;
+
+  /* Style for the renewal option toggle switch */
+.renewal-option {
+  margin: 15px 0;
+  text-align: center;
+}
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  display: none; /* Hide the default checkbox */
+}
+
+.toggle-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.toggle-label.off {
+  color: #999; /* Gray when off */
+}
+
+.toggle-label.on {
+  color: #007bff; /* Blue when on */
+}
+
+.toggle-slider {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  background: #e0e0e0; /* Gray background when off */
+  border-radius: 20px;
+  transition: background 0.3s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+/* When the toggle is checked (on) */
+.toggle-switch input:checked + .toggle-slider {
+  background: #007bff; /* Blue background when on */
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(20px); /* Slide the circle to the right */
+}
+
+.toggle-switch input:checked ~ .toggle-label.off {
+  color: #666; /* Dim the "Off" label when on */
+}
+
+.toggle-switch input:checked ~ .toggle-label.on {
+  color: #007bff; /* Highlight the "On" label when on */
+}
+}

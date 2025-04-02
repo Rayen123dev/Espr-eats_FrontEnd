@@ -1,0 +1,85 @@
+<!-- payment-confirmation.component.html -->
+<!-- Toast Notification -->
+<div class="toast" *ngIf="showToast">
+  <div class="toast-icon">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="20 6 9 17 4 12"></polyline>
+    </svg>
+  </div>
+  <div class="toast-content">
+    <p class="toast-title">Successful</p>
+    <p class="toast-message">Email sent with verification code</p>
+  </div>
+</div>
+<div class="confirmation-container" *ngIf="subscriptionDetails; else loading">
+  <div class="left-panel">
+    <div class="header">
+      <h2>Subscribe to {{ subscriptionDetails.typeAbonnement | titlecase }}</h2>
+      <h1>{{ subscriptionDetails.cout.toFixed(2) }} Dt</h1>
+    </div>
+    <div class="details">
+      <div class="detail-row">
+        <span>Plan</span>
+        <span>{{ subscriptionDetails.typeAbonnement | titlecase }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Status</span>
+        <span>{{ subscriptionDetails.abonnementStatus }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Automatic Renewal</span>
+        <span>{{ subscriptionDetails.renouvellementAutomatique ? 'Enabled' : 'Disabled' }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Start Date</span>
+        <span>{{ subscriptionDetails.dateDebut }}</span>
+      </div>
+      <div class="detail-row">
+        <span>End Date</span>
+        <span>{{ subscriptionDetails.dateFin }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Remaining Days</span>
+        <span>{{ subscriptionDetails.remainingDays }}</span>
+      </div>
+    
+      <div class="detail-row">
+        <span>Code Date Expiration</span>
+        <span>{{ subscriptionDetails.codeExpiration }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Blocked</span>
+        <span>{{ subscriptionDetails.isBlocked ? 'Yes' : 'No' }}</span>
+      </div>
+      <div class="detail-row">
+        <span>Confirmed</span>
+        <span>{{ subscriptionDetails.isConfirmed ? 'Yes' : 'No' }}</span>
+      </div> 
+    </div>
+  </div>
+  <div class="right-panel">
+    <h3>Enter Verification Code</h3>
+    <p>Please enter the verification code you received to activate your subscription.</p>
+    <form (ngSubmit)="submitCode()">
+      <label for="code">Verification Code</label>
+      <input
+        type="text"
+        id="code"
+        name="code"
+        placeholder="Enter your code"
+        [(ngModel)]="generatedCode"
+        required
+      />
+      <button type="submit" class="pay-button" [disabled]="submitting">
+        {{ submitting ? 'Submitting...' : 'Submit Code' }}
+      </button>
+    </form>
+    <div class="footer">
+      <p>Powered by Stripe | <a href="#">Terms</a> | <a href="#">Privacy</a></p>
+    </div>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p>Loading subscription details...</p>
+</ng-template>
