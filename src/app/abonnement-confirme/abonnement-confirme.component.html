@@ -8,7 +8,7 @@
       </svg>
     </div>
     <h1>Félicitation {{ userInfo?.name }}</h1>
-    <p>Nous somme ravi your order no. #{{ subscriptionDetails?.idAbonnement }} and an email has been sent to {{ userInfo?.email }}</p>
+    <p>Nous somme ravi your order no. <b>#{{ subscriptionDetails?.idAbonnement }}</b> and an email has been sent to <b>{{ userInfo?.email }}</b></p>
   </div>
 
   <!-- Details section -->
@@ -24,10 +24,12 @@
         </div>
         <span class="item-price"></span>
       </div>
+      <hr/>
       <div class="payment-method">
         <span>Payment method</span>
         <span>Stripe</span>
       </div>
+      <hr/>
       <div class="total">
         <span>TOTAL</span>
         <span>{{ formattedCout }} Dt</span>
@@ -36,7 +38,7 @@
 
     <!-- Information Section -->
     <div class="info-section">
-      <h2>Information</h2>
+      <h2>Informations</h2>
       <div class="info-item">
         <span>Email</span>
         <span>{{ userInfo?.email }}</span>

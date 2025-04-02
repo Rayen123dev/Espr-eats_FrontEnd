@@ -1,3 +1,4 @@
+// abonnement.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Abonnement, AbonnementService } from '../../abonnement.service';
@@ -20,6 +21,9 @@ export class AbonnementComponent implements OnInit {
     features: string[];
     renouvellementAutomatique: boolean;
   }[] = [];
+  showToast: boolean = false; // Control visibility of the toast
+  toastMessage: string = ''; // Store the message to display in the toast
+  toastTitle: string = 'Danger'; // Title of the toast
 
   constructor(
     private abonnementService: AbonnementService,
@@ -49,7 +53,7 @@ export class AbonnementComponent implements OnInit {
         this.subscriptionPlans = [
           {
             type: 'MENSUEL',
-            cost: data['MENSUEL'] || 0, // Fallback to 0 if undefined
+            cost: data['MENSUEL'] || 0,
             monthlyCost: data['MENSUEL'] || 0,
             discount: '',
             description: 'Un Plan pour un mois',
@@ -110,12 +114,14 @@ export class AbonnementComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching subscription plans:', error);
-        alert('Failed to load subscription plans. Please try again later.');
+        this.showToast = true;
+        this.toastTitle = 'Danger';
+        this.toastMessage =
+          'Failed to load subscription plans. Please try again later.';
       },
     });
   }
 
-  // abonnement.component.ts (excerpt)
   createSubscription(
     type: string,
     price: number,
@@ -123,7 +129,9 @@ export class AbonnementComponent implements OnInit {
   ): void {
     if (!this.userId) {
       console.error('No user ID available');
-      alert('You must be logged in to create a subscription.');
+      this.showToast = true;
+      this.toastTitle = 'Danger';
+      this.toastMessage = 'You must be logged in to create a subscription.';
       this.router.navigate(['/login']);
       return;
     }
@@ -138,16 +146,36 @@ export class AbonnementComponent implements OnInit {
       .subscribe({
         next: (response: Abonnement) => {
           console.log('Subscription created successfully:', response);
+          this.showToast = false; // Hide the toast on success
           this.router.navigate(['/abonnement/payment-confirmation'], {
             state: {
-              abonnement: response, // Pass the entire Abonnement object
+              abonnement: response,
             },
           });
         },
         error: (error) => {
           console.error('Error creating subscription:', error);
-          alert('Failed to create subscription. Please try again.');
+          // Check if the error is due to the user already having a subscription
+          if (
+            error.error &&
+            error.error.message === "L'utilisateur a déjà un abonnement."
+          ) {
+            this.showToast = true;
+            this.toastTitle = '';
+            this.toastMessage = 'Tu as déjà créé un abonnement.';
+          } else {
+            this.showToast = true;
+            this.toastTitle = '';
+            this.toastMessage = 'Tu as déjà créé un abonnement.';
+            setTimeout(() => this.closeToast(), 5000);
+          }
         },
       });
+  }
+
+  // Method to close the toast
+  closeToast(): void {
+    this.showToast = false;
+    this.toastMessage = '';
   }
 }

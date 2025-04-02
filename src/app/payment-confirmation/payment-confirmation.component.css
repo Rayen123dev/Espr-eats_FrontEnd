@@ -1,17 +1,19 @@
 /* payment-confirmation.component.css */
 .confirmation-container {
   display: flex;
-  min-height: 100vh;
+  min-height: 80vh;
+  font-family: Inter;
 }
 
 .left-panel {
   flex: 1;
-  background: #2e7d32; /* Green background */
-  color: white;
+  background: #f8f8ff; /* Green background */
+  color: rgb(39, 41, 41);
   padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  font-family: Inter;
 }
 
 .header {
@@ -19,15 +21,21 @@
 }
 
 .header h2 {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
   margin: 0 0 10px;
+  font-family: Inter;
+}
+
+.voir-plus:hover{
+  text-decoration: underline;
 }
 
 .header h1 {
-  font-size: 36px;
+  font-size: 30px;
   font-weight: 700;
   margin: 0 0 10px;
+  font-family: Inter;
 }
 
 .header p {
@@ -43,11 +51,11 @@
   display: flex;
   justify-content: space-between;
   font-size: 16px;
-  margin-bottom: 25px;
+  margin-bottom: 8px;
 }
 
 .detail-row.total {
-  font-weight: 600;
+  font-weight: 500;
   font-size: 18px;
 }
 
@@ -59,11 +67,13 @@
 
 .right-panel {
   flex: 1;
-  background: white;
+  background: rgb(255, 255, 255);
   padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  font-family: Inter;
+  box-shadow: -5px 0px 5px rgba(0, 0, 0, 0.1);
 }
 
 .right-panel h3 {
@@ -97,7 +107,7 @@
 }
 
 .pay-button {
-  background: #2e7d32; /* Green button */
+  background: #4b86a3; /* Green button */
   color: white;
   border: none;
   padding: 12px 24px;
@@ -110,7 +120,7 @@
 }
 
 .pay-button:hover {
-  background: #1b5e20; /* Darker green on hover */
+  background: #4151a9; /* Darker green on hover */
 }
 
 .footer {
@@ -132,6 +142,35 @@
 /* payment-confirmation.component.css */
 
 /* Existing styles for .confirmation-container, .left-panel, .right-panel, etc. remain unchanged */
+
+.btn-upgrade {
+  color: white;
+  background-color: rgb(44, 79, 162);
+  border-radius: 5px;
+  margin : 0px 10px;
+  padding: 10px;
+  border : 0px;
+  font-family: Inter;
+  font-size: 13px;
+}
+
+.btn-upgrade:hover{
+  background-color: rgb(51, 44, 156);
+}
+
+.btn-annuler:hover{
+  background-color: rgb(238, 237, 237);
+}
+.btn-annuler {
+  color: rgb(0, 0, 0);
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+  margin : 10px;
+  padding: 10px;
+  border : 0.5px solid rgb(178, 178, 178);
+  font-family: Inter;
+  font-size: 13px;
+}
 
 .toast {
   position: fixed;

@@ -1,6 +1,20 @@
+<!-- abonnement.component.html -->
 <div class="subscription-container">
   <h6 class="pricing-smalltitle"><span>Notre Grille tarifaire</span></h6>
   <h2 class="pricing-title">Choisir votre Plan d'abonnement</h2>
+
+  <!-- Toast Notification -->
+  <div *ngIf="showToast" class="custom-toast" role="alert">
+    <div class="toast-header">
+      <span class="toast-icon">!</span>
+      <strong class="toast-title">{{ toastTitle }}</strong>
+      <button type="button" class="toast-close" (click)="closeToast()" aria-label="Close">×</button>
+    </div>
+    <div class="toast-body">
+      {{ toastMessage }}
+    </div>
+  </div>
+
   <div class="plans-container">
     <div *ngFor="let plan of subscriptionPlans; let i = index" class="plan-card" [class.recommended]="plan.type === 'SEMESTRIEL'">
       <h3>{{ plan.type | titlecase }}</h3>

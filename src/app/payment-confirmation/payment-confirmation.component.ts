@@ -17,6 +17,8 @@ export class PaymentConfirmationComponent implements OnInit {
   generatedCode: string = '';
   submitting: boolean = false;
   showToast: boolean = false;
+  isDeleting: boolean = false; // To show a loading state during deletion
+  errorMessage: string | null = null; // To display error messages
 
   constructor(
     private abonnementService: AbonnementService,
@@ -33,7 +35,6 @@ export class PaymentConfirmationComponent implements OnInit {
       return;
     }
 
-    // Check if we have an Abonnement ID passed via the router state or history
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       const state = navigation.extras.state as { abonnement: Abonnement };
@@ -51,7 +52,6 @@ export class PaymentConfirmationComponent implements OnInit {
       );
       this.fetchAbonnementDetails();
     } else {
-      // Show toast when component loads
       this.showToast = true;
       setTimeout(() => {
         this.showToast = false;
@@ -66,7 +66,6 @@ export class PaymentConfirmationComponent implements OnInit {
       return;
     }
 
-    // Assuming `idAbonnement` is passed or stored somewhere; replace with actual logic
     const idAbonnement = 1; // Replace with actual logic to get abonnement ID
     this.abonnementService
       .getAbonnementById(this.currentUserId, idAbonnement)
@@ -111,7 +110,6 @@ export class PaymentConfirmationComponent implements OnInit {
         next: (response) => {
           console.log('Subscription confirmed successfully:', response);
 
-          // Try to get user info from subscriptionDetails
           let userInfo: UserInfo;
           if (this.subscriptionDetails?.user) {
             userInfo = mapUserToUserInfo(this.subscriptionDetails.user);
@@ -120,14 +118,11 @@ export class PaymentConfirmationComponent implements OnInit {
             console.warn(
               'No user associated with the abonnement, fetching from LoginService'
             );
-            // Fetch user info from LoginService
-            // Since we've already checked currentUserId above, we can safely assert it's a number
             this.loginService
               .getUserById(this.currentUserId!)
               .pipe(
                 catchError((error) => {
                   console.error('Error fetching user info:', error);
-                  // Fallback user info if the API call fails
                   return of({
                     id: this.currentUserId!,
                     nom: 'Unknown User',
@@ -151,6 +146,46 @@ export class PaymentConfirmationComponent implements OnInit {
         },
         complete: () => {
           this.submitting = false;
+        },
+      });
+  }
+
+  // Method to delete the abonnement
+  deleteSubscription(): void {
+    if (!this.currentUserId || !this.subscriptionDetails) {
+      this.errorMessage = 'User ID or subscription details are missing.';
+      return;
+    }
+
+    // Confirm with the user before deleting (optional, can be moved to the template)
+    if (!confirm('Are you sure you want to delete this subscription?')) {
+      return;
+    }
+
+    this.isDeleting = true;
+    this.errorMessage = null;
+
+    this.abonnementService
+      .deleteAbonnement(
+        this.currentUserId,
+        this.subscriptionDetails.idAbonnement
+      )
+      .subscribe({
+        next: () => {
+          console.log('Subscription deleted successfully');
+          // Redirect to the abonnement page after deletion
+          this.router.navigate(['/abonnement'], {
+            state: { message: 'Subscription deleted successfully' },
+          });
+        },
+        error: (error) => {
+          console.error('Error deleting subscription:', error);
+          this.errorMessage =
+            'Failed to delete subscription. Please try again.';
+          this.isDeleting = false;
+        },
+        complete: () => {
+          this.isDeleting = false;
         },
       });
   }

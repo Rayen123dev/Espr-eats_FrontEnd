@@ -6,7 +6,7 @@ import { User } from './app/login.service';
 
 // Define the Abonnement interface to match the backend entity
 export interface Abonnement {
-  idAbonnement?: number;
+  idAbonnement: number;
   typeAbonnement: string;
   abonnementStatus: string;
   renouvellementAutomatique: boolean;
@@ -54,5 +54,9 @@ export class AbonnementService {
     return this.http.get<Abonnement>(
       `${this.apiUrl}/get/${userId}/${idAbonnement}`
     );
+  }
+
+  deleteAbonnement(userId: number, idAbonnement: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete/${userId}/${idAbonnement}`);
   }
 }
