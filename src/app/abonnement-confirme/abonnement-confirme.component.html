@@ -1,0 +1,50 @@
+<!-- abonnement-confirme.component.html -->
+<div class="confirmation-page">
+  <!-- Header with checkmark and message -->
+  <div class="confirmation-header">
+    <div class="checkmark-icon">
+      <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+    </div>
+    <h1>Félicitation {{ userInfo?.name }}</h1>
+    <p>Nous somme ravi your order no. #{{ subscriptionDetails?.idAbonnement }} and an email has been sent to {{ userInfo?.email }}</p>
+  </div>
+
+  <!-- Details section -->
+  <div class="confirmation-details">
+    <!-- Items Section -->
+    <div class="items-section">
+      <h2>Items</h2>
+      <div class="item">
+       <!-- <img src="assets/subscription-icon.png" alt="Subscription Icon" class="item-icon" /> -->
+        <div class="item-details">
+          <span class="item-name">{{ subscriptionDetails?.typeAbonnement | titlecase }}</span>
+          <p class="item-description">Vous avez choisis notre Plan d'abonnement {{ subscriptionDetails?.typeAbonnement | titlecase }} tier helps your team get started with our best-in-class tools.</p>
+        </div>
+        <span class="item-price"></span>
+      </div>
+      <div class="payment-method">
+        <span>Payment method</span>
+        <span>Stripe</span>
+      </div>
+      <div class="total">
+        <span>TOTAL</span>
+        <span>{{ formattedCout }} Dt</span>
+      </div>
+    </div>
+
+    <!-- Information Section -->
+    <div class="info-section">
+      <h2>Information</h2>
+      <div class="info-item">
+        <span>Email</span>
+        <span>{{ userInfo?.email }}</span>
+      </div>
+      <div class="info-item">
+        <span>Billing address</span>
+        <span>{{ userInfo?.billingAddress }}</span>
+      </div>
+    </div>
+  </div>
+</div>

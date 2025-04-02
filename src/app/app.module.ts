@@ -27,6 +27,7 @@ import { AuthRoutingModule } from './Auth-routing.module';
 import { GestionUsersComponent } from './gestion-users/gestion-users.component';
 import { AbonnementComponent } from './abonnement/abonnement.component';
 import { PaymentConfirmationComponent } from './payment-confirmation/payment-confirmation.component';
+import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-confirme.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -42,7 +43,8 @@ import { PaymentConfirmationComponent } from './payment-confirmation/payment-con
     FooterComponent,
     GestionUsersComponent,
     AbonnementComponent,
-    PaymentConfirmationComponent
+    PaymentConfirmationComponent,
+    AbonnementConfirmeComponent
   ],
   imports: [
     BrowserModule,

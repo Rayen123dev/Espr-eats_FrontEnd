@@ -1,0 +1,151 @@
+/* abonnement-confirme.component.css */
+.confirmation-page {
+  max-width: 800px;
+  margin: 40px auto;
+  background: #f5f7fa;
+  padding: 40px;
+  border-radius: 12px;
+  font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+}
+
+.confirmation-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.checkmark-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: #e6f4ea;
+  border-radius: 50%;
+  margin-bottom: 16px;
+}
+
+.checkmark-icon svg {
+  stroke: #28a745;
+}
+
+.confirmation-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.confirmation-header p {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0;
+}
+
+.confirmation-details {
+  display: flex;
+  gap: 24px;
+}
+
+.items-section,
+.info-section {
+  flex: 1;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.items-section h2,
+.info-section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin: 0 0 16px 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.item-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.item-description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 4px 0 0 0;
+}
+
+.item-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.subtotal,
+.payment-method,
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 12px;
+}
+
+.total {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 16px;
+}
+
+.info-item {
+  margin-bottom: 16px;
+}
+
+.info-item span:first-child {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.info-item span:last-child {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+@media (max-width: 600px) {
+  .confirmation-details {
+    flex-direction: column;
+  }
+
+  .confirmation-page {
+    padding: 20px;
+    margin: 20px;
+  }
+
+  .confirmation-header h1 {
+    font-size: 24px;
+  }
+
+  .confirmation-header p {
+    font-size: 12px;
+  }
+}

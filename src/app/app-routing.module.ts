@@ -7,6 +7,7 @@ import { AuthRoutingModule } from './Auth-routing.module';
 import { GestionUsersComponent } from './gestion-users/gestion-users.component';
 import { AbonnementComponent } from './abonnement/abonnement.component';
 import { PaymentConfirmationComponent } from './payment-confirmation/payment-confirmation.component';
+import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-confirme.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -15,7 +16,11 @@ const routes: Routes = [
   { path: 'user-reclamations', component: UserReclamationsComponent },
   { path: 'gestionuser', component: GestionUsersComponent },
   { path: 'abonnement', component: AbonnementComponent },
-  { path: 'abonnement/payment-confirmation', component: PaymentConfirmationComponent },
+  {
+    path: 'abonnement/payment-confirmation',
+    component: PaymentConfirmationComponent,
+  },
+  { path: 'abonnement-confirme', component: AbonnementConfirmeComponent },
 ];
 
 @NgModule({

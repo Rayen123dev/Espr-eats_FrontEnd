@@ -27,7 +27,7 @@
   transform: translateY(-50%); /* Adjust for the height of the line */
   width: 40px; /* Length of each line */
   height: 2px; /* Thickness of the line */
-  background-color: #00CED1; /* Cyan color matching the image */
+  background-color: #2c5beb; /* Cyan color matching the image */
 }
 
 .pricing-smalltitle::before {

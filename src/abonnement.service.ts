@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { User } from './app/login.service';
 
 // Define the Abonnement interface to match the backend entity
 export interface Abonnement {
@@ -17,6 +18,7 @@ export interface Abonnement {
   codeExpiration: string; // LocalDateTime will be serialized as a string (e.g., "2025-04-02T10:00:00")
   isBlocked: boolean;
   isConfirmed: boolean;
+  user?: User;
 }
 
 @Injectable({
