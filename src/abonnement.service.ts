@@ -59,4 +59,14 @@ export class AbonnementService {
   deleteAbonnement(userId: number, idAbonnement: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/delete/${userId}/${idAbonnement}`);
   }
+
+  updateAbonnement(
+    userId: number,
+    abonnement: Abonnement
+  ): Observable<Abonnement> {
+    return this.http.put<Abonnement>(
+      `${this.apiUrl}/update/${userId}`,
+      abonnement
+    );
+  }
 }
