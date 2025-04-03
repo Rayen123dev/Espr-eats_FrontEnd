@@ -39,6 +39,7 @@ export class LoginService {
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/users`);
   }
+  
 
   getRole(): string | null {
     const token = localStorage.getItem('token');

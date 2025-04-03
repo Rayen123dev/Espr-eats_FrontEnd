@@ -4,6 +4,7 @@
       <h1 class="dashboard-title">Gestion des Menus</h1>
       <div class="dashboard-actions">
         <button 
+          *ngIf="userRole === 'Staff'" 
           class="btn btn-generate" 
           (click)="generateMenus()"
           [disabled]="isLoading || !canGenerateMenus()">
@@ -12,6 +13,7 @@
         </button>
         
         <button 
+          *ngIf="userRole === 'Staff'" 
           class="btn btn-regenerate" 
           (click)="regenerateMenus()"
           [disabled]="isLoading || !canGenerateMenus()">

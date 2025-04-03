@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { MenuService } from '../../services/menu.service';
 import { Menu } from '../../../core/models/menu.model';
+import { LoginService } from 'src/app/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-menu',
@@ -15,17 +17,27 @@ export class MenuComponent implements OnInit {
   selectedCategory: string = '';
   selectedDate: string = ''; // Pas de date par défaut
   currentPage: number = 1;
-  pageSize: number = 5;
+  pageSize: number = 3;
   totalPages: number = 1;
+  
 
-  constructor(private menuService: MenuService) {}
+  constructor(private menuService: MenuService,private loginService: LoginService, private router: Router) {}
 
   ngOnInit(): void {
+    // Vérifier si l'utilisateur a le rôle 'User'
+    const userRole = this.loginService.getRole();
+    if (userRole !== 'User') {
+      console.log('Accès refusé : rôle requis "User", rôle actuel :', userRole);
+      this.router.navigate(['/login']);
+      return; // Arrêter l'exécution si le rôle n'est pas correct
+    }
+  
+    // Si le rôle est correct, charger les menus
     this.menuService.getValidatedMenus().subscribe(
       data => {
         this.menus = data;
-        this.filteredMenus = data; // Afficher tous les menus au départ
-        this.updatePagination(); // Pas de filtre initial par date
+        this.filteredMenus = data;
+        this.updatePagination();
       }, 
       error => {
         console.error('Erreur lors de la récupération des menus:', error);

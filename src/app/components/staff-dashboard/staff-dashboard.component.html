@@ -2,12 +2,13 @@
     <!-- Barre de navigation -->
     <nav class="section-nav mb-5" >
       <ul>
-        <li><a (click)="scrollToSection('stats')">Statistiques</a></li>
-        <li><a (click)="scrollToSection('charts')">Graphiques</a></li>
-        <li><a (click)="scrollToSection('plats')">Gestion des Plats</a></li>
-        <li><a (click)="scrollToSection('regimes')">Gestion des Régimes</a></li>
-        <li><a (click)="scrollToSection('menus')" >Gestion des Menus</a></li>
-      </ul>
+      <li><a (click)="scrollToSection('stats')">Statistiques</a></li>
+      <li><a (click)="scrollToSection('charts')">Graphiques</a></li>
+      <!-- Limiter les sections de gestion au rôle 'staff' -->
+      <li *ngIf="userRole === 'Staff'"><a (click)="scrollToSection('plats')">Gestion des Plats</a></li>
+      <li *ngIf="userRole === 'Staff'"><a (click)="scrollToSection('regimes')">Gestion des Régimes</a></li>
+      <li><a (click)="scrollToSection('menus')">Gestion des Menus</a></li>
+    </ul>
     </nav>
   
     <!-- Titre et sous-titre -->
@@ -32,7 +33,7 @@
           <p>{{ totalMenus }} <span>{{ totalValidatedMenus }} menus validés</span></p>
         </div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card" *ngIf="userRole === 'Staff'">
         <div class="stat-icon">👤</div>
         <div class="stat-info">
           <h3>Régimes Alimentaires</h3>
@@ -75,7 +76,7 @@
     </div>
   
     <!-- Gestion des plats -->
-    <div class="management-section" id="plats">
+    <div class="management-section" id="plats" *ngIf="userRole === 'Staff'">
       <h2>Gestion des Plats</h2>
       <button class="btn-add" (click)="toggleAddPlatForm()">Ajouter un Plat</button>
   
@@ -154,10 +155,9 @@
       </div>
     </div>
   
-    <!-- Gestion des régimes -->
-    <!-- Gestion des régimes -->
+   
 <!-- Gestion des régimes -->
-<div class="management-section" id="regimes">
+<div class="management-section" id="regimes" *ngIf="userRole === 'Staff'">
     <h2>Gestion des Régimes Alimentaires</h2>
     <button class="btn-add" (click)="toggleAddRegimeForm()">Ajouter un Régime</button>
   
