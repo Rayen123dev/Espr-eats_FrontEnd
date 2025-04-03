@@ -1,3 +1,6 @@
+<!-- Add this link in your HTML file to include Material Icons -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 <!-- abonnement-confirme.component.html -->
 <div class="confirmation-page" *ngIf="subscriptionDetails && userInfo">
 
@@ -54,7 +57,24 @@
       </div>
     </div>
   </div>
+  <div style="display: flex; justify-content: center; gap: 20px;">
+  <div class="download-button">
+  <button (click)="downloadPDF()">
+    <span class="material-icons">picture_as_pdf</span>
+    Télécharger PDF
+  </button>
 </div>
+<div class="menu-button">
+  <button>
+    <span class="material-icons">restaurant</span>
+    Exploiter Menu
+  </button>
+</div>
+</div>
+
+</div>
+
+
 
 <!-- Fallback message if data is missing -->
 <div *ngIf="!subscriptionDetails || !userInfo" class="error-message">

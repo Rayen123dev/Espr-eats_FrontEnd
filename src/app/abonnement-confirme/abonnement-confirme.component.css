@@ -13,6 +13,57 @@
   margin-bottom: 40px;
 }
 
+.download-button {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.download-button button {
+  display: flex;
+  background-color: #2850a7;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.download-button button:hover {
+  background-color: #19336b;
+}
+.download-button button .material-icons {
+  margin-right: 8px; /* Space between the icon and text */
+}
+
+.menu-button {
+  margin-top: 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+
+.menu-button button {
+  display: flex;
+  background-color: #d43343;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.menu-button button:hover {
+  background-color: #812024;
+}
+.menu-button button .material-icons {
+  margin-right: 8px; /* Space between the icon and text */
+}
+
+
 .checkmark-icon {
   display: inline-flex;
   align-items: center;
@@ -148,4 +199,5 @@
   .confirmation-header p {
     font-size: 12px;
   }
+
 }

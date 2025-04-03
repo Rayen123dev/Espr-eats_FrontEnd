@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Abonnement } from '../../abonnement.service';
 import { UserInfo } from '../user-info.interface';
+import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-abonnement-confirme',
@@ -50,5 +51,31 @@ export class AbonnementConfirmeComponent implements OnInit {
     if (this.subscriptionDetails.cout !== undefined) {
       this.formattedCout = this.subscriptionDetails.cout.toFixed(2);
     }
+  }
+  downloadPDF(): void {
+    const doc = new jsPDF();
+
+    const title = `Abonnement Confirmation - ${this.userInfo?.name}`;
+    const body = `
+      Félicitation ${this.userInfo?.name},
+      Nous sommes ravis que vous ayez souscrit au plan d'abonnement ${this.subscriptionDetails?.typeAbonnement}.
+      Votre commande numéro: ${this.subscriptionDetails?.idAbonnement}
+      Un email a été envoyé à: ${this.userInfo?.email}.
+      
+      Items:
+      - ${this.subscriptionDetails?.typeAbonnement} : ${this.subscriptionDetails?.cout} Dt
+
+      Informations:
+      - Email: ${this.userInfo?.email}
+      - Billing Address: ${this.userInfo?.billingAddress}
+
+      Total: ${this.formattedCout} Dt
+    `;
+
+    doc.setFontSize(12);
+    doc.text(title, 20, 20);
+    doc.text(body, 20, 30);
+
+    doc.save('abonnement_confirmation.pdf');
   }
 }
