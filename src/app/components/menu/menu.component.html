@@ -1,0 +1,129 @@
+<div class="container">
+  <!-- Conteneur pour le sélecteur de date et la barre de filtrage -->
+  <div class="filter-container mb-4">
+    <!-- Sélecteur de date -->
+    <div class="date-picker">
+      <label for="dateSelect">Date :</label>
+      <input 
+        type="date" 
+        id="dateSelect" 
+        class="form-control date-input" 
+        [(ngModel)]="selectedDate"
+        (change)="filterByDate()"
+      >
+    </div>
+
+    <!-- Barre de filtrage par catégorie -->
+    <div class="category-filter">
+      <button 
+        class="btn-standard" 
+        [class.active]="selectedCategory === ''"
+        (click)="filterByCategory('')"
+      >
+        Toutes
+      </button>
+      <button 
+        *ngFor="let category of categories" 
+        class="btn-standard"
+        [class.active]="selectedCategory === category"
+        (click)="filterByCategory(category)"
+      >
+        {{ category }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Liste des menus -->
+  <div *ngIf="paginatedMenus.length > 0; else noMenus">
+    <div class="row">
+      <div class="col-12 mb-4" *ngFor="let menu of paginatedMenus">
+        <div class="card menu-card">
+          <div class="card-header">
+            <h5 class="card-title">
+              {{ menu.date | date:'mediumDate' }}
+            </h5>
+            <span class="badge">{{ menu.regime }}</span>
+          </div>
+          <div class="card-body">
+            <div class="menu-layout">
+              <div class="menu-section">
+                <h6 class="section-title">Entrée</h6>
+                <div class="plats-horizontal">
+                  <div class="plat-card" *ngFor="let plat of getPlatsByType(menu, 'entree')">
+                    <div class="card">
+                      <img class="card-img-top" [src]="plat.imagePath" alt="{{ plat.nom }}">
+                      <div class="card-body">
+                        <h6 class="card-title">{{ plat.nom }}</h6>
+                        <p class="card-text">{{ plat.description }} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="menu-section">
+                <h6 class="section-title">Plat Principal</h6>
+                <div class="plats-horizontal">
+                  <div class="plat-card" *ngFor="let plat of getPlatsByType(menu, 'plat_principal')">
+                    <div class="card">
+                      <img class="card-img-top" [src]="plat.imagePath" alt="{{ plat.nom }}">
+                      <div class="card-body">
+                        <h6 class="card-title">{{ plat.nom }}</h6>
+                        <p class="card-text">{{ plat.description }} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="menu-section">
+                <h6 class="section-title">Dessert</h6>
+                <div class="plats-horizontal">
+                  <div class="plat-card" *ngFor="let plat of getPlatsByType(menu, 'dessert')">
+                    <div class="card">
+                      <img class="card-img-top" [src]="plat.imagePath" alt="{{ plat.nom }}">
+                      <div class="card-body">
+                        <h6 class="card-title">{{ plat.nom }}</h6>
+                        <p class="card-text">{{ plat.description }} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="card-footer">
+            <small class="text-muted">Total Calories: {{ menu.totalCalories }} kcal</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination">
+      <button 
+        class="btn-paginate" 
+        [disabled]="currentPage === 1" 
+        (click)="previousPage()"
+      >
+        Précédent
+      </button>
+      <span class="page-info">
+        Page {{ currentPage }} sur {{ totalPages }}
+      </span>
+      <button 
+        class="btn-paginate" 
+        [disabled]="currentPage === totalPages" 
+        (click)="nextPage()"
+      >
+        Suivant
+      </button>
+    </div>
+  </div>
+
+  <ng-template #noMenus>
+    <div class="no-menus">
+      <p>Aucun menu disponible pour cette date ou catégorie.</p>
+    </div>
+  </ng-template>
+</div>
