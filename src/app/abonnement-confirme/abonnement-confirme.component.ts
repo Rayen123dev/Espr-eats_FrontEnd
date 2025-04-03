@@ -25,13 +25,21 @@ export class AbonnementConfirmeComponent implements OnInit {
       };
       this.subscriptionDetails = state.abonnement;
       this.userInfo = state.userInfo;
+      console.log(
+        'Navigation state (during navigation):',
+        navigation.extras.state
+      );
     } else {
       const state = window.history.state;
       if (state && state.abonnement && state.userInfo) {
         this.subscriptionDetails = state.abonnement;
         this.userInfo = state.userInfo;
       }
+      console.log('Navigation state (from history):', state);
     }
+
+    console.log('Subscription Details:', this.subscriptionDetails);
+    console.log('User Info:', this.userInfo);
 
     if (!this.subscriptionDetails || !this.userInfo) {
       console.error('No subscription or user info found');

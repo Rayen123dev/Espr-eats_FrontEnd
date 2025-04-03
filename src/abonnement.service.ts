@@ -40,8 +40,11 @@ export class AbonnementService {
     );
   }
 
-  confirmAbonnement(userId: number, confirmationCode: string): Observable<any> {
-    return this.http.put(
+  confirmAbonnement(
+    userId: number,
+    confirmationCode: string
+  ): Observable<Abonnement> {
+    return this.http.put<Abonnement>(
       `${this.apiUrl}/confirm/${userId}/${confirmationCode}`,
       null
     );

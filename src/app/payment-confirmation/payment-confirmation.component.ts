@@ -19,8 +19,8 @@ export class PaymentConfirmationComponent implements OnInit {
   showToast: boolean = false;
   toastMessage: string = '';
   toastType: 'success' | 'error' = 'success';
-  isDeleting: boolean = false; // To show a loading state during deletion
-  errorMessage: string | null = null; // To display error messages
+  isDeleting: boolean = false;
+  errorMessage: string | null = null;
 
   constructor(
     private abonnementService: AbonnementService,
@@ -105,10 +105,46 @@ export class PaymentConfirmationComponent implements OnInit {
     this.abonnementService
       .confirmAbonnement(this.currentUserId, this.generatedCode)
       .subscribe({
-        next: (response) => {
+        next: (response: Abonnement) => {
           console.log('Subscription confirmed successfully:', response);
+          this.subscriptionDetails = response; // Update subscriptionDetails with the response
+
+          // Create userInfo by fetching the user
+          let userInfo: UserInfo;
+          if (this.subscriptionDetails?.user) {
+            console.log(
+              'User from subscriptionDetails:',
+              this.subscriptionDetails.user
+            );
+            userInfo = mapUserToUserInfo(this.subscriptionDetails.user);
+            console.log('Mapped userInfo from subscriptionDetails:', userInfo);
+            this.navigateToConfirmation(userInfo);
+          } else {
+            console.warn(
+              'No user associated with the abonnement, fetching from LoginService'
+            );
+            this.loginService
+              .getUserById(this.currentUserId!)
+              .pipe(
+                catchError((error) => {
+                  console.error('Error fetching user info:', error);
+                  // Provide a default user if fetching fails
+                  return of({
+                    id: this.currentUserId!,
+                    nom: 'Utilisateur Inconnu',
+                    email: 'N/A',
+                  } as User);
+                })
+              )
+              .subscribe((user: User) => {
+                console.log('User from LoginService:', user);
+                userInfo = mapUserToUserInfo(user);
+                console.log('Mapped userInfo from LoginService:', userInfo);
+                this.navigateToConfirmation(userInfo);
+              });
+          }
+
           this.showSuccessToast('Subscription confirmed successfully');
-          this.navigateToConfirmation(response);
         },
         error: () => {
           this.submitting = false;
@@ -159,12 +195,18 @@ export class PaymentConfirmationComponent implements OnInit {
   }
 
   private navigateToConfirmation(userInfo: UserInfo): void {
+    const navigationState = {
+      abonnement: this.subscriptionDetails,
+      userInfo: userInfo,
+    };
+    console.log(
+      'Navigating to /abonnement-confirme with state:',
+      navigationState
+    );
+
     this.router
       .navigate(['/abonnement-confirme'], {
-        state: {
-          abonnement: this.subscriptionDetails,
-          userInfo: userInfo,
-        },
+        state: navigationState,
       })
       .catch((error) => {
         console.error('Navigation error:', error);
