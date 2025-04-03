@@ -172,12 +172,13 @@
   font-size: 13px;
 }
 
+/* General Toast Styles */
 .toast {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #57955a; /* Dark green, matching the image */
+  background-color: #57955a; /* Default success green background */
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
@@ -186,9 +187,20 @@
   display: flex;
   align-items: center;
   animation: fadeInOut 5s ease-in-out forwards;
-  min-width: 300px; /* Ensure it’s wide enough */
+  min-width: 300px; 
 }
 
+/* Success Toast Specific Styling */
+.toast.success {
+  background-color: #57955a; /* Dark green, success color */
+}
+
+/* Error Toast Specific Styling */
+.toast.error {
+  background-color: #d9534f; /* Red background for error */
+}
+
+/* Toast Icon Styles */
 .toast-icon {
   margin-right: 12px;
 }
@@ -198,6 +210,7 @@
   height: 24px;
 }
 
+/* Toast Content Styles */
 .toast-content {
   display: flex;
   flex-direction: column;
@@ -212,6 +225,26 @@
 .toast-message {
   font-size: 14px;
   margin: 2px 0 0 0;
+}
+
+/* Animation for the toast */
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
 }
 
 @keyframes fadeInOut {

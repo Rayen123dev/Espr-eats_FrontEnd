@@ -17,6 +17,8 @@ export class PaymentConfirmationComponent implements OnInit {
   generatedCode: string = '';
   submitting: boolean = false;
   showToast: boolean = false;
+  toastMessage: string = '';
+  toastType: 'success' | 'error' = 'success';
   isDeleting: boolean = false; // To show a loading state during deletion
   errorMessage: string | null = null; // To display error messages
 
@@ -52,10 +54,7 @@ export class PaymentConfirmationComponent implements OnInit {
       );
       this.fetchAbonnementDetails();
     } else {
-      this.showToast = true;
-      setTimeout(() => {
-        this.showToast = false;
-      }, 5000);
+      this.showSuccessToast('Email sent with verification code');
     }
   }
 
@@ -72,10 +71,7 @@ export class PaymentConfirmationComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.subscriptionDetails = response;
-          this.showToast = true;
-          setTimeout(() => {
-            this.showToast = false;
-          }, 5000);
+          this.showSuccessToast('Subscription details loaded successfully');
         },
         error: (err) => {
           console.error('Error fetching abonnement:', err);
@@ -87,18 +83,20 @@ export class PaymentConfirmationComponent implements OnInit {
 
   submitCode(): void {
     if (!this.generatedCode.trim()) {
-      alert('Please enter a valid code.');
+      this.showErrorToast('Please enter a valid code.');
       return;
     }
 
     if (!this.currentUserId) {
-      alert('User ID is missing. Please log in again.');
+      this.showErrorToast('User ID is missing. Please log in again.');
       this.router.navigate(['/login']);
       return;
     }
 
     if (!this.subscriptionDetails) {
-      alert('Subscription details are missing. Please try again.');
+      this.showErrorToast(
+        'Subscription details are missing. Please try again.'
+      );
       this.router.navigate(['/abonnement']);
       return;
     }
@@ -109,40 +107,14 @@ export class PaymentConfirmationComponent implements OnInit {
       .subscribe({
         next: (response) => {
           console.log('Subscription confirmed successfully:', response);
-
-          let userInfo: UserInfo;
-          if (this.subscriptionDetails?.user) {
-            userInfo = mapUserToUserInfo(this.subscriptionDetails.user);
-            this.navigateToConfirmation(userInfo);
-          } else {
-            console.warn(
-              'No user associated with the abonnement, fetching from LoginService'
-            );
-            this.loginService
-              .getUserById(this.currentUserId!)
-              .pipe(
-                catchError((error) => {
-                  console.error('Error fetching user info:', error);
-                  return of({
-                    id: this.currentUserId!,
-                    nom: 'Unknown User',
-                    email: 'unknown@example.com',
-                    age: '0',
-                    role: 'USER',
-                    avatarUrl: '',
-                  } as User);
-                })
-              )
-              .subscribe((user: User) => {
-                userInfo = mapUserToUserInfo(user);
-                this.navigateToConfirmation(userInfo);
-              });
-          }
+          this.showSuccessToast('Subscription confirmed successfully');
+          this.navigateToConfirmation(response);
         },
-        error: (error) => {
-          console.error('Error confirming subscription:', error);
-          alert('Invalid code or confirmation failed. Please try again.');
+        error: () => {
           this.submitting = false;
+          this.showErrorToast(
+            'Invalid code or confirmation failed. Please try again.'
+          );
         },
         complete: () => {
           this.submitting = false;
@@ -150,14 +122,12 @@ export class PaymentConfirmationComponent implements OnInit {
       });
   }
 
-  // Method to delete the abonnement
   deleteSubscription(): void {
     if (!this.currentUserId || !this.subscriptionDetails) {
       this.errorMessage = 'User ID or subscription details are missing.';
       return;
     }
 
-    // Confirm with the user before deleting (optional, can be moved to the template)
     if (!confirm('Are you sure you want to delete this subscription?')) {
       return;
     }
@@ -172,16 +142,14 @@ export class PaymentConfirmationComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          console.log('Subscription deleted successfully');
-          // Redirect to the abonnement page after deletion
-          this.router.navigate(['/abonnement'], {
-            state: { message: 'Subscription deleted successfully' },
-          });
+          this.showSuccessToast('Subscription deleted successfully');
+          this.router.navigate(['/abonnement']);
         },
         error: (error) => {
           console.error('Error deleting subscription:', error);
-          this.errorMessage =
-            'Failed to delete subscription. Please try again.';
+          this.showErrorToast(
+            'Failed to delete subscription. Please try again.'
+          );
           this.isDeleting = false;
         },
         complete: () => {
@@ -191,11 +159,6 @@ export class PaymentConfirmationComponent implements OnInit {
   }
 
   private navigateToConfirmation(userInfo: UserInfo): void {
-    console.log('Navigating to /abonnement-confirme with state:', {
-      abonnement: this.subscriptionDetails,
-      userInfo: userInfo,
-    });
-
     this.router
       .navigate(['/abonnement-confirme'], {
         state: {
@@ -203,22 +166,30 @@ export class PaymentConfirmationComponent implements OnInit {
           userInfo: userInfo,
         },
       })
-      .then((success) => {
-        console.log('Navigation success:', success);
-        if (!success) {
-          console.error('Navigation failed: Route not found or blocked');
-          alert(
-            'Unable to navigate to confirmation page. Redirecting to abonnement page.'
-          );
-          this.router.navigate(['/abonnement']);
-        }
-      })
       .catch((error) => {
         console.error('Navigation error:', error);
-        alert(
-          'An error occurred while navigating. Redirecting to abonnement page.'
+        this.showErrorToast(
+          'Unable to navigate. Redirecting to abonnement page.'
         );
         this.router.navigate(['/abonnement']);
       });
+  }
+
+  private showSuccessToast(message: string): void {
+    this.toastMessage = message;
+    this.toastType = 'success';
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, 5000);
+  }
+
+  private showErrorToast(message: string): void {
+    this.toastMessage = message;
+    this.toastType = 'error';
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, 5000);
   }
 }
