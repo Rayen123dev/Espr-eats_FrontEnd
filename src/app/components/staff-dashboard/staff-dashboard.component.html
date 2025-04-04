@@ -130,6 +130,7 @@
             <tr>
               <th>ID</th>
               <th>Nom</th>
+              <th>Description</th>
               <th>Catégorie</th>
               <th>Calories</th>
               <th>Image</th>
@@ -140,6 +141,7 @@
             <tr *ngFor="let plat of plats">
               <td>{{ plat.id }}</td>
               <td>{{ plat.nom }}</td>
+              <td>{{ plat.description }}</td>
               <td>{{ plat.categorie }}</td>
               <td>{{ plat.calories }} kcal</td>
               <td>
