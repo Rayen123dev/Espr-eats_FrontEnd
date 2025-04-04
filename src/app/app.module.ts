@@ -28,6 +28,7 @@ import { GestionUsersComponent } from './gestion-users/gestion-users.component';
 import { AbonnementComponent } from './abonnement/abonnement.component';
 import { PaymentConfirmationComponent } from './payment-confirmation/payment-confirmation.component';
 import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-confirme.component';
+import { AbonnementDetailsComponent } from './abonnement-details/abonnement-details.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,7 +45,8 @@ import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-co
     GestionUsersComponent,
     AbonnementComponent,
     PaymentConfirmationComponent,
-    AbonnementConfirmeComponent
+    AbonnementConfirmeComponent,
+    AbonnementDetailsComponent
   ],
   imports: [
     BrowserModule,

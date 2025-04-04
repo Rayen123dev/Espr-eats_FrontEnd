@@ -1,4 +1,3 @@
-// payment-confirmation.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AbonnementService, Abonnement } from '../../abonnement.service';
@@ -65,7 +64,18 @@ export class PaymentConfirmationComponent implements OnInit {
       return;
     }
 
-    const idAbonnement = 1; // Replace with actual logic to get abonnement ID
+    // Retrieve the abonnementId from localStorage
+    const storedId = localStorage.getItem('abonnementId');
+    if (!storedId) {
+      console.error('No abonnement ID found in localStorage');
+      this.showErrorToast(
+        'No subscription details available. Redirecting to subscriptions page.'
+      );
+      this.router.navigate(['/abonnement']);
+      return;
+    }
+
+    const idAbonnement = parseInt(storedId, 10); // Convert storedId to number
     this.abonnementService
       .getAbonnementById(this.currentUserId, idAbonnement)
       .subscribe({

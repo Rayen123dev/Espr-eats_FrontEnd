@@ -1,7 +1,10 @@
-// abonnement.component.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Abonnement, AbonnementService } from '../../abonnement.service';
+import {
+  Abonnement,
+  AbonnementService,
+  CreateAbonnementResponse,
+} from '../../abonnement.service';
 import { LoginService } from '../login.service';
 
 @Component({
@@ -21,9 +24,9 @@ export class AbonnementComponent implements OnInit {
     features: string[];
     renouvellementAutomatique: boolean;
   }[] = [];
-  showToast: boolean = false; // Control visibility of the toast
-  toastMessage: string = ''; // Store the message to display in the toast
-  toastTitle: string = 'Danger'; // Title of the toast
+  showToast: boolean = false;
+  toastMessage: string = '';
+  toastTitle: string = 'Danger';
 
   constructor(
     private abonnementService: AbonnementService,
@@ -37,7 +40,7 @@ export class AbonnementComponent implements OnInit {
   ngOnInit(): void {
     if (!this.currentUserId) {
       this.router.navigate(['/login']);
-      return; // Exit early if no user ID
+      return;
     }
     this.loadSubscriptionPlans();
   }
@@ -45,7 +48,6 @@ export class AbonnementComponent implements OnInit {
   loadSubscriptionPlans(): void {
     this.abonnementService.getSubscriptionTypesAndCosts().subscribe({
       next: (data) => {
-        // Validate data before assigning to subscriptionPlans
         if (!data || typeof data !== 'object') {
           console.error('Invalid subscription data:', data);
           return;
@@ -144,18 +146,30 @@ export class AbonnementComponent implements OnInit {
     this.abonnementService
       .createAbonnement(this.userId as number, abonnement)
       .subscribe({
-        next: (response: Abonnement) => {
+        next: (response: CreateAbonnementResponse) => {
           console.log('Subscription created successfully:', response);
-          this.showToast = false; // Hide the toast on success
-          this.router.navigate(['/abonnement/payment-confirmation'], {
-            state: {
-              abonnement: response,
-            },
-          });
+          this.showToast = false;
+
+          // Redirect to Stripe Checkout URL
+          if (
+            response.stripeResponse &&
+            response.stripeResponse.status === 'open'
+          ) {
+            // Store the abonnement ID in localStorage for use after payment
+            localStorage.setItem(
+              'abonnementId',
+              response.abonnement.idAbonnement.toString()
+            );
+            window.location.href = response.stripeResponse.message; // Redirect to Stripe
+          } else {
+            this.showToast = true;
+            this.toastTitle = '';
+            this.toastMessage =
+              'Failed to create Stripe payment session. Please try again.';
+          }
         },
         error: (error) => {
           console.error('Error creating subscription:', error);
-          // Check if the error is due to the user already having a subscription
           if (
             error.error &&
             error.error.message === "L'utilisateur a déjà un abonnement."
@@ -167,13 +181,12 @@ export class AbonnementComponent implements OnInit {
             this.showToast = true;
             this.toastTitle = '';
             this.toastMessage = 'Tu as déjà créé un abonnement.';
-            setTimeout(() => this.closeToast(), 5000);
           }
+          setTimeout(() => this.closeToast(), 5000);
         },
       });
   }
 
-  // Method to close the toast
   closeToast(): void {
     this.showToast = false;
     this.toastMessage = '';

@@ -1,0 +1,42 @@
+<!-- abonnement-details.component.html -->
+<div class="billing-container">
+  <h1>Votre Abonnement</h1>
+
+  <!-- Current Plan Section -->
+  <div class="section">
+    <h2>PLAN COURANT</h2>
+    <div class="plan-details">
+      <div class="plan-info">
+        <span class="plan-name">{{ displayPlanName | titlecase }}</span>
+        <span class="plan-cost">Cout {{ displayCost }} Dt</span>
+        <span class="plan-renewal">Votre Abonnement va etre expiré le {{ displayRenewalDate }}.</span>
+      </div>
+      <div class="plan-actions">
+        <button class="change-plan-btn" (click)="changePlan()">Supprimer Plan</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment Method Section -->
+  <div class="section">
+    <h2>Methode de Paiement</h2>
+    <div class="payment-method">
+      <span class="card-info">{{ paymentMethod.card }}</span>
+      <span class="default-label" *ngIf="paymentMethod.isDefault">Default</span>
+      <span class="expiry">Expires {{ paymentMethod.expiry }}</span>
+    </div>
+  </div>
+
+  <!-- Billing History Section -->
+  <div class="section">
+    <h2>Votre Transactions</h2>
+    <div class="billing-history">
+      <div class="history-item" *ngFor="let item of billingHistory">
+        <span class="history-date">{{ item.date }}</span>
+        <span class="history-amount">{{ item.amount }}</span>
+        <span class="history-plan">{{ item.plan }}</span>
+        <span class="download-icon">📄</span>
+      </div>
+    </div>
+  </div>
+</div>

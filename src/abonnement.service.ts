@@ -19,6 +19,16 @@ export interface Abonnement {
   isBlocked: boolean;
   isConfirmed: boolean;
   user?: User;
+  stripeSessionId: string;
+}
+
+export interface CreateAbonnementResponse {
+  stripeResponse: {
+    paymentId: string;
+    status: string;
+    message: string; // This is the Stripe Checkout URL
+  };
+  abonnement: Abonnement;
 }
 
 @Injectable({
@@ -33,8 +43,11 @@ export class AbonnementService {
     return this.http.get(`${this.apiUrl}/types-and-costs`);
   }
 
-  createAbonnement(userId: number, abonnement: any): Observable<Abonnement> {
-    return this.http.post<Abonnement>(
+  createAbonnement(
+    userId: number,
+    abonnement: any
+  ): Observable<CreateAbonnementResponse> {
+    return this.http.post<CreateAbonnementResponse>(
       `${this.apiUrl}/add/${userId}`,
       abonnement
     );
