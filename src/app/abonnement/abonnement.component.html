@@ -1,10 +1,9 @@
-<!-- abonnement.component.html -->
 <div class="subscription-container">
   <h6 class="pricing-smalltitle"><span>Notre Grille tarifaire</span></h6>
   <h2 class="pricing-title">Choisir votre Plan d'abonnement</h2>
 
   <!-- Toast Notification -->
-  <div *ngIf="showToast" class="custom-toast" role="alert">
+  <div *ngIf="showToast" class="custom-toast" [ngClass]="{'toast-danger': toastTitle === 'Danger', 'toast-warning': toastTitle === 'Warning'}" role="alert">
     <div class="toast-header">
       <span class="toast-icon">!</span>
       <strong class="toast-title">{{ toastTitle }}</strong>
@@ -16,34 +15,34 @@
   </div>
 
   <div class="plans-container">
-    <div *ngFor="let plan of subscriptionPlans; let i = index" class="plan-card" [class.recommended]="plan.type === 'SEMESTRIEL'">
+    <div *ngFor="let plan of subscriptionPlans; let i = index" class="plan-card" [class.recommended]="plan.isRecommended">
+      <!-- Recommended Badge -->
+      <div *ngIf="plan.isRecommended" class="recommended-badge"></div>
+
       <h3>{{ plan.type | titlecase }}</h3>
       <p class="description">{{ plan.description }}</p>
       <br/>
       <br/>
-      <div class="price">{{ plan.monthlyCost.toFixed(2) }} Dt<span>/Mois</span></div>
+      <!-- Display total cost and monthly cost -->
+      <div class="price">
+        {{ plan.cost.toFixed(2) }} Dt <span *ngIf="plan.type !== 'MENSUEL'">({{ plan.monthlyCost.toFixed(2) }} Dt/Mois)</span>
+      </div>
       
+      <!-- Display discount if available -->
+      <p *ngIf="plan.discount" class="discount">{{ plan.discount }}</p>
+
+      <!-- Display user count if available -->
+      <p *ngIf="plan.userCount" class="user-count">Choisi par {{ plan.userCount }} utilisateurs</p>
+
       <div class="renewal-option">
-        <label class="toggle-switch">
-          <span class="toggle-label off">Off</span>
+        <label class="toggle-switch" title="Activer le renouvellement automatique pour renouveler votre abonnement à la fin de la période">
+          <span class="toggle-label off"></span>
           <input type="checkbox" [(ngModel)]="plan.renouvellementAutomatique" [ngModelOptions]="{standalone: true}">
           <span class="toggle-slider"></span>
-          <span class="toggle-label on">On</span>
+          <span class="toggle-label on">renouvellement</span>
         </label>
       </div>
 
-      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.monthlyCost, plan.renouvellementAutomatique)">Choisir Plan</button>
+      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.cost, plan.renouvellementAutomatique)">Choisir Plan</button>
       <br/>
       <br/>
-      <hr/>
-      <div class="features">
-        <h4>{{ i === 0 ? (plan.type | titlecase) + ' includes' : 'Everything in ' + (subscriptionPlans[i - 1].type | titlecase) + ', plus:' }}</h4>
-        <ul>
-          <li *ngFor="let feature of plan.features">{{ feature }}</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<router-outlet></router-outlet>

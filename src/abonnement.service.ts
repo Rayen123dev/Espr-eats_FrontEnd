@@ -85,4 +85,10 @@ export class AbonnementService {
       abonnement
     );
   }
+
+  getRecommendedSubscriptionType(): Observable<string> {
+    return this.http.get<string>(`${this.apiUrl}/recommended-type`, {
+      responseType: 'text' as 'json',
+    });
+  }
 }

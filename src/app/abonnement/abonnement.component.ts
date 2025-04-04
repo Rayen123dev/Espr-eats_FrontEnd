@@ -8,7 +8,7 @@ import {
 import { LoginService } from '../login.service';
 
 @Component({
-  selector: 'app-home', // Note: selector says 'app-home' but template is 'abonnement.component.html'
+  selector: 'app-home',
   templateUrl: './abonnement.component.html',
   styleUrls: ['./abonnement.component.css'],
 })
@@ -23,10 +23,13 @@ export class AbonnementComponent implements OnInit {
     description: string;
     features: string[];
     renouvellementAutomatique: boolean;
+    isRecommended?: boolean;
+    userCount?: number; // Add this to store the number of users (optional)
   }[] = [];
   showToast: boolean = false;
   toastMessage: string = '';
   toastTitle: string = 'Danger';
+  recommendedType: string | null = null;
 
   constructor(
     private abonnementService: AbonnementService,
@@ -42,10 +45,44 @@ export class AbonnementComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    this.loadSubscriptionPlans();
+    this.loadRecommendedType(); // Load recommended type first
   }
 
-  loadSubscriptionPlans(): void {
+  loadRecommendedType(): void {
+    // Use getRecommendedSubscriptionTypeWithCounts if you implemented user counts
+    this.abonnementService.getRecommendedSubscriptionType().subscribe({
+      next: (type) => {
+        this.recommendedType = type;
+        console.log('Recommended subscription type:', this.recommendedType);
+        // Load subscription plans after the recommended type is fetched
+        this.loadSubscriptionPlans();
+      },
+      error: (error) => {
+        console.error('Error fetching recommended subscription type:', error);
+        this.recommendedType = 'MENSUEL';
+        // Load subscription plans even if there's an error
+        this.loadSubscriptionPlans();
+      },
+    });
+
+    // If you implemented user counts, use this instead:
+    /*
+    this.abonnementService.getRecommendedSubscriptionTypeWithCounts().subscribe({
+      next: (response) => {
+        this.recommendedType = response.recommendedType;
+        console.log('Recommended subscription type:', this.recommendedType);
+        this.loadSubscriptionPlans(response.counts);
+      },
+      error: (error) => {
+        console.error('Error fetching recommended subscription type:', error);
+        this.recommendedType = 'MENSUEL';
+        this.loadSubscriptionPlans();
+      },
+    });
+    */
+  }
+
+  loadSubscriptionPlans(counts?: { [key: string]: number }): void {
     this.abonnementService.getSubscriptionTypesAndCosts().subscribe({
       next: (data) => {
         if (!data || typeof data !== 'object') {
@@ -57,7 +94,7 @@ export class AbonnementComponent implements OnInit {
             type: 'MENSUEL',
             cost: data['MENSUEL'] || 0,
             monthlyCost: data['MENSUEL'] || 0,
-            discount: '',
+            discount: 'Save 0Dt',
             description: 'Un Plan pour un mois',
             features: [
               '3 templates',
@@ -66,6 +103,8 @@ export class AbonnementComponent implements OnInit {
               '5MB file size limit',
             ],
             renouvellementAutomatique: false,
+            isRecommended: this.recommendedType === 'MENSUEL',
+            userCount: counts ? counts['MENSUEL'] : undefined, // Set user count if available
           },
           {
             type: 'TRIMESTRIEL',
@@ -81,6 +120,8 @@ export class AbonnementComponent implements OnInit {
               'Basic analytics',
             ],
             renouvellementAutomatique: false,
+            isRecommended: this.recommendedType === 'TRIMESTRIEL',
+            userCount: counts ? counts['TRIMESTRIEL'] : undefined,
           },
           {
             type: 'SEMESTRIEL',
@@ -96,6 +137,8 @@ export class AbonnementComponent implements OnInit {
               'Advanced analytics',
             ],
             renouvellementAutomatique: false,
+            isRecommended: this.recommendedType === 'SEMESTRIEL',
+            userCount: counts ? counts['SEMESTRIEL'] : undefined,
           },
           {
             type: 'ANNUEL',
@@ -111,6 +154,8 @@ export class AbonnementComponent implements OnInit {
               'Integrations',
             ],
             renouvellementAutomatique: false,
+            isRecommended: this.recommendedType === 'ANNUEL',
+            userCount: counts ? counts['ANNUEL'] : undefined,
           },
         ];
       },
@@ -150,20 +195,18 @@ export class AbonnementComponent implements OnInit {
           console.log('Subscription created successfully:', response);
           this.showToast = false;
 
-          // Redirect to Stripe Checkout URL
           if (
             response.stripeResponse &&
             response.stripeResponse.status === 'open'
           ) {
-            // Store the abonnement ID in localStorage for use after payment
             localStorage.setItem(
               'abonnementId',
               response.abonnement.idAbonnement.toString()
             );
-            window.location.href = response.stripeResponse.message; // Redirect to Stripe
+            window.location.href = response.stripeResponse.message;
           } else {
             this.showToast = true;
-            this.toastTitle = '';
+            this.toastTitle = 'Danger';
             this.toastMessage =
               'Failed to create Stripe payment session. Please try again.';
           }
@@ -175,12 +218,13 @@ export class AbonnementComponent implements OnInit {
             error.error.message === "L'utilisateur a déjà un abonnement."
           ) {
             this.showToast = true;
-            this.toastTitle = '';
+            this.toastTitle = 'Warning';
             this.toastMessage = 'Tu as déjà créé un abonnement.';
           } else {
             this.showToast = true;
-            this.toastTitle = '';
-            this.toastMessage = 'Tu as déjà créé un abonnement.';
+            this.toastTitle = 'Danger';
+            this.toastMessage =
+              'Error creating subscription. Please try again.';
           }
           setTimeout(() => this.closeToast(), 5000);
         },
