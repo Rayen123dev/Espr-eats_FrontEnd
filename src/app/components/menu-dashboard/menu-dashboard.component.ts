@@ -18,6 +18,7 @@ export class MenuDashboardComponent implements OnInit {
   isLoading: boolean = false;
   regimeTypes = Object.values(RegimeAlimentaireType); // Liste des types de régimes
   selectedRegimeType: string = 'ALL'; // Type de régime sélectionné (par défaut : tous)
+  rejectedMenuIds: Set<number> = new Set();
 
   constructor(
     private menuService: MenuService,
@@ -91,11 +92,34 @@ export class MenuDashboardComponent implements OnInit {
       next: (message) => {
         console.log(message);
         alert(message);
-        this.getMenus();
+        this.filteredMenus = this.filteredMenus.map(menu =>
+          menuIds.includes(menu.id) ? { ...menu, isValidated: true } : menu
+        );
+        menuIds.forEach(id => this.rejectedMenuIds.delete(id)); // Clear rejection if validated
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Erreur lors de la validation des menus', err);
         this.errorMessage = 'Erreur lors de la validation des menus';
+      }
+    });
+  }
+
+  rejectMenus(menuIds: number[]): void {
+    const rejectionReason = prompt('Veuillez entrer la raison du rejet :');
+    if (!this.userId || !this.canValidateMenus() || !rejectionReason) return;
+    const doctorId = this.userId;
+    this.menuService.rejectMenus(doctorId, menuIds, rejectionReason).subscribe({
+      next: () => {
+        this.filteredMenus = this.filteredMenus.map(menu =>
+          menuIds.includes(menu.id) ? { ...menu, isValidated: false } : menu
+        );
+        menuIds.forEach(id => this.rejectedMenuIds.add(id)); // Mark as rejected locally
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.errorMessage = 'Erreur lors du rejet';
+        console.error(err);
       }
     });
   }
@@ -120,5 +144,8 @@ export class MenuDashboardComponent implements OnInit {
 
   canValidateMenus(): boolean {
     return this.userRole === 'Medecin';
+  }
+  isRejected(menuId: number): boolean {
+    return this.rejectedMenuIds.has(menuId);
   }
 }

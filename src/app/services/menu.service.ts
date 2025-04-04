@@ -39,8 +39,9 @@ export class MenuService {
 );
 
   }
-  
-
+  rejectMenus(userId: number, menuIds: number[], rejectionReason: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/reject?doctorId=${userId}`, { menuIds, rejectionReason });
+  }
   generateMenus(userId: number): Observable<any> {
     const token = localStorage.getItem('token');
     return this.http.post<any>(`${this.apiUrl}/generate?userId=${userId}`, {},{

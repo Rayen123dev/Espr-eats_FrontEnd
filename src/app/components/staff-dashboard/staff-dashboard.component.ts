@@ -292,55 +292,57 @@ export class StaffDashboardComponent implements OnInit {
  // Méthode modifiée pour soumettre un plat
  submitPlat(): void {
   if (this.addPlatForm.valid && this.userId !== null) {
-    const nomPlat = this.addPlatForm.get('nom')?.value.trim().toLowerCase();
+      const nomPlat = this.addPlatForm.get('nom')?.value.trim().toLowerCase();
 
-    const platExiste = this.plats.some(plat => 
-      plat.nom.trim().toLowerCase() === nomPlat && 
-      (!this.isEditMode || plat.id !== this.currentPlatId)
-    );
+      const platExiste = this.plats.some(plat => 
+          plat.nom.trim().toLowerCase() === nomPlat && 
+          (!this.isEditMode || plat.id !== this.currentPlatId)
+      );
 
-    if (platExiste) {
-      alert('Un plat avec ce nom existe déjà. Veuillez choisir un autre nom.');
-      return;
-    }
+      if (platExiste) {
+          alert('Un plat avec ce nom existe déjà. Veuillez choisir un autre nom.');
+          return;
+      }
 
-    const formData = new FormData();
-    formData.append('nom', this.addPlatForm.get('nom')?.value);
-    formData.append('description', this.addPlatForm.get('description')?.value);
-    formData.append('categorie', this.addPlatForm.get('categorie')?.value);
-    formData.append('calories', this.addPlatForm.get('calories')?.value.toString());
-    if (this.selectedFile) {
-      formData.append('image', this.selectedFile);
-    }
-    formData.append('userId', this.userId.toString());
+      const formData = new FormData();
+      formData.append('nom', this.addPlatForm.get('nom')?.value || '');
+      formData.append('description', this.addPlatForm.get('description')?.value || '');
+      formData.append('categorie', this.addPlatForm.get('categorie')?.value || '');
+      formData.append('calories', this.addPlatForm.get('calories')?.value.toString() || '0');
+      if (this.selectedFile) {
+          formData.append('image', this.selectedFile);
+      }
+      formData.append('userId', this.userId.toString());
 
-    if (this.isEditMode && this.currentPlatId) {
-      this.platService.updatePlatWithImage(this.currentPlatId, this.userId, formData).subscribe({
-        next: (response) => {
-          this.loadPlats();
-          this.loadStats();
-          this.toggleAddPlatForm();
-          alert('Plat modifié avec succès.');
-        },
-        error: (err) => {
-          console.error('Erreur lors de la modification du plat:', err);
-          alert('Une erreur est survenue lors de la modification du plat.');
-        }
-      });
-    } else {
-      this.platService.addPlatWithImage(formData, this.userId).subscribe({
-        next: (response) => {
-          this.loadPlats();
-          this.loadStats();
-          this.toggleAddPlatForm();
-          alert('Plat ajouté avec succès.');
-        },
-        error: (err) => {
-          console.error('Erreur lors de l\'ajout du plat:', err);
-          alert('Une erreur est survenue lors de l\'ajout du plat.');
-        }
-      });
-    }
+   
+
+      if (this.isEditMode && this.currentPlatId) {
+          this.platService.updatePlatWithImage(this.currentPlatId, this.userId, formData).subscribe({
+              next: (response) => {
+                  this.loadPlats();
+                  this.loadStats();
+                  this.toggleAddPlatForm();
+                  alert('Plat modifié avec succès.');
+              },
+              error: (err) => {
+                  console.error('Erreur lors de la modification du plat:', err);
+                  alert('Une erreur est survenue lors de la modification du plat.');
+              }
+          });
+      } else {
+          this.platService.addPlatWithImage(formData, this.userId).subscribe({
+              next: (response) => {
+                  this.loadPlats();
+                  this.loadStats();
+                  this.toggleAddPlatForm();
+                  alert('Plat ajouté avec succès.');
+              },
+              error: (err) => {
+                  console.error('Erreur lors de l\'ajout du plat:', err);
+                  alert('Une erreur est survenue lors de l\'ajout du plat.');
+              }
+          });
+      }
   }
 }
 

@@ -310,3 +310,29 @@
     width: 100%;
   }
 }
+.btn-reject {
+  width: 100%;
+  background-color: #c82333;
+  color: white;
+  padding: 0.8rem;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-reject:hover {
+  background-color: #c82333; /* Darker red on hover */
+}
+
+.btn-reject:disabled {
+  background-color: #6c757d; /* Gray when disabled */
+  cursor: not-allowed;
+}
+.status-rejected {
+  color: #dc3545; /* Red color to match the reject button */
+  font-weight: bold;
+  font-size: 0.9rem;
+}

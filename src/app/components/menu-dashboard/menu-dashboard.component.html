@@ -85,12 +85,13 @@
 
           <div class="validation-status">
             <span 
-              [ngClass]="{
-                'status-validated': menu.isValidated,
-                'status-pending': !menu.isValidated
-              }">
-              {{ menu.isValidated ? 'Validé' : 'En attente' }}
-            </span>
+    [ngClass]="{
+      'status-validated': menu.isValidated,
+      'status-pending': !menu.isValidated && !isRejected(menu.id),
+      'status-rejected': !menu.isValidated && isRejected(menu.id)
+    }">
+    {{ menu.isValidated ? 'Validé' : (isRejected(menu.id) ? 'Rejeté' : 'En attente') }}
+  </span>
           </div>
         </div>
       </div>
@@ -102,6 +103,12 @@
           (click)="validateMenus([menu.id])">
           Valider le menu
         </button>
+        <button 
+    *ngIf="!menu.isValidated && !isRejected(menu.id) && canValidateMenus()" 
+    class="btn btn-reject"
+    (click)="rejectMenus([menu.id])">
+    Rejeter le menu
+  </button>
       </div>
     </div>
   </div>
