@@ -22,13 +22,14 @@ export class HeaderComponent implements OnInit {
 
   loadUserProfile(): void {
     const userId = this.loginService.getUserIdFromToken();
+    const userRole = this.loginService.getRole();
 
     if (userId) {
       this.loginService.getUserById(userId).subscribe({
         next: (user: User) => {
           this.userName = user.nom;
           this.userProfileImage = user.avatarUrl || this.userProfileImage;
-          this.userRole = this.loginService.getRole();
+          this.userRole = this.loginService.getRole(); // Already assigned from getRole()
           this.hasAbonnement = !!user.abonnement; // Assuming abonnement is part of user object
         },
         error: (error) => {
@@ -58,10 +59,16 @@ export class HeaderComponent implements OnInit {
   }
 
   navigateToAbonnement(): void {
-    if (this.hasAbonnement) {
-      this.router.navigate(['/abonnement-details']); // Navigate to abonnement-details if the user has an abonnement
+    if (this.userRole === 'Admin') {
+      // If user is Admin, navigate to abonnement-report
+      this.router.navigate(['/abonnement-report']);
     } else {
-      this.router.navigate(['/abonnement']); // Navigate to abonnement if the user doesn't have one
+      // For non-Admin users, check abonnement status
+      if (this.hasAbonnement) {
+        this.router.navigate(['/abonnement-details']); // Navigate to abonnement-details if user has an abonnement
+      } else {
+        this.router.navigate(['/abonnement']); // Navigate to abonnement if user doesn't have one
+      }
     }
     this.isProfileDropdownOpen = false;
   }
@@ -72,8 +79,9 @@ export class HeaderComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event'])
-  clickOutside(event: any): void {
-    if (!event.target.closest('.user-profile')) {
+  clickOutside(event: Event): void {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.user-profile')) {
       this.isProfileDropdownOpen = false;
     }
   }

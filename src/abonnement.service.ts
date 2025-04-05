@@ -4,6 +4,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './app/login.service';
 
+export interface SubscriptionReport {
+  activeSubscriptions: number;
+  pendingSubscriptions: number;
+  expiredSubscriptions: number;
+  totalRevenue: number;
+  monthlyGrowth: { [key: string]: number }; // Map of month names to subscription counts
+}
+
 export enum TransactionStatus {
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED',
@@ -115,5 +123,9 @@ export class AbonnementService {
     return this.http.get<Transaction[]>(
       `http://localhost:8081/api/transaction/allAbonnement/${userId}/${abonnementId}`
     );
+  }
+
+  getSubscriptionReport(): Observable<SubscriptionReport> {
+    return this.http.get<SubscriptionReport>(`${this.apiUrl}/report`);
   }
 }

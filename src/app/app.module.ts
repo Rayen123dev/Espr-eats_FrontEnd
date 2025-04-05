@@ -29,6 +29,9 @@ import { AbonnementComponent } from './abonnement/abonnement.component';
 import { PaymentConfirmationComponent } from './payment-confirmation/payment-confirmation.component';
 import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-confirme.component';
 import { AbonnementDetailsComponent } from './abonnement-details/abonnement-details.component';
+import { AbonnementReportComponent } from './abonnement-report/abonnement-report.component';
+import { NgChartsModule } from 'ng2-charts';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -46,7 +49,8 @@ import { AbonnementDetailsComponent } from './abonnement-details/abonnement-deta
     AbonnementComponent,
     PaymentConfirmationComponent,
     AbonnementConfirmeComponent,
-    AbonnementDetailsComponent
+    AbonnementDetailsComponent,
+    AbonnementReportComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +67,8 @@ import { AbonnementDetailsComponent } from './abonnement-details/abonnement-deta
     MatIconModule,
     BrowserModule,
     BrowserAnimationsModule,
-    MatTooltipModule
+    MatTooltipModule,
+    NgChartsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -37,32 +37,42 @@
   </div>
 
   <!-- Billing History Section -->
-  <div class="section" *ngIf="transactions.length">
-    <h2>Votre Historique de Transactions</h2>
-    <div class="billing-history">
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Détails de Transaction</th>
-            <th>Date Action</th>
-            <th>Statut Abonnement</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let transaction of transactions">
-            <td>{{ transaction.dateTransaction | date:'mediumDate' }}</td>
-            <td>{{ transaction.details }}</td>
-            <td>{{ transaction.dateTransaction }}</td>
-            <td>{{ transaction.status | titlecase }}</td>
-            <td><span class="download-icon">📄</span></td>
-          </tr>
-        </tbody>
-      </table>
+  <!-- Billing History Section with Timeline -->
+<div class="section" *ngIf="transactions.length">
+  <h2>Votre Historique de Transactions</h2>
+  <div class="transaction-timeline">
+    <div class="timeline-container">
+      <div class="timeline-line"></div>
+      <div *ngFor="let transaction of transactions; let i = index" class="timeline-item" [ngClass]="{'even': i % 2 === 0}">
+        <div class="timeline-marker" [ngClass]="transaction.status.toLowerCase()"></div>
+        <div class="timeline-content">
+          <div class="timeline-date">{{ transaction.dateTransaction | date:'longDate' }}</div>
+          <div class="timeline-details">
+            <h3>{{ transaction.details }}</h3>
+            <div class="timeline-meta">
+              <span class="transaction-status" [ngClass]="transaction.status.toLowerCase()">
+                {{ transaction.status | titlecase }}
+              </span>
+              <span class="transaction-date">Date Action: {{ transaction.dateTransaction | date:'shortTime' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 
+<!-- No Transactions Section -->
+<div *ngIf="transactions.length === 0 && !isLoadingTransactions" class="no-transactions">
+  <div class="no-data-icon"></div>
+  <p>Aucune transaction trouvée.</p>
+  <span>Vos transactions apparaîtront ici une fois qu'elles seront effectuées.</span>
+</div>
+
+<!-- Loading Transactions Spinner Section -->
+<div *ngIf="isLoadingTransactions" class="loading-spinner">
+  <p>Chargement de l'historique des transactions...</p>
+</div>
   <!-- No Transactions Section -->
   <div *ngIf="transactions.length === 0 && !isLoadingTransactions">
     <p>Aucune transaction trouvée.</p>
