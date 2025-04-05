@@ -9,7 +9,8 @@ export interface User {
   email: string;
   age: string;
   role: string;
-  avatarUrl: string;  
+  avatarUrl: string;
+  abonnement?: boolean;
 }
 
 @Injectable({

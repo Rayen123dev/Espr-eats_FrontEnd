@@ -1,21 +1,20 @@
 import { Component, OnInit, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService,User } from '../login.service';
+import { LoginService, User } from '../login.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss']
+  styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {
   userName: string = 'User';
   userProfileImage: string = 'assets/default-avatar.png';
   isProfileDropdownOpen: boolean = false;
   userRole: string | null = null;
+  hasAbonnement: boolean = false; // Flag to track if user has abonnement
 
-  constructor(
-    private loginService: LoginService,
-    private router: Router
-  ) {}
+  constructor(private loginService: LoginService, private router: Router) {}
 
   ngOnInit(): void {
     this.loadUserProfile();
@@ -23,17 +22,18 @@ export class HeaderComponent implements OnInit {
 
   loadUserProfile(): void {
     const userId = this.loginService.getUserIdFromToken();
-    
+
     if (userId) {
       this.loginService.getUserById(userId).subscribe({
         next: (user: User) => {
           this.userName = user.nom;
           this.userProfileImage = user.avatarUrl || this.userProfileImage;
           this.userRole = this.loginService.getRole();
+          this.hasAbonnement = !!user.abonnement; // Assuming abonnement is part of user object
         },
         error: (error) => {
           console.error('Error fetching user profile', error);
-        }
+        },
       });
     }
   }
@@ -54,6 +54,15 @@ export class HeaderComponent implements OnInit {
 
   navigateToSettings(): void {
     this.router.navigate(['/user-reclamations']);
+    this.isProfileDropdownOpen = false;
+  }
+
+  navigateToAbonnement(): void {
+    if (this.hasAbonnement) {
+      this.router.navigate(['/abonnement-details']); // Navigate to abonnement-details if the user has an abonnement
+    } else {
+      this.router.navigate(['/abonnement']); // Navigate to abonnement if the user doesn't have one
+    }
     this.isProfileDropdownOpen = false;
   }
 

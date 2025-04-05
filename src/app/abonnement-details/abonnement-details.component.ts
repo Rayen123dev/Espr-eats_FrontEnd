@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Abonnement, AbonnementService } from 'src/abonnement.service';
+import {
+  Abonnement,
+  AbonnementService,
+  Transaction,
+} from 'src/abonnement.service';
 import { LoginService } from '../login.service';
-
-interface BillingHistory {
-  date: string;
-  amount: string;
-  plan: string;
-}
 
 @Component({
   selector: 'app-abonnement-details',
@@ -20,17 +18,16 @@ export class AbonnementDetailsComponent implements OnInit {
   paymentMethod: { card: string; isDefault: boolean; expiry: string } = {
     card: 'Visa •••• 4242',
     isDefault: true,
-    expiry: '02/2024',
+    expiry: '02/2026',
   };
-  billingHistory: BillingHistory[] = [
-    { date: 'Jun 1, 2020', amount: '$10.00', plan: 'Typographic Starter' },
-    { date: 'May 1, 2020', amount: '$10.00', plan: 'Typographic Starter' },
-    { date: 'Apr 1, 2020', amount: '$10.00', plan: 'Typographic Starter' },
-  ];
+  transactions: Transaction[] = [];
+  isLoading: boolean = false; // Add loading state for subscription details
+  isLoadingTransactions: boolean = false; // Add loading state for transactions
+  errorMessage: string = ''; // Add error message for UI display
 
   // Default values for display
   displayPlanName: string = 'Typographic Starter';
-  displayCost: string = '$10.00';
+  displayCost: string = '10.00 Dt'; // Update default to use Dt
   displayRenewalDate: string = 'Jul 1, 2020';
 
   constructor(
@@ -54,17 +51,14 @@ export class AbonnementDetailsComponent implements OnInit {
       }
     }
 
-    // If no subscription details, fetch from backend
-    if (!this.subscriptionDetails) {
-      this.fetchAbonnementDetails();
-    } else {
-      this.setDisplayValues();
-    }
+    // Fetch subscription details regardless of navigation state to ensure we have the latest data
+    this.fetchAbonnementDetails();
   }
 
   fetchAbonnementDetails(): void {
     if (!this.currentUserId) {
       console.error('Cannot fetch abonnement details: user ID is missing');
+      this.errorMessage = 'Utilisateur non connecté. Veuillez vous connecter.';
       this.router.navigate(['/login']);
       return;
     }
@@ -73,27 +67,74 @@ export class AbonnementDetailsComponent implements OnInit {
     const storedId = localStorage.getItem('abonnementId');
     if (!storedId) {
       console.error('No abonnement ID found in localStorage');
-      alert(
-        'No subscription details available. Redirecting to subscriptions page.'
-      );
+      this.errorMessage =
+        'Aucun abonnement trouvé. Redirection vers la page des abonnements.';
       this.router.navigate(['/abonnement']);
       return;
     }
 
-    const idAbonnement = parseInt(storedId, 10); // Convert storedId to number
+    const idAbonnement = parseInt(storedId, 10);
+    if (isNaN(idAbonnement)) {
+      console.error('Invalid abonnement ID in localStorage:', storedId);
+      this.errorMessage =
+        "ID d'abonnement invalide. Redirection vers la page des abonnements.";
+      this.router.navigate(['/abonnement']);
+      return;
+    }
+
+    this.isLoading = true;
     this.abonnementService
       .getAbonnementById(this.currentUserId, idAbonnement)
       .subscribe({
         next: (response) => {
           this.subscriptionDetails = response;
           this.setDisplayValues();
+          this.fetchTransactions(); // Fetch transactions after successfully getting abonnement details
+          this.isLoading = false;
+          this.errorMessage = '';
         },
         error: (err) => {
           console.error('Error fetching abonnement details:', err);
-          alert(
-            'Unable to fetch subscription details. Redirecting to subscriptions page.'
-          );
+          this.errorMessage =
+            "Impossible de récupérer les détails de l'abonnement. Redirection vers la page des abonnements.";
+          this.isLoading = false;
           this.router.navigate(['/abonnement']);
+        },
+      });
+  }
+
+  fetchTransactions(): void {
+    if (!this.currentUserId || !this.subscriptionDetails?.idAbonnement) {
+      console.error(
+        'Cannot fetch transactions: user ID or abonnement ID is missing',
+        {
+          userId: this.currentUserId,
+          abonnementId: this.subscriptionDetails?.idAbonnement,
+        }
+      );
+      this.errorMessage =
+        'Impossible de récupérer les transactions : informations manquantes.';
+      return;
+    }
+
+    this.isLoadingTransactions = true;
+    this.abonnementService
+      .getTransactionsByAbonnementId(
+        this.currentUserId,
+        this.subscriptionDetails.idAbonnement
+      )
+      .subscribe({
+        next: (transactions) => {
+          console.log('Fetched Transactions:', transactions); // Check what transactions are returned
+          this.transactions = transactions; // Assign all transactions
+          this.isLoadingTransactions = false;
+          this.errorMessage = '';
+        },
+        error: (err) => {
+          console.error('Error fetching transactions:', err);
+          this.errorMessage =
+            "Impossible de récupérer l'historique des transactions. Veuillez réessayer plus tard.";
+          this.isLoadingTransactions = false;
         },
       });
   }
@@ -103,8 +144,8 @@ export class AbonnementDetailsComponent implements OnInit {
       this.displayPlanName =
         this.subscriptionDetails.typeAbonnement || 'Typographic Starter';
       this.displayCost = this.subscriptionDetails.cout
-        ? `$${this.subscriptionDetails.cout.toFixed(2)}`
-        : '$10.00';
+        ? `${this.subscriptionDetails.cout.toFixed(2)} Dt` // Use Dt instead of $
+        : '10.00 Dt';
       this.displayRenewalDate =
         this.subscriptionDetails.dateFin || 'Jul 1, 2020';
     }
@@ -114,29 +155,9 @@ export class AbonnementDetailsComponent implements OnInit {
     this.router.navigate(['/abonnement']);
   }
 
-  cancelPlan(): void {
-    if (confirm('Are you sure you want to cancel your plan?')) {
-      if (this.subscriptionDetails && this.currentUserId) {
-        this.abonnementService
-          .deleteAbonnement(
-            this.currentUserId,
-            this.subscriptionDetails.idAbonnement
-          )
-          .subscribe({
-            next: () => {
-              alert('Plan cancelled successfully.');
-              this.router.navigate(['/abonnement']);
-            },
-            error: (err) => {
-              console.error('Error cancelling plan:', err);
-              alert('Failed to cancel plan. Please try again.');
-            },
-          });
-      }
-    }
-  }
-
-  addPaymentMethod(): void {
-    alert('Add payment method functionality to be implemented.');
+  // New method to handle errors globally
+  handleError(error: any, userMessage: string): void {
+    console.error(error);
+    this.errorMessage = userMessage;
   }
 }

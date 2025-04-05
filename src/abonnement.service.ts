@@ -4,6 +4,22 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from './app/login.service';
 
+export enum TransactionStatus {
+  SUCCESS = 'SUCCESS',
+  FAILED = 'FAILED',
+  PENDING = 'PENDING',
+}
+
+export interface Transaction {
+  idTransaction: number;
+  abonnement: Abonnement; // Reference to the Abonnement entity
+  montant: number;
+  status: TransactionStatus;
+  dateTransaction: string; // LocalDateTime serialized as string (e.g., "2025-04-02 10:00:00")
+  referencePaiement: string;
+  details: string;
+}
+
 // Define the Abonnement interface to match the backend entity
 export interface Abonnement {
   idAbonnement: number;
@@ -90,5 +106,14 @@ export class AbonnementService {
     return this.http.get<string>(`${this.apiUrl}/recommended-type`, {
       responseType: 'text' as 'json',
     });
+  }
+
+  getTransactionsByAbonnementId(
+    userId: number,
+    abonnementId: number
+  ): Observable<Transaction[]> {
+    return this.http.get<Transaction[]>(
+      `http://localhost:8081/api/transaction/allAbonnement/${userId}/${abonnementId}`
+    );
   }
 }
