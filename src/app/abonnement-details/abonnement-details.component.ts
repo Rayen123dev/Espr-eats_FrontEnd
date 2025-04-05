@@ -21,13 +21,15 @@ export class AbonnementDetailsComponent implements OnInit {
     expiry: '02/2026',
   };
   transactions: Transaction[] = [];
-  isLoading: boolean = false; // Add loading state for subscription details
-  isLoadingTransactions: boolean = false; // Add loading state for transactions
-  errorMessage: string = ''; // Add error message for UI display
+  isLoading: boolean = false;
+  isLoadingTransactions: boolean = false;
+  isDeleting: boolean = false;
+  showToast: boolean = false; // Added for toast notification
+  toastMessage: string = ''; // Toast message content
+  toastType: 'success' | 'error' = 'success'; // Toast type
 
-  // Default values for display
   displayPlanName: string = 'Typographic Starter';
-  displayCost: string = '10.00 Dt'; // Update default to use Dt
+  displayCost: string = '10.00 Dt';
   displayRenewalDate: string = 'Jul 1, 2020';
 
   constructor(
@@ -39,7 +41,6 @@ export class AbonnementDetailsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Try to get subscription details from navigation state
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       const state = navigation.extras.state as { abonnement: Abonnement };
@@ -51,24 +52,23 @@ export class AbonnementDetailsComponent implements OnInit {
       }
     }
 
-    // Fetch subscription details regardless of navigation state to ensure we have the latest data
     this.fetchAbonnementDetails();
   }
 
   fetchAbonnementDetails(): void {
     if (!this.currentUserId) {
       console.error('Cannot fetch abonnement details: user ID is missing');
-      this.errorMessage = 'Utilisateur non connecté. Veuillez vous connecter.';
+      this.showErrorToast('Utilisateur non connecté. Veuillez vous connecter.');
       this.router.navigate(['/login']);
       return;
     }
 
-    // Retrieve the abonnementId from localStorage
     const storedId = localStorage.getItem('abonnementId');
     if (!storedId) {
       console.error('No abonnement ID found in localStorage');
-      this.errorMessage =
-        'Aucun abonnement trouvé. Redirection vers la page des abonnements.';
+      this.showErrorToast(
+        'Aucun abonnement trouvé. Redirection vers la page des abonnements.'
+      );
       this.router.navigate(['/abonnement']);
       return;
     }
@@ -76,8 +76,9 @@ export class AbonnementDetailsComponent implements OnInit {
     const idAbonnement = parseInt(storedId, 10);
     if (isNaN(idAbonnement)) {
       console.error('Invalid abonnement ID in localStorage:', storedId);
-      this.errorMessage =
-        "ID d'abonnement invalide. Redirection vers la page des abonnements.";
+      this.showErrorToast(
+        "ID d'abonnement invalide. Redirection vers la page des abonnements."
+      );
       this.router.navigate(['/abonnement']);
       return;
     }
@@ -89,14 +90,14 @@ export class AbonnementDetailsComponent implements OnInit {
         next: (response) => {
           this.subscriptionDetails = response;
           this.setDisplayValues();
-          this.fetchTransactions(); // Fetch transactions after successfully getting abonnement details
+          this.fetchTransactions();
           this.isLoading = false;
-          this.errorMessage = '';
         },
         error: (err) => {
           console.error('Error fetching abonnement details:', err);
-          this.errorMessage =
-            "Impossible de récupérer les détails de l'abonnement. Redirection vers la page des abonnements.";
+          this.showErrorToast(
+            "Impossible de récupérer les détails de l'abonnement."
+          );
           this.isLoading = false;
           this.router.navigate(['/abonnement']);
         },
@@ -112,8 +113,9 @@ export class AbonnementDetailsComponent implements OnInit {
           abonnementId: this.subscriptionDetails?.idAbonnement,
         }
       );
-      this.errorMessage =
-        'Impossible de récupérer les transactions : informations manquantes.';
+      this.showErrorToast(
+        'Impossible de récupérer les transactions : informations manquantes.'
+      );
       return;
     }
 
@@ -125,15 +127,15 @@ export class AbonnementDetailsComponent implements OnInit {
       )
       .subscribe({
         next: (transactions) => {
-          console.log('Fetched Transactions:', transactions); // Check what transactions are returned
-          this.transactions = transactions; // Assign all transactions
+          console.log('Fetched Transactions:', transactions);
+          this.transactions = transactions;
           this.isLoadingTransactions = false;
-          this.errorMessage = '';
         },
         error: (err) => {
           console.error('Error fetching transactions:', err);
-          this.errorMessage =
-            "Impossible de récupérer l'historique des transactions. Veuillez réessayer plus tard.";
+          this.showErrorToast(
+            "Impossible de récupérer l'historique des transactions."
+          );
           this.isLoadingTransactions = false;
         },
       });
@@ -144,20 +146,80 @@ export class AbonnementDetailsComponent implements OnInit {
       this.displayPlanName =
         this.subscriptionDetails.typeAbonnement || 'Typographic Starter';
       this.displayCost = this.subscriptionDetails.cout
-        ? `${this.subscriptionDetails.cout.toFixed(2)} Dt` // Use Dt instead of $
+        ? `${this.subscriptionDetails.cout.toFixed(2)} Dt`
         : '10.00 Dt';
       this.displayRenewalDate =
         this.subscriptionDetails.dateFin || 'Jul 1, 2020';
     }
   }
 
-  changePlan(): void {
-    this.router.navigate(['/abonnement']);
+  deleteSubscription(): void {
+    if (!this.currentUserId || !this.subscriptionDetails?.idAbonnement) {
+      this.showErrorToast(
+        'Impossible de supprimer : ID utilisateur ou abonnement manquant.'
+      );
+      console.error('Missing user ID or abonnement ID', {
+        userId: this.currentUserId,
+        abonnementId: this.subscriptionDetails?.idAbonnement,
+      });
+      return;
+    }
+
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cet abonnement ?')) {
+      return;
+    }
+
+    this.isDeleting = true;
+
+    this.abonnementService
+      .deleteAbonnement(
+        this.currentUserId,
+        this.subscriptionDetails.idAbonnement
+      )
+      .subscribe({
+        next: () => {
+          console.log('Subscription deleted successfully');
+          this.showSuccessToast('Abonnement supprimé avec succès.');
+          this.isDeleting = false;
+          localStorage.removeItem('abonnementId');
+          setTimeout(() => {
+            this.router.navigate(['/abonnement']);
+          }, 2000); // Increased delay to 2s for toast visibility
+        },
+        error: (err) => {
+          console.error('Error deleting subscription:', err);
+          this.showErrorToast(
+            'Échec de la suppression de l’abonnement. Veuillez réessayer.'
+          );
+          this.isDeleting = false;
+        },
+        complete: () => {
+          this.isDeleting = false;
+        },
+      });
   }
 
-  // New method to handle errors globally
+  // Toast Notification Methods
+  private showSuccessToast(message: string): void {
+    this.toastMessage = message;
+    this.toastType = 'success';
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, 5000);
+  }
+
+  private showErrorToast(message: string): void {
+    this.toastMessage = message;
+    this.toastType = 'error';
+    this.showToast = true;
+    setTimeout(() => {
+      this.showToast = false;
+    }, 5000);
+  }
+
   handleError(error: any, userMessage: string): void {
     console.error(error);
-    this.errorMessage = userMessage;
+    this.showErrorToast(userMessage);
   }
 }

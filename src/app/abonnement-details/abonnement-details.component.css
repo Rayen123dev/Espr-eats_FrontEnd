@@ -807,6 +807,61 @@
   box-shadow: 0 2px 5px rgba(14, 165, 233, 0.2);
 }
 
+/* Toast Styles */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 12px 24px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: min(90vw, 320px);
+  color: white;
+  animation: slideInFade 5s ease-in-out forwards;
+}
+
+.toast.success {
+  background-color: #57955a;
+}
+
+.toast.error {
+  background-color: #d9534f;
+}
+
+.toast-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.toast-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.toast-title {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.toast-message {
+  font-size: 14px;
+  margin-top: 2px;
+}
+
+@keyframes slideInFade {
+  0% { opacity: 0; transform: translate(-50%, -20px); }
+  15% { opacity: 1; transform: translate(-50%, 0); }
+  85% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -20px); }
+}
+
+/* Rest of your existing CSS remains unchanged */
+
 /* Empty State */
 .no-transactions {
   display: flex;
@@ -842,6 +897,7 @@
   text-align: center;
   max-width: 400px;
 }
+
 
 /* Animation keyframes */
 @keyframes fadeIn {

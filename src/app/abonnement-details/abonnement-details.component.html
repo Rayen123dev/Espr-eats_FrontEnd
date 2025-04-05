@@ -1,85 +1,108 @@
 <div class="billing-container">
   <h1 class="page-title">Gestion de Votre Abonnement</h1>
 
-  <!-- Current Plan Section -->
-  <div class="section" *ngIf="subscriptionDetails">
-    <h2>PLAN COURANT</h2>
-    <div class="plan-details">
-      <div class="plan-info">
-        <span class="plan-name">{{ displayPlanName | titlecase }}</span>
-        <span class="plan-cost">Coût {{ displayCost }}</span>
-        <span class="plan-renewal">Votre abonnement expire le {{ displayRenewalDate | date:'mediumDate' }}.</span>
-      </div>
-      <div class="plan-actions">
-        <button class="change-plan-btn" (click)="changePlan()">Supprimer Plan</button>
-      </div>
+  <!-- Toast Notification -->
+  <div class="toast" *ngIf="showToast" [ngClass]="toastType">
+    <div class="toast-icon">
+      <svg *ngIf="toastType === 'success'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="20 6 9 17 4 12"></polyline>
+      </svg>
+      <svg *ngIf="toastType === 'error'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <line x1="15" y1="9" x2="9" y2="15"></line>
+        <line x1="9" y1="9" x2="15" y2="15"></line>
+      </svg>
+    </div>
+    <div class="toast-content">
+      <p class="toast-title">{{ toastType === 'success' ? 'Succès' : 'Erreur' }}</p>
+      <p class="toast-message">{{ toastMessage }}</p>
     </div>
   </div>
 
-  <!-- Error Message Section -->
-  <div *ngIf="errorMessage" class="error-message">
-    <p>{{ errorMessage }}</p>
-  </div>
-
-  <!-- Loading Spinner Section -->
+  <!-- Loading Spinner for Subscription Details -->
   <div *ngIf="isLoading" class="loading-spinner">
+    <div class="spinner"></div>
     <p>Chargement des détails de l'abonnement...</p>
   </div>
 
-  <!-- Payment Method Section -->
-  <div class="section">
-    <h2>Méthode de Paiement</h2>
-    <div class="payment-method">
-      <span class="card-info">{{ paymentMethod.card }}</span>
-      <span class="default-label" *ngIf="paymentMethod.isDefault">Défaut</span>
-      <span class="expiry">Expire {{ paymentMethod.expiry }}</span>
+  <!-- Main Content -->
+  <div *ngIf="!isLoading">
+    <!-- Current Plan Section -->
+    <div class="section" *ngIf="subscriptionDetails">
+      <h2>PLAN COURANT</h2>
+      <div class="plan-details">
+        <div class="plan-info">
+          <span class="plan-name">{{ displayPlanName | titlecase }}</span>
+          <span class="plan-cost">Coût {{ displayCost }}</span>
+          <span class="plan-renewal">
+            Votre abonnement expire le {{ displayRenewalDate | date:'mediumDate' }}.
+          </span>
+        </div>
+        <div class="plan-actions">
+          
+          <button 
+            class="change-plan-btn" 
+            (click)="deleteSubscription()" 
+            [disabled]="isDeleting">
+            {{ isDeleting ? 'Suppression...' : 'Supprimer Plan' }}
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
 
-  <!-- Billing History Section -->
-  <!-- Billing History Section with Timeline -->
-<div class="section" *ngIf="transactions.length">
-  <h2>Votre Historique de Transactions</h2>
-  <div class="transaction-timeline">
-    <div class="timeline-container">
-      <div class="timeline-line"></div>
-      <div *ngFor="let transaction of transactions; let i = index" class="timeline-item" [ngClass]="{'even': i % 2 === 0}">
-        <div class="timeline-marker" [ngClass]="transaction.status.toLowerCase()"></div>
-        <div class="timeline-content">
-          <div class="timeline-date">{{ transaction.dateTransaction | date:'longDate' }}</div>
-          <div class="timeline-details">
-            <h3>{{ transaction.details }}</h3>
-            <div class="timeline-meta">
-              <span class="transaction-status" [ngClass]="transaction.status.toLowerCase()">
-                {{ transaction.status | titlecase }}
-              </span>
-              <span class="transaction-date">Date Action: {{ transaction.dateTransaction | date:'shortTime' }}</span>
+    <!-- Payment Method Section -->
+    <div class="section">
+      <h2>MÉTHODE DE PAIEMENT</h2>
+      <div class="payment-method">
+        <span class="card-info">{{ paymentMethod.card }}</span>
+        <span class="default-label" *ngIf="paymentMethod.isDefault">Défaut</span>
+        <span class="expiry">Expire {{ paymentMethod.expiry }}</span>
+      </div>
+    </div>
+
+    <!-- Billing History Section with Timeline -->
+    <div class="section" *ngIf="transactions.length > 0">
+      <h2>VOTRE HISTORIQUE DE TRANSACTIONS</h2>
+      <div class="transaction-timeline">
+        <div class="timeline-container">
+          <div class="timeline-line"></div>
+          <div 
+            *ngFor="let transaction of transactions; let i = index" 
+            class="timeline-item" 
+            [ngClass]="{'even': i % 2 === 0}">
+            <div class="timeline-marker" [ngClass]="transaction.status.toLowerCase()"></div>
+            <div class="timeline-content">
+              <div class="timeline-date">{{ transaction.dateTransaction | date:'longDate' }}</div>
+              <div class="timeline-details">
+                <h3>{{ transaction.details }}</h3>
+                <div class="timeline-meta">
+                  <span class="transaction-status" [ngClass]="transaction.status.toLowerCase()">
+                    {{ transaction.status | titlecase }}
+                  </span>
+                  <span class="transaction-date">
+                    Date Action: {{ transaction.dateTransaction | date:'shortTime' }}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 
-<!-- No Transactions Section -->
-<div *ngIf="transactions.length === 0 && !isLoadingTransactions" class="no-transactions">
-  <div class="no-data-icon"></div>
-  <p>Aucune transaction trouvée.</p>
-  <span>Vos transactions apparaîtront ici une fois qu'elles seront effectuées.</span>
-</div>
+    <!-- No Transactions Section -->
+    <div *ngIf="transactions.length === 0 && !isLoadingTransactions" class="no-transactions">
+      <div class="no-data-icon">
+        <i class="fas fa-file-invoice"></i>
+      </div>
+      <p>Aucune transaction trouvée.</p>
+      <span>Vos transactions apparaîtront ici une fois qu'elles seront effectuées.</span>
+    </div>
 
-<!-- Loading Transactions Spinner Section -->
-<div *ngIf="isLoadingTransactions" class="loading-spinner">
-  <p>Chargement de l'historique des transactions...</p>
-</div>
-  <!-- No Transactions Section -->
-  <div *ngIf="transactions.length === 0 && !isLoadingTransactions">
-    <p>Aucune transaction trouvée.</p>
-  </div>
-
-  <!-- Loading Transactions Spinner Section -->
-  <div *ngIf="isLoadingTransactions" class="loading-spinner">
-    <p>Chargement de l'historique des transactions...</p>
+    <!-- Loading Transactions Spinner Section -->
+    <div *ngIf="isLoadingTransactions" class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Chargement de l'historique des transactions...</p>
+    </div>
   </div>
 </div>
