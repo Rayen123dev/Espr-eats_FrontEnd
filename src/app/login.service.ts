@@ -1,24 +1,39 @@
 import { Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError, from, switchMap } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-
 export interface User {
-  id: number;
+  idUser: number;
   nom: string;
   email: string;
   age: string;
   role: string;
-  avatarUrl: string;  
+  avatarUrl: string;
+  link_Image: string;  
+}
+
+export interface CloudinaryUploadResponse {
+  secure_url: string;
+  public_id: string;
+  asset_id: string;
+  // Add other properties as needed based on Cloudinary response
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+  [x: string]: any;
   constructor(private http: HttpClient) { }
 
   private baseUrl = 'http://localhost:8081/api/auth';
+
+  uploadImage(file: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('file', file);
+    return this.http.post(`${this.baseUrl}/upload-image`, formData);
+  }
+  
 
   login(user: { email: string; mdp: string }): Observable<any> {
     return this.http.post<{ token: string }>(`${this.baseUrl}/login`, user).pipe(
@@ -39,7 +54,6 @@ export class LoginService {
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/users`);
   }
-  
 
   getRole(): string | null {
     const token = localStorage.getItem('token');
@@ -54,7 +68,6 @@ export class LoginService {
     }
   }
 
-  // Improved JWT decoding method
   private jwtDecode(token: string): any {
     try {
       const base64Url = token.split('.')[1];
@@ -72,7 +85,6 @@ export class LoginService {
   
     try {
       const decodedToken = this.jwtDecode(token);
-      // Directly parse the 'id' claim as a number
       return decodedToken?.id ? parseInt(decodedToken.id, 10) : null;
     } catch (error) {
       console.error('Error extracting user ID', error);
@@ -84,8 +96,6 @@ export class LoginService {
     const token = localStorage.getItem('token');
     
     if (!token) {
-      console.error('No authentication token found');
-      // Optionally throw an error or return an observable that errors out
       return throwError(() => new Error('No authentication token found'));
     }
   
@@ -97,22 +107,16 @@ export class LoginService {
     }).pipe(
       catchError(error => {
         console.error('Profile update error:', error);
-        // Re-throw the error to be caught by the component
         return throwError(() => error);
       })
     );
   }
 
+
+
+
   logout(): void {
     localStorage.removeItem('token');
-  }
-
-  registerWithImage(formData: FormData): Observable<any> {
-    return this.http.post(`${this.baseUrl}/signup`, formData, {
-      headers: new HttpHeaders({
-        'Accept': 'application/json'
-      })
-    });
   }
 
   register(user: {
@@ -121,10 +125,21 @@ export class LoginService {
     mdp: string;
     age: string;
     role: string;
-    link_image: string;
+    Link_Image: string;
   }): Observable<any> {
-    console.log(user);
-    return this.http.post(`${this.baseUrl}/signup`, user);
+    console.log('Registering user:', user);
+    
+    // Add content type header explicitly
+    return this.http.post(`${this.baseUrl}/signup`, user, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json'
+      })
+    }).pipe(
+      catchError(error => {
+        console.error('Signup error details:', error);
+        return throwError(() => error);
+      })
+    );
   }
 
   verifyEmail(token: string): Observable<any> {
@@ -149,7 +164,7 @@ export class LoginService {
         headers: new HttpHeaders({
           'Content-Type': 'application/x-www-form-urlencoded'
         }),
-        responseType: 'text' // Change responseType to 'text'
+        responseType: 'text'
       }
     );
   }

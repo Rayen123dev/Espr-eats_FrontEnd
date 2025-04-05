@@ -44,6 +44,7 @@ export class StaffDashboardComponent implements OnInit {
   selectedPlatIds: number[] = [];
   selectedRegimeId: number | null = null;
 
+
   // Ajout pour le formulaire de régime
   showAddRegimeForm: boolean = false; // Contrôle l'affichage du formulaire
   addRegimeForm: FormGroup; // Formulaire pour ajouter un régime
@@ -161,6 +162,7 @@ export class StaffDashboardComponent implements OnInit {
     this.loadPlats();
     this.loadRegimes();
     this.loadMenus();
+    
   }
 
   private initializeUser(): void {
@@ -199,6 +201,9 @@ export class StaffDashboardComponent implements OnInit {
       this.regimeTypes = new Set(regimes.map(regime => regime.type)).size;
     });
   }
+
+
+ 
 
   loadPlats(): void {
     this.platService.getAllPlats().subscribe(plats => {

@@ -19,6 +19,7 @@ export class MenuComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 3;
   totalPages: number = 1;
+
   
 
   constructor(private menuService: MenuService,private loginService: LoginService, private router: Router) {}

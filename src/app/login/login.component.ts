@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LoginService } from '../login.service';
+import { AuthService } from '../auth-service.service';
 
 @Component({
   selector: 'app-login',
@@ -21,18 +22,20 @@ import { LoginService } from '../login.service';
   ]
 })
 export class LoginComponent implements OnInit {
-  loginForm: FormGroup; // Remove the potential undefined type
+  loginForm: FormGroup;
   loading = false;
   isSubmitted = false;
   errorMessage = '';
   showPassword = false;
+  captchaToken = '';
 
   constructor(
     private formBuilder: FormBuilder,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
-    // Initialize the form in the constructor instead of ngOnInit
+    // Initialize the form in the constructor
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(3)]],
@@ -40,25 +43,29 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  onCaptchaResolved(token: string) {
+    this.captchaToken = token;
+  }
+
   ngOnInit(): void {
-      const userId = this.loginService.getUserIdFromToken();
-      console.log('User ID:', userId);
+    // Check if user is already logged in
+    const userId = this.loginService.getUserIdFromToken();
     
-      if (userId) {
-        this.loginService.getUserById(userId).subscribe({
-          next: (user) => {
-            // Handle user data
-            console.log('User details:', user);
-          },
-          error: (error) => {
-            console.error('Error fetching user', error);
-          }
-        });
-      } else {
-        console.error('No user ID found');
-      }
+    if (userId) {
+      this.loginService.getUserById(userId).subscribe({
+        next: (user) => {
+          // User is already logged in, redirect based on role
+          const role = this.loginService.getRole();
+          this.redirectBasedOnRole(role || 'Guest');
+        },
+        error: (error) => {
+          console.error('Error fetching user', error);
+          // Token might be invalid, do nothing and let user log in again
+        }
+      });
+    }
     
-    // We still initialize animations in ngOnInit
+    // Initialize animations
     this.initFoodAnimation();
   }
 
@@ -70,8 +77,13 @@ export class LoginComponent implements OnInit {
     this.showPassword = !this.showPassword;
   }
 
-  /*onSubmit(): void {
+  clearError(): void {
+    this.errorMessage = '';
+  }
+
+  onSubmit(): void {
     this.isSubmitted = true;
+    this.clearError();
     
     if (this.loginForm.invalid) {
       return;
@@ -81,114 +93,93 @@ export class LoginComponent implements OnInit {
     
     const credentials = {
       email: this.formControls['email'].value,
-      mdp: this.formControls['password'].value
+      mdp: this.formControls['password'].value,
+      captchaToken: this.captchaToken
     };
     
     this.loginService.login(credentials).subscribe({
       next: (data) => {
-        console.log(credentials.email);
-        console.log(credentials.mdp);
-        console.log(data);
-        this.loading = false;
+        // The user ID might not be immediately available
+        const userId = this.loginService.getUserIdFromToken();
         
-        // Determine where to navigate based on role
-        const role = this.loginService.getRole();
-        this.router.navigate(['/profile']);
-        /*
-        switch (role) {
-          case 'ADMIN':
-            this.router.navigate(['/admin/dashboard']);
-            break;
-          case 'USER':
-            this.router.navigate(['/menu']);
-            break;
-          case 'STAFF':
-            this.router.navigate(['/staff/orders']);
-            break;
-          default:
-            this.router.navigate(['/home']);
+        if (userId) {
+          // Ensure user data is fetchable before navigating
+          this.loginService.getUserById(userId).subscribe({
+            next: () => {
+              this.loading = false;
+              const role = this.loginService.getRole();
+              this.redirectBasedOnRole(role|| 'Guest');
+            },
+            error: (error) => {
+              this.loading = false;
+              console.error('Failed to fetch user', error);
+              this.errorMessage = 'Failed to load user data. Please try again.';
+              
+              // Create shaking animation for form
+              this.shakeLoginCard();
+            }
+          });
+        } else {
+          this.loading = false;
+          console.error('No user ID found');
+          this.errorMessage = 'Authentication error: Unable to retrieve user ID';
+          
+          // Create shaking animation for form
+          this.shakeLoginCard();
         }
-        
       },
-      error: (error: { status: number; }) => {
+      error: (error) => {
         this.loading = false;
+        console.error('Login failed', error);
+        
+        // Display appropriate error message based on error status
         if (error.status === 401) {
           this.errorMessage = 'Invalid email or password';
+        } else if (error.status === 403) {
+          this.errorMessage = 'Account is locked or inactive';
         } else {
-          this.errorMessage = 'Connection error. Please try again.';
+          this.errorMessage = 'Connection error. Please try again later.';
         }
         
         // Create shaking animation for form
-        const loginCard = document.querySelector('.login-card');
-        loginCard?.classList.add('shake');
-        setTimeout(() => {
-          loginCard?.classList.remove('shake');
-        }, 500);
+        this.shakeLoginCard();
       }
     });
-  }*/
-
-    onSubmit(): void {
-      this.isSubmitted = true;
-    
-    if (this.loginForm.invalid) {
-      return;
-    }
-    
-    this.loading = true;
-    
-    const credentials = {
-      email: this.formControls['email'].value,
-      mdp: this.formControls['password'].value
-    };
-      this.loginService.login(credentials).subscribe({
-        next: (data) => {
-          // The user ID might not be immediately available
-          const userId = this.loginService.getUserIdFromToken();
-          
-          if (userId) {
-            // Ensure user data is fetchable before navigating
-            this.loginService.getUserById(userId).subscribe({
-              next: () => {
-                const role = this.loginService.getRole();
-              switch (role) {
-                case 'Admin':
-                  this.router.navigate(['gestionuser']);
-                  break;
-                case 'User':
-                  this.router.navigate(['/profile']);
-                  break;
-                case 'Staff':
-                  this.router.navigate(['/staffdashboard']);
-                  break;
-                case 'Medecin':
-                  this.router.navigate(['/staffdashboard']);
-                  break;
-                default:
-                  this.router.navigate(['/home']);
-              }
-              },
-              error: (error) => {
-                console.error('Failed to fetch user', error);
-                // Fallback navigation or error handling
-              }
-            });
-          } else {
-            console.error('No user ID found');
-          }
-        },
-        error: (error) => {
-          // Error handling
-        }
-      });
-    }
-
-
-  
-  clearError(): void {
-    this.errorMessage = '';
   }
   
+  // Helper method to add shake animation to login card
+  private shakeLoginCard(): void {
+    const loginCard = document.querySelector('.login-card');
+    loginCard?.classList.add('shake');
+    setTimeout(() => {
+      loginCard?.classList.remove('shake');
+    }, 500);
+  }
+  
+  // Helper method to redirect based on role
+  private redirectBasedOnRole(role: string): void {
+    switch (role) {
+      case 'Admin':
+        this.router.navigate(['gestionuser']);
+        break;
+      case 'User':
+        this.router.navigate(['/profile']);
+        break;
+      case 'Staff':
+        this.router.navigate(['/staffdashboard']);
+        break;
+      case 'Medecin':
+        this.router.navigate(['/staffdashboard']);
+        break;
+      default:
+        this.router.navigate(['/home']);
+    }
+  }
+  loginWithGoogle() {
+
+    this.authService.loginWithGoogle();
+
+  }
   initFoodAnimation(): void {
     // Animation for food icons
     // Ensure gsap is available from the global window object

@@ -1,72 +1,85 @@
 <div class="profile-container">
+  <!-- Loading indicator -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- Profile Sidebar -->
   <div class="profile-sidebar">
-    <div class="profile-avatar">
-      <div class="avatar-wrapper">
-        <img 
-          [src]="user.avatarUrl || '/assets/default-avatar.png'" 
-          alt="Profile Picture"
-        >
-        <input 
-          type="file" 
-          #avatarInput 
-          (change)="uploadAvatar($event)" 
-          class="avatar-upload-input"
-        >
-        <button 
-          class="edit-avatar-btn" 
-          (click)="avatarInput.click()"
-        >
-          <i class="icon-edit"></i>
-        </button>
+    <div class="avatar-wrapper">
+      <img 
+        [src]="user.link_Image || '/assets/default-avatar.png'" 
+        alt="Profile Picture"
+      >
+      <input 
+        type="file" 
+        #avatarInput 
+        (change)="uploadAvatar($event)" 
+        accept="image/*"
+        class="avatar-upload-input"
+      >
+      <button 
+        class="edit-avatar-btn" 
+        (click)="avatarInput.click()"
+        title="Change profile picture"
+      >
+        <i class="fas fa-camera"></i>
+      </button>
+    </div>
+
+    <div class="profile-stats">
+      <div class="stat" [title]="'Your connections'">
+        <span class="stat-number">22</span>
+        <span class="stat-label">Friends</span>
       </div>
-      <div class="profile-stats">
-        <div class="stat">
-          <span class="stat-number">22</span>
-          <span class="stat-label">Friends</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">10</span>
-          <span class="stat-label">Photos</span>
-        </div>
-        <div class="stat">
-          <span class="stat-number">89</span>
-          <span class="stat-label">Comments</span>
-        </div>
+      <div class="stat" [title]="'Photos you\'ve shared'">
+        <span class="stat-number">10</span>
+        <span class="stat-label">Photos</span>
       </div>
-      <div class="profile-actions">
-        <button class="btn btn-connect">Connect</button>
-        <button class="btn btn-message">Message</button>
+      <div class="stat" [title]="'Comments you\'ve received'">
+        <span class="stat-number">89</span>
+        <span class="stat-label">Comments</span>
       </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="btn btn-connect">
+        <i class="fas fa-user-plus"></i> Connect
+      </button>
+      <button class="btn btn-message">
+        <i class="fas fa-comment"></i> Message
+      </button>
     </div>
   </div>
 
+  <!-- Profile Main Content -->
   <div class="profile-main">
-    <div class="profile-header">
-      <div class="header-actions">
+    <div class="header-actions">
+      <button 
+        *ngIf="!editMode" 
+        (click)="toggleEditMode()" 
+        class="btn btn-edit"
+      >
+        <i class="fas fa-pen"></i> Edit Profile
+      </button>
+      <div *ngIf="editMode" class="edit-buttons">
         <button 
-          *ngIf="!editMode" 
-          (click)="toggleEditMode()" 
-          class="btn btn-edit"
+          (click)="saveChanges()" 
+          class="btn btn-save"
+          [disabled]="profileForm.invalid"
         >
-          Edit Profile
+          <i class="fas fa-check"></i> Save
         </button>
-        <div *ngIf="editMode" class="edit-buttons">
-          <button 
-            (click)="saveChanges()" 
-            class="btn btn-save"
-            [disabled]="profileForm.invalid"
-          >
-            Save
-          </button>
-          <button 
-            (click)="cancelEdit()" 
-            class="btn btn-cancel"
-          >
-            Cancel
-          </button>
-        </div>
+        <button 
+          (click)="cancelEdit()" 
+          class="btn btn-cancel"
+        >
+          <i class="fas fa-times"></i> Cancel
+        </button>
       </div>
+    </div>
 
+    <div class="profile-header">
       <h1 class="profile-name">
         <ng-container *ngIf="!editMode">
           {{ user.nom }}, {{ user.age }}
@@ -80,7 +93,7 @@
       </h1>
       <p class="profile-title">
         <ng-container *ngIf="!editMode">
-          {{ user.role }} - {{ user.email }}
+          <i class="fas fa-briefcase"></i> {{ user.role }} - {{ user.email }}
         </ng-container>
         <ng-container *ngIf="editMode">
           <select 
@@ -100,18 +113,18 @@
         </ng-container>
       </p>
       <p class="profile-location">
-        <i class="icon-location"></i> 
+        <i class="fas fa-map-marker-alt"></i> 
         Bucharest, Romania
       </p>
 
       <div *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
+        <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
       </div>
     </div>
 
     <div class="profile-details">
       <div class="detail-section">
-        <h2>User Information</h2>
+        <h2>Personal Information</h2>
         <div class="detail-grid">
           <div class="detail-item">
             <label>Username</label>
@@ -123,6 +136,9 @@
               [formControl]="getFormControl('nom')"
               class="edit-input"
             >
+            <div class="error-feedback" *ngIf="getFormControl('nom').invalid && getFormControl('nom').touched">
+              Username is required (2-50 characters)
+            </div>
           </div>
           <div class="detail-item">
             <label>Email Address</label>
@@ -133,7 +149,11 @@
               *ngIf="editMode" 
               [formControl]="getFormControl('email')"
               class="edit-input"
+              placeholder="your@email.com"
             >
+            <div class="error-feedback" *ngIf="getFormControl('email').invalid && getFormControl('email').touched">
+              Please enter a valid email address
+            </div>
           </div>
           <div class="detail-item">
             <label>First Name</label>
@@ -142,7 +162,7 @@
             </ng-container>
             <input 
               *ngIf="editMode" 
-              [formControl]="getFormControl('nom')"
+              [formControl]="getFormControl('firstName')"
               class="edit-input"
             >
           </div>
@@ -153,7 +173,7 @@
             </ng-container>
             <input 
               *ngIf="editMode" 
-              [formControl]="getFormControl('nom')"
+              [formControl]="getFormControl('lastName')"
               class="edit-input"
             >
           </div>
@@ -172,6 +192,42 @@
               [formControl]="getFormControl('age')"
               class="edit-input"
             >
+            <div class="error-feedback" *ngIf="getFormControl('age').invalid && getFormControl('age').touched">
+              Age must be between 18-120
+            </div>
+          </div>
+          
+          <!-- New fields for enhanced profile -->
+          <div class="detail-item">
+            <label>Professional Title</label>
+            <span>UX/UI Designer</span>
+          </div>
+          <div class="detail-item">
+            <label>Join Date</label>
+            <span>April 20, 2022</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Additional profile sections -->
+      <div class="detail-section">
+        <h2>Account Status</h2>
+        <div class="detail-grid">
+          <div class="detail-item">
+            <label>Membership Level</label>
+            <span>Premium</span>
+          </div>
+          <div class="detail-item">
+            <label>Last Login</label>
+            <span>Today, 09:42 AM</span>
+          </div>
+          <div class="detail-item">
+            <label>Account Status</label>
+            <span>Active</span>
+          </div>
+          <div class="detail-item">
+            <label>2FA Status</label>
+            <span>Enabled</span>
           </div>
         </div>
       </div>

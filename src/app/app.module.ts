@@ -37,6 +37,8 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component'; // Assurez-vous d'importer MatCheckbox
 import { NgChartsModule } from 'ng2-charts';
+import { AuthService } from './auth-service.service';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,10 +81,12 @@ import { NgChartsModule } from 'ng2-charts';
     MatOptionModule,
     MatCheckboxModule,
     FormsModule,
-    NgChartsModule
+    NgChartsModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
     
   ],
-  providers: [],
+  providers: [AuthService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

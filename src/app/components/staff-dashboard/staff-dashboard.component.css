@@ -2,7 +2,7 @@
 .dashboard-container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 2rem;
+    padding: 1rem;
     background-color: #f8f9fa;
   }
   
@@ -505,13 +505,16 @@
   }
   /* Styles pour la barre de navigation */
 .section-nav {
-  background-color: #ffffff; /* Fond blanc */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère pour un effet de profondeur */
-  padding: 15px 0;
+    background: linear-gradient(135deg, #ffffff, #f5f7fa);
+    
+  padding: 25px 0 ;
   position: sticky; /* Fixe la barre en haut lors du défilement */
   top: 0;
   z-index: 1000; /* S'assure que la barre reste au-dessus des autres éléments */
-  width: 100%;
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
 }
 
 .section-nav ul {
@@ -530,7 +533,7 @@
 .section-nav a {
   text-decoration: none;
   color: #333; /* Couleur des liens */
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 500;
   padding: 10px 15px;
   border-radius: 5px;

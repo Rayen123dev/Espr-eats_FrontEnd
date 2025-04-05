@@ -12,12 +12,13 @@ import { of } from 'rxjs';
 })
 export class ProfileComponent implements OnInit {
   user: User = {
-    id: 0,
+    idUser: 0,
     nom: '',
     email: '',
     age: '',
     role: '',
-    avatarUrl: ''
+    avatarUrl: '',
+    link_Image: '',
   };
 
   editMode = false;
@@ -78,6 +79,7 @@ export class ProfileComponent implements OnInit {
     }
 
     this.fetchUserProfile(userId);
+    console.log('User ID:', userId);
   }
 
   // Centralized method to fetch user profile
