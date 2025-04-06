@@ -8,13 +8,30 @@ export interface SubscriptionReport {
   activeSubscriptions: number;
   pendingSubscriptions: number;
   expiredSubscriptions: number;
+  blockedSubscriptions: number;
   totalRevenue: number;
   monthlyGrowth: { [key: string]: number }; // Map of month names to subscription counts
+  subscriptionsByType: { [key: string]: number };
 }
 
 export enum TransactionStatus {
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED',
+  PENDING = 'PENDING',
+}
+
+export enum TypeAbonnement {
+  MENSUEL = 'MENSUEL',
+  TRIMESTRIEL = 'TRIMESTRIEL',
+  SEMESTRIEL = 'SEMESTRIEL',
+  ANNUEL = 'ANNUEL',
+}
+
+export enum AbonnementStatus {
+  ACTIVE = 'ACTIVE',
+  CANCELED = 'CANCELED',
+  EXPIRED = 'EXPIRED',
+  SUSPENDED = 'SUSPENDED',
   PENDING = 'PENDING',
 }
 
@@ -127,5 +144,15 @@ export class AbonnementService {
 
   getSubscriptionReport(): Observable<SubscriptionReport> {
     return this.http.get<SubscriptionReport>(`${this.apiUrl}/report`);
+  }
+
+  getAbonnementsByType(type: string): Observable<Abonnement[]> {
+    return this.http.get<Abonnement[]>(`${this.apiUrl}/getAll-ByType/${type}`);
+  }
+
+  getAbonnementsByStatus(status: string): Observable<Abonnement[]> {
+    return this.http.get<Abonnement[]>(
+      `${this.apiUrl}/getAll-ByStatus/${status}`
+    );
   }
 }
