@@ -155,4 +155,11 @@ export class AbonnementService {
       `${this.apiUrl}/getAll-ByStatus/${status}`
     );
   }
+
+  unblockAbonnement(idAbonnement: number): Observable<Abonnement> {
+    return this.http.put<Abonnement>(
+      `${this.apiUrl}/${idAbonnement}/unblock`,
+      null
+    );
+  }
 }

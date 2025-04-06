@@ -1,4 +1,11 @@
 <div class="billing-container">
+  <!-- Notification for Blocked Subscriptions -->
+  <div *ngIf="showBlockedNotification" class="notification warning">
+    <span class="notification-icon"></span>
+    <span>Attention: Il y a {{ report?.blockedSubscriptions }} abonnement(s) bloqué(s) actuellement!</span>
+    <button class="close-btn" (click)="closeBlockedNotification()">×</button>
+  </div>
+
   <!-- Header -->
   <h1 class="page-title">Tableau de Bord des Abonnements</h1>
 
@@ -115,6 +122,14 @@
         </div>
       </div>
 
+      <!-- Toggle Success/Error Messages -->
+      <div *ngIf="toggleSuccessMessage" class="success-message">
+        {{ toggleSuccessMessage }}
+      </div>
+      <div *ngIf="toggleErrorMessage" class="error-message">
+        {{ toggleErrorMessage }}
+      </div>
+
       <!-- Table Error Message -->
       <div *ngIf="tableErrorMessage" class="error-message">
         {{ tableErrorMessage }}
@@ -148,9 +163,14 @@
               <td>{{ abonnement.dateDebut | date: 'shortDate' }}</td>
               <td>{{ abonnement.dateFin | date: 'shortDate' }}</td>
               <td>
-                <span [ngClass]="{'text-green-500': !abonnement.isBlocked, 'text-red-500': abonnement.isBlocked}">
-                  {{ abonnement.isBlocked ? 'Oui' : 'Non' }}
-                </span>
+                <label class="toggle-switch">
+                  <input
+                    type="checkbox"
+                    [checked]="abonnement.isBlocked"
+                    (change)="toggleBlockedStatus(abonnement.idAbonnement)"
+                  />
+                  <span class="slider"></span>
+                </label>
               </td>
             </tr>
           </tbody>

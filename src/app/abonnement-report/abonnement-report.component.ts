@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import {
   AbonnementService,
   SubscriptionReport,
@@ -23,11 +23,18 @@ export class AbonnementReportComponent implements OnInit {
   isLoadingTable: boolean = false;
   tableErrorMessage: string = '';
 
+  // Toggle action states
+  toggleErrorMessage: string = '';
+  toggleSuccessMessage: string = '';
+
+  // Notification state for blocked subscriptions
+  showBlockedNotification: boolean = false;
+
   // Dropdown options for filtering
   types: string[] = Object.values(TypeAbonnement);
   statuses: string[] = Object.values(AbonnementStatus);
-  selectedType: string = ''; // Default to no filter
-  selectedStatus: string = ''; // Default to no filter
+  selectedType: string = '';
+  selectedStatus: string = '';
 
   // Line Chart for Monthly Growth
   lineChartData: {
@@ -49,28 +56,14 @@ export class AbonnementReportComponent implements OnInit {
   lineChartOptions: ChartOptions = {
     responsive: true,
     plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: 'Croissance Mensuelle des Abonnements',
-      },
+      legend: { position: 'top' },
+      title: { display: true, text: 'Croissance Mensuelle des Abonnements' },
     },
     scales: {
-      x: {
-        display: true,
-        title: {
-          display: true,
-          text: 'Mois',
-        },
-      },
+      x: { display: true, title: { display: true, text: 'Mois' } },
       y: {
         display: true,
-        title: {
-          display: true,
-          text: "Nombre d'Abonnements",
-        },
+        title: { display: true, text: "Nombre d'Abonnements" },
         beginAtZero: true,
       },
     },
@@ -99,19 +92,17 @@ export class AbonnementReportComponent implements OnInit {
   pieChartOptions: ChartOptions = {
     responsive: true,
     plugins: {
-      legend: {
-        position: 'top',
-      },
-      title: {
-        display: true,
-        text: "Répartition des Statuts d'Abonnement",
-      },
+      legend: { position: 'top' },
+      title: { display: true, text: "Répartition des Statuts d'Abonnement" },
     },
   };
   pieChartType: ChartType = 'pie';
   pieChartLegend = true;
 
-  constructor(private abonnementService: AbonnementService) {}
+  constructor(
+    private abonnementService: AbonnementService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.fetchSubscriptionReport();
@@ -125,6 +116,15 @@ export class AbonnementReportComponent implements OnInit {
         this.updateCharts();
         this.isLoading = false;
         this.errorMessage = '';
+
+        // Show notification if there are blocked subscriptions
+        if (report.blockedSubscriptions > 0) {
+          this.showBlockedNotification = true;
+          setTimeout(() => {
+            this.showBlockedNotification = false;
+            this.cdr.detectChanges();
+          }, 5000); // Auto-hide after 5 seconds
+        }
       },
       error: (err) => {
         console.error('Error fetching subscription report:', err);
@@ -143,12 +143,8 @@ export class AbonnementReportComponent implements OnInit {
 
     const report: SubscriptionReport = this.report;
 
-    // Update Line Chart (Monthly Growth)
     const monthlyGrowthEntries = Object.keys(report.monthlyGrowth)
-      .map((month) => ({
-        month,
-        count: report.monthlyGrowth[month],
-      }))
+      .map((month) => ({ month, count: report.monthlyGrowth[month] }))
       .sort((a, b) => a.month.localeCompare(b.month));
     this.lineChartData.labels = monthlyGrowthEntries.map(
       (entry) => entry.month
@@ -157,7 +153,6 @@ export class AbonnementReportComponent implements OnInit {
       (entry) => entry.count
     );
 
-    // Update Pie Chart (Subscription Status Distribution)
     this.pieChartData.datasets[0].data = [
       report.activeSubscriptions,
       report.pendingSubscriptions,
@@ -171,7 +166,6 @@ export class AbonnementReportComponent implements OnInit {
     this.fetchSubscriptionReport();
   }
 
-  // Table-related methods
   fetchAbonnements(): void {
     this.isLoadingTable = true;
     this.tableErrorMessage = '';
@@ -252,5 +246,76 @@ export class AbonnementReportComponent implements OnInit {
     this.selectedStatus = '';
     this.abonnements = [];
     this.tableErrorMessage = '';
+  }
+
+  toggleBlockedStatus(idAbonnement: number): void {
+    console.log('Before toggle - ID:', idAbonnement);
+    const abonnement = this.abonnements.find(
+      (a) => a.idAbonnement === idAbonnement
+    );
+    console.log('Current state:', abonnement?.isBlocked);
+
+    // Optimistically update the UI
+    const index = this.abonnements.findIndex(
+      (a) => a.idAbonnement === idAbonnement
+    );
+    if (index !== -1 && abonnement) {
+      this.abonnements[index].isBlocked = !abonnement.isBlocked; // Toggle locally
+      this.abonnements = [...this.abonnements];
+      this.cdr.detectChanges();
+      console.log(
+        'Local state updated optimistically:',
+        this.abonnements[index].isBlocked
+      );
+    }
+
+    this.toggleErrorMessage = '';
+    this.toggleSuccessMessage = '';
+
+    // Sync with API
+    this.abonnementService.unblockAbonnement(idAbonnement).subscribe({
+      next: (updatedAbonnement) => {
+        console.log('API response - New state:', updatedAbonnement.isBlocked);
+
+        // Update local state with API response
+        if (index !== -1) {
+          this.abonnements[index].isBlocked = updatedAbonnement.isBlocked;
+          this.abonnements = [...this.abonnements];
+          this.cdr.detectChanges();
+          console.log(
+            'Updated local state from API:',
+            this.abonnements[index].isBlocked
+          );
+        }
+
+        this.toggleSuccessMessage = `Abonnement ${
+          updatedAbonnement.isBlocked ? 'blocked' : 'unblocked'
+        } successfully!`;
+        setTimeout(() => (this.toggleSuccessMessage = ''), 3000);
+
+        // Update charts without full reload
+        if (this.report) {
+          this.report.blockedSubscriptions = this.abonnements.filter(
+            (a) => a.isBlocked
+          ).length;
+          this.updateCharts();
+        }
+      },
+      error: (error) => {
+        console.error('API Error:', error);
+        if (index !== -1 && abonnement) {
+          this.abonnements[index].isBlocked = abonnement.isBlocked; // Revert on error
+          this.abonnements = [...this.abonnements];
+          this.cdr.detectChanges();
+        }
+        this.toggleErrorMessage = 'Failed to update status';
+        setTimeout(() => (this.toggleErrorMessage = ''), 3000);
+      },
+    });
+  }
+
+  closeBlockedNotification(): void {
+    this.showBlockedNotification = false;
+    this.cdr.detectChanges();
   }
 }
