@@ -1,228 +1,621 @@
-// Advanced SCSS for Modern UI
-// Variables for colors, typography, and other design system values
-$primary-color: #5f63f2;
-$secondary-color: #f3f4f7;
-$accent-color: #28a745;
-$danger-color: #dc3545;
-$neutral-color: #6c757d;
-$background-color: #f9f9f9;
+// Advanced SCSS for a Modern and Creative Complaints Dashboard
+// Variables for an enhanced design system
+$primary-color: #6a5acd; // Vibrant purple to match your form
+$secondary-color: #f3f7ff; // Light blue-ish background
+$accent-color: #00c39a; // Mint green accent
+$danger-color: #ff5252; // Bright red for delete actions
+$neutral-color: #566a80; // Blue-gray for text
+$background-color: #f7f9fc; // Light blue-gray background
 $card-bg-color: #ffffff;
-$border-radius: 12px;
+$border-radius: 16px;
 $font-family: 'Poppins', Arial, sans-serif;
 $transition-speed: 0.3s;
-$shadow-color: rgba(0, 0, 0, 0.1);
-$hover-shadow: rgba(0, 0, 0, 0.2);
+$shadow-color: rgba(106, 90, 205, 0.15);
+
+// Status-specific colors
+$status-pending: #ffc107; // Amber
+$status-in-progress: #3d7cf4; // Blue
+$status-resolved: #00c39a; // Green (same as accent)
+$status-closed: #6c757d; // Gray
 
 // Utility mixins for consistency
 @mixin box-shadow($color, $blur: 16px, $spread: 2px) {
-  box-shadow: 0 4px $blur $color, 0 2px $spread $color;
+  box-shadow: 0 8px $blur $color, 0 2px $spread $color;
 }
 
 @mixin button-style($bg-color, $hover-bg-color) {
   padding: 10px 20px;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: 600;
   border: none;
   border-radius: $border-radius;
   cursor: pointer;
-  transition: all $transition-speed ease;
-  background-color: $bg-color;
+  transition: all $transition-speed cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, $bg-color, $hover-bg-color);
   color: white;
-
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg, 
+      rgba(255, 255, 255, 0) 0%, 
+      rgba(255, 255, 255, 0.3) 50%, 
+      rgba(255, 255, 255, 0) 100%
+    );
+    transition: all 0.8s ease;
+  }
+  
   &:hover {
-    background-color: $hover-bg-color;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba($bg-color, 0.4);
+    
+    &::after {
+      left: 100%;
+    }
   }
 }
 
 @mixin status-badge($bg-color) {
-  padding: 5px 10px;
-  border-radius: 20px;
-  background-color: $bg-color;
+  padding: 6px 12px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, $bg-color, darken($bg-color, 15%));
   color: white;
-  font-size: 14px;
-  text-transform: capitalize;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 3px 8px rgba($bg-color, 0.3);
 }
 
-// Main wrapper
+// Animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+// Page background with subtle pattern
+body {
+  background-color: $background-color;
+  background-image: 
+    radial-gradient(rgba($primary-color, 0.05) 2px, transparent 2px),
+    radial-gradient(rgba($primary-color, 0.05) 2px, transparent 2px);
+  background-size: 40px 40px;
+  background-position: 0 0, 20px 20px;
+}
+
+// Main wrapper with enhanced styling
 .reclamation-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 30px;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: $background-color;
+  gap: 40px;
+  padding: 30px;
+  max-width: 1280px;
+  margin: 30px auto;
+  background-color: rgba($background-color, 0.8);
+  backdrop-filter: blur(10px);
   border-radius: $border-radius;
   font-family: $font-family;
+  box-shadow: 
+    0 20px 50px $shadow-color,
+    0 10px 20px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+  
+  // Decorative elements
+  &::before, &::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+  }
+  
+  &::before {
+    width: 300px;
+    height: 300px;
+    background: linear-gradient(135deg, rgba($accent-color, 0.1), transparent);
+    top: -150px;
+    left: -150px;
+  }
+  
+  &::after {
+    width: 400px;
+    height: 400px;
+    background: linear-gradient(135deg, rgba($primary-color, 0.1), transparent);
+    bottom: -200px;
+    right: -200px;
+  }
 
+  // Header section styling
   .reclamation-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid rgba($primary-color, 0.1);
+    position: relative;
+    z-index: 1;
 
     h1 {
-      font-size: 28px;
-      font-weight: 600;
+      font-size: 32px;
+      font-weight: 700;
       color: #333;
-      text-transform: capitalize;
+      background: linear-gradient(45deg, $primary-color, $accent-color);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
+      
+      &::after {
+        content: '';
+        display: block;
+        width: 60px;
+        height: 4px;
+        margin-top: 5px;
+        background: linear-gradient(90deg, $primary-color, $accent-color);
+        border-radius: 10px;
+      }
     }
 
     .filter-actions {
       display: flex;
-      gap: 15px;
-
+      gap: 10px;
+      flex-wrap: wrap;
+      
       .filter-btn {
-        padding: 12px 20px;
+        padding: 10px 16px;
         font-size: 14px;
+        font-weight: 500;
         border: none;
         background-color: $secondary-color;
-        color: #333;
+        color: $neutral-color;
         cursor: pointer;
-        border-radius: $border-radius;
-        transition: background-color $transition-speed ease, color $transition-speed ease;
+        border-radius: 50px;
+        transition: all $transition-speed cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        
+        &::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: linear-gradient(
+            to right,
+            transparent,
+            rgba(255, 255, 255, 0.8),
+            transparent
+          );
+          transform: translateX(-100%);
+          transition: transform 0.6s ease;
+        }
 
         &:hover {
-          background-color: $primary-color;
-          color: white;
+          transform: translateY(-3px);
+          box-shadow: 0 5px 15px rgba($primary-color, 0.1);
+          
+          &::after {
+            transform: translateX(100%);
+          }
         }
 
         &.active {
-          background-color: $primary-color;
+          background: linear-gradient(135deg, $primary-color, darken($primary-color, 15%));
           color: white;
+          box-shadow: 0 5px 15px rgba($primary-color, 0.3);
         }
       }
     }
 
     .add-reclamation-btn {
-      @include button-style($accent-color, darken($accent-color, 10%));
+      @include button-style($accent-color, darken($accent-color, 15%));
+      display: flex;
+      align-items: center;
+      padding: 12px 24px;
+      
+      &::before {
+        content: '+';
+        margin-right: 8px;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 0;
+      }
+      
+      &:hover {
+        animation: pulse 1s infinite;
+      }
     }
   }
 
+  // Content section
   .reclamation-content {
-    // Loading indicator
+    position: relative;
+    z-index: 1;
+    
+    // Loading indicator with creative animation
     .loading-indicator {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 10px;
-      padding: 50px 0;
+      gap: 20px;
+      padding: 80px 0;
       
       .spinner {
-        border: 4px solid transparent;
-        border-top: 4px solid $primary-color;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        animation: spin 1s linear infinite;
+        position: relative;
+        width: 70px;
+        height: 70px;
+        
+        &::before, &::after {
+          content: '';
+          position: absolute;
+          border-radius: 50%;
+          border: 4px solid transparent;
+          animation-duration: 1.5s;
+          animation-iteration-count: infinite;
+          animation-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);
+        }
+        
+        &::before {
+          width: 100%;
+          height: 100%;
+          border-top-color: $primary-color;
+          border-left-color: $primary-color;
+          animation-name: spin-clockwise;
+        }
+        
+        &::after {
+          width: 80%;
+          height: 80%;
+          top: 10%;
+          left: 10%;
+          border-bottom-color: $accent-color;
+          border-right-color: $accent-color;
+          animation-name: spin-counterclockwise;
+        }
+        
+        @keyframes spin-clockwise {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes spin-counterclockwise {
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(-360deg); }
+        }
       }
 
       p {
-        font-size: 16px;
+        font-size: 18px;
         color: $neutral-color;
-      }
-
-      @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        font-weight: 500;
+        background: linear-gradient(
+          to right,
+          $neutral-color 20%,
+          lighten($neutral-color, 30%) 40%,
+          $neutral-color 60%
+        );
+        background-size: 200% auto;
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 2s linear infinite;
       }
     }
 
-    // Empty state
+    // Empty state styling
     .empty-state {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      gap: 20px;
-      padding: 50px 0;
-      color: $neutral-color;
-
+      gap: 25px;
+      padding: 80px 0;
+      background: radial-gradient(
+        circle at center,
+        rgba($primary-color, 0.03) 0%,
+        rgba($primary-color, 0) 70%
+      );
+      border-radius: $border-radius;
+      
       img {
-        width: 100px;
+        width: 120px;
+        opacity: 0.7;
+        filter: drop-shadow(0 5px 15px rgba($primary-color, 0.2));
+        animation: float 3s ease-in-out infinite;
+        
+        @keyframes float {
+          0% { transform: translateY(0px); }
+          50% { transform: translateY(-10px); }
+          100% { transform: translateY(0px); }
+        }
       }
-
+      
+      p {
+        font-size: 18px;
+        color: $neutral-color;
+        font-weight: 500;
+      }
+      
       button {
-        @include button-style($primary-color, darken($primary-color, 10%));
+        @include button-style($primary-color, darken($primary-color, 15%));
+        padding: 12px 30px;
       }
     }
 
-    // Reclamation list
+    // Reclamation list grid with advanced card styling
     .reclamation-list {
       display: grid;
       gap: 30px;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+      perspective: 1000px;
 
       .reclamation-card {
         background-color: $card-bg-color;
-        padding: 20px;
+        padding: 25px;
         border-radius: $border-radius;
-        box-shadow: 0 10px 20px $shadow-color;
-        transition: transform $transition-speed ease, box-shadow $transition-speed ease;
-
+        box-shadow: 0 10px 30px rgba($shadow-color, 0.5);
+        transition: all $transition-speed cubic-bezier(0.23, 1, 0.32, 1);
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        position: relative;
+        overflow: hidden;
+        animation: fadeIn 0.5s ease-out forwards;
+        
+        &::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 5px;
+          background: linear-gradient(to right, $primary-color, $accent-color);
+        }
+        
         &:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 15px 30px $shadow-color;
+          transform: translateY(-15px) rotateX(5deg);
+          box-shadow: 0 20px 40px rgba($shadow-color, 0.8);
+          
+          .card-header h3 {
+            color: $primary-color;
+          }
         }
 
         .card-header {
           display: flex;
           justify-content: space-between;
-          align-items: center;
-
+          align-items: flex-start;
+          margin-bottom: 15px;
+          
           h3 {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 600;
             color: #333;
+            transition: color $transition-speed ease;
+            line-height: 1.4;
           }
 
           .status-badge {
             @include status-badge($primary-color);
-            &.pending { @include status-badge(#ffc107); }
-            &.in-progress { @include status-badge($primary-color); }
-            &.resolved { @include status-badge($accent-color); }
+            &.pending { @include status-badge($status-pending); }
+            &.in-progress { @include status-badge($status-in-progress); }
+            &.resolved { @include status-badge($status-resolved); }
+            &.closed { @include status-badge($status-closed); }
           }
         }
 
         .reclamation-description {
-          font-size: 14px;
+          font-size: 15px;
+          line-height: 1.6;
           color: $neutral-color;
           margin: 15px 0;
+          max-height: 100px;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          position: relative;
+          
+          &::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+          }
         }
 
         .card-footer {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          font-size: 14px;
-          color: $neutral-color;
+          margin-top: 20px;
+          padding-top: 15px;
+          border-top: 1px solid rgba($primary-color, 0.1);
 
           .date {
+            font-size: 14px;
             color: $neutral-color;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            
+            &::before {
+              content: '📅';
+              margin-right: 5px;
+              font-size: 16px;
+            }
           }
 
           .actions {
             display: flex;
-            gap: 15px;
+            gap: 12px;
 
             .btn-view, .btn-delete {
-              padding: 8px 15px;
-              font-size: 14px;
+              padding: 8px 16px;
+              font-size: 13px;
+              font-weight: 600;
               border: none;
-              border-radius: $border-radius;
+              border-radius: 50px;
               cursor: pointer;
               transition: all $transition-speed ease;
               text-transform: uppercase;
             }
 
             .btn-view {
-              @include button-style($primary-color, darken($primary-color, 10%));
+              @include button-style($primary-color, darken($primary-color, 15%));
+              display: flex;
+              align-items: center;
+              
+              &::after {
+                content: '→';
+                margin-left: 5px;
+                font-size: 16px;
+                transition: transform $transition-speed ease;
+              }
+              
+              &:hover::after {
+                transform: translateX(4px);
+              }
             }
 
             .btn-delete {
-              @include button-style($danger-color, darken($danger-color, 10%));
+              @include button-style($danger-color, darken($danger-color, 15%));
+              display: flex;
+              align-items: center;
+              
+              &::before {
+                content: '×';
+                margin-right: 5px;
+                font-size: 18px;
+                font-weight: 700;
+                line-height: 0;
+              }
             }
           }
+        }
+      }
+    }
+  }
+}
+
+// Notification styling
+.notification {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  padding: 15px 25px;
+  border-radius: $border-radius;
+  background: linear-gradient(135deg, $primary-color, darken($primary-color, 15%));
+  color: white;
+  font-family: $font-family;
+  font-weight: 500;
+  transform: translateY(100px);
+  opacity: 0;
+  box-shadow: 0 10px 30px rgba($primary-color, 0.3);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  
+  &::before {
+    content: '✓';
+    margin-right: 10px;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  &.error {
+    background: linear-gradient(135deg, $danger-color, darken($danger-color, 15%));
+    box-shadow: 0 10px 30px rgba($danger-color, 0.3);
+    
+    &::before {
+      content: '✕';
+    }
+  }
+  
+  &.show {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Responsive adaptations
+@media screen and (max-width: 1024px) {
+  .reclamation-wrapper {
+    padding: 25px;
+    margin: 20px;
+    
+    .reclamation-header {
+      h1 {
+        font-size: 28px;
+      }
+    }
+    
+    .reclamation-content .reclamation-list {
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .reclamation-wrapper {
+    padding: 20px;
+    margin: 15px;
+    
+    .reclamation-header {
+      flex-direction: column;
+      align-items: flex-start;
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .filter-actions {
+        width: 100%;
+        overflow-x: auto;
+        padding-bottom: 10px;
+        
+        .filter-btn {
+          flex: 0 0 auto;
+        }
+      }
+      
+      .add-reclamation-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    .reclamation-content .reclamation-list {
+      grid-template-columns: 1fr;
+      
+      .reclamation-card {
+        &:hover {
+          transform: translateY(-5px);
         }
       }
     }

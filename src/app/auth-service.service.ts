@@ -25,7 +25,7 @@ export class AuthService {
    */
   loginWithGoogle(): void {
     // Utiliser l'URL correcte pour déclencher le flux OAuth2
-    window.location.href =` ${this.baseUrl}/oauth2/authorization/google`;
+    window.location.href = `${this.baseUrl}/oauth2/authorization/google`;
   }
 
   /**

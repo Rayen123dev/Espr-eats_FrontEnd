@@ -58,6 +58,10 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
     RegimeComponent,
     MenuDashboardComponent,
     StaffDashboardComponent,
+    MenuDashboardComponent,
+    PlatComponent,
+    RegimeComponent,
+    StaffDashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -85,6 +89,16 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
     RecaptchaModule,
     RecaptchaFormsModule,
     
+    RecaptchaModule,
+    RecaptchaFormsModule,
+    AuthRoutingModule,
+    BrowserModule,
+    NgChartsModule,
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatSelectModule,
+    MatOptionModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

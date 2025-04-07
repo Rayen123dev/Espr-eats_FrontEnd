@@ -87,6 +87,22 @@ export class ReclamationService {
     );
   }
 
+  resuluReclamation(id: number): Observable<Reclamation> {
+    return this.http.put<Reclamation>(`${this.apiUrl}/updateStatusRes/${id}`, {
+      headers: this.getHeaders()
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  closeReclamation(id: number): Observable<Reclamation> {
+    return this.http.put<Reclamation>(`${this.apiUrl}/updateStatusClo/${id}`, {
+      headers: this.getHeaders()
+    }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   // Update reclamation status
   updateReclamationStatus(id: number, status: 'PENDING' | 'IN_PROGRESS' | 'RESOLVED' | 'CLOSED'): Observable<Reclamation> {
     return this.http.patch<Reclamation>(`${this.apiUrl}/${id}/status`, { status }, {

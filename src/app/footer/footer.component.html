@@ -1,69 +1,101 @@
+<!-- Full-featured footer -->
 <footer class="main-footer">
-    <div class="footer-container">
-      <div class="footer-section company-info">
-        <img src="assets/logo-white.png" alt="Company Logo" class="footer-logo">
-        <p class="company-description">
-          Empowering innovation through cutting-edge solutions and transformative technologies.
-        </p>
-        <div class="social-links">
-          <a href="#" class="social-icon"><i class="icon-facebook"></i></a>
-          <a href="#" class="social-icon"><i class="icon-twitter"></i></a>
-          <a href="#" class="social-icon"><i class="icon-linkedin"></i></a>
-          <a href="#" class="social-icon"><i class="icon-instagram"></i></a>
-        </div>
-      </div>
+  <!-- Decorative elements -->
+  <div class="footer-wave">
+    <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+      <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="shape-fill"></path>
+    </svg>
+  </div>
   
-      <div class="footer-section quick-links">
-        <h4>Quick Links</h4>
-        <ul>
-          <li><a routerLink="/dashboard">Dashboard</a></li>
-          <li><a routerLink="/projects">Projects</a></li>
-          <li><a routerLink="/reports">Reports</a></li>
-          <li><a routerLink="/profile">Profile</a></li>
-        </ul>
-      </div>
+  <div class="footer-particles">
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+    <div class="particle"></div>
+  </div>
   
-      <div class="footer-section support">
-        <h4>Support</h4>
-        <ul>
-          <li><a routerLink="/help">Help Center</a></li>
-          <li><a routerLink="/faq">FAQ</a></li>
-          <li><a routerLink="/contact">Contact Us</a></li>
-          <li><a routerLink="/support">Customer Support</a></li>
-        </ul>
-      </div>
-  
-      <div class="footer-section newsletter">
-        <h4>Stay Updated</h4>
-        <p>Subscribe to our newsletter for latest updates</p>
-        <form (ngSubmit)="subscribeNewsletter()" #newsletterForm="ngForm">
-          <div class="input-group">
-            <input 
-              type="email" 
-              name="email" 
-              [(ngModel)]="newsletterEmail" 
-              required 
-              email 
-              placeholder="Enter your email"
-              class="newsletter-input"
-            >
-            <button type="submit" class="newsletter-submit" [disabled]="!newsletterForm.form.valid">
-              <i class="icon-send"></i>
-            </button>
-          </div>
-        </form>
+  <div class="footer-container">
+    <div class="footer-section company-info">
+      <img src="assets/logo.png" alt="Company Logo" class="footer-logo">
+      <p class="company-description">
+        We are dedicated to providing exceptional service and innovative solutions to meet your needs. Our team is committed to excellence in every project we undertake.
+      </p>
+      <div class="social-links">
+        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
       </div>
     </div>
-  
-    <div class="footer-bottom">
-      <div class="footer-bottom-container">
-        <p class="copyright">
-          &copy; 2025 Your Company Name. All Rights Reserved.
-        </p>
-        <div class="footer-legal-links">
-          <a routerLink="/privacy-policy">Privacy Policy</a>
-          <a routerLink="/terms-of-service">Terms of Service</a>
-        </div>
+
+    <div class="footer-section links">
+      <h4>Quick Links</h4>
+      <ul>
+        <li><a routerLink="/dashboard">Dashboard</a></li>
+        <li><a routerLink="/projects">Projects</a></li>
+        <li><a routerLink="/reports">Reports</a></li>
+        <li><a routerLink="/about">About Us</a></li>
+        <li><a routerLink="/contact">Contact</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section contact">
+      <h4>Contact Us</h4>
+      <ul>
+        <li><a href="tel:+1234567890"><i class="fas fa-phone-alt"></i> +1 (234) 567-890</a></li>
+        <li><a href="mailto:info@example.com"><i class="fas fa-envelope"></i> info@example.com</a></li>
+        <li><a href="#"><i class="fas fa-map-marker-alt"></i> 123 Street Name, City, Country</a></li>
+        <li><a href="#"><i class="far fa-clock"></i> Mon-Fri: 9AM - 5PM</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-section newsletter">
+      <h4>Newsletter</h4>
+      <p class="newsletter-text">Stay updated with our latest news and offers by subscribing to our newsletter.</p>
+      <div class="input-group">
+        <input 
+          type="email" 
+          class="newsletter-input" 
+          placeholder="Your Email"
+          [(ngModel)]="newsletterEmail"
+          required
+        >
+        <button 
+          class="newsletter-submit" 
+          (click)="subscribeNewsletter()"
+          [disabled]="!newsletterEmail"
+        >
+          Subscribe
+        </button>
+      </div>
+      <div class="newsletter-confirmation" [class.visible]="isSubscribed">
+        Thank you for subscribing to our newsletter!
       </div>
     </div>
-  </footer>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="footer-bottom-container">
+      <p class="copyright">
+        &copy; {{ currentYear }} Your Company. Designed with <span class="heart"></span> by <a href="#">Your Team</a>
+      </p>
+      <div class="footer-legal-links">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Sitemap</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Simplified footer alternative -->
+<!-- 
+<div class="footer">
+  <div class="copyright">
+    <p>Designed with <span class="heart"></span> by <a href="#">Your Team</a> {{ currentYear }}</p>
+  </div>
+</div>
+-->

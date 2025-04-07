@@ -119,6 +119,18 @@ export class LoginService {
     localStorage.removeItem('token');
   }
 
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('token');
+    if (!token) return false;
+  
+    const decoded = this.jwtDecode(token);
+    if (!decoded || !decoded.exp) return false;
+  
+    const expiry = decoded.exp * 1000; // exp est en secondes
+    return Date.now() < expiry;
+  }
+  
+
   register(user: {
     nom: string;
     email: string;
