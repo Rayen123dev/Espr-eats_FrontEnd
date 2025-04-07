@@ -80,7 +80,7 @@ export class MenuDashboardComponent implements OnInit {
       error: (err) => {
         this.errorMessage = 'Erreur lors de la génération des menus';
         this.isLoading = false;
-        console.error(err);
+        console.error(err); // Ici, l'erreur est loggée
       }
     });
   }
