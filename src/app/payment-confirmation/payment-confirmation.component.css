@@ -1,48 +1,137 @@
-/* payment-confirmation.component.css */
+/* Import Google Fonts (Poppins for consistency) */
+
+
+/* Root Variables (Copied from abonnement-report.component.css) */
+:root {
+  --primary: #0ea5e9;
+  --primary-light: #38bdf8;
+  --secondary: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --dark: #0f172a;
+  --light: #f8fafc;
+}
+
+/* Base Styles */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+/* Confirmation Container */
 .confirmation-container {
   display: flex;
   min-height: 80vh;
-  font-family: Inter;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
+.confirmation-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, rgba(14, 165, 233, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Left Panel */
 .left-panel {
   flex: 1;
-  background: #f8f8ff; /* Green background */
-  color: rgb(39, 41, 41);
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  color: #334155;
   padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-family: Inter;
+  font-family: 'Poppins', sans-serif;
+  border-right: 1px solid #bae6fd;
+  font-family: 'Inter';
 }
 
+.left-panel::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 120px;
+  height: 120px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='1' stroke-linecap='round' stroke-linejoin='round' opacity='0.2'%3E%3Cpath d='M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z'%3E%3C/path%3E%3Cline x1='16' y1='8' x2='2' y2='22'%3E%3C/line%3E%3Cline x1='17.5' y1='15' x2='9' y2='15'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  pointer-events: none;
+  font-family: 'Inter';
+}
+
+/* Header */
 .header {
   text-align: left;
+  font-family: 'Inter';
 }
 
 .header h2 {
   font-size: 20px;
   font-weight: 600;
+  color: #0f172a;
   margin: 0 0 10px;
-  font-family: Inter;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.voir-plus:hover{
-  text-decoration: underline;
+.header h2::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'%3E%3C/path%3E%3Cpolyline points='7.5 4.21 12 6.81 16.5 4.21'%3E%3C/polyline%3E%3Cpolyline points='7.5 19.79 7.5 14.6 3 12'%3E%3C/polyline%3E%3Cpolyline points='21 12 16.5 14.6 16.5 19.79'%3E%3C/polyline%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'%3E%3C/polyline%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  font-family: 'Inter';
 }
 
 .header h1 {
   font-size: 30px;
   font-weight: 700;
+  color: #0369a1;
   margin: 0 0 10px;
-  font-family: Inter;
+  font-family: 'Inter';
 }
 
 .header p {
   font-size: 16px;
+  color: #6b7280;
   opacity: 0.9;
+  font-family: 'Inter';
 }
 
+/* Voir Plus Link */
+.voir-plus {
+  color: #0ea5e9;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Inter';
+}
+
+.voir-plus:hover {
+  text-decoration: underline;
+  color: #0284c7;
+}
+
+/* Details */
 .details {
   margin-top: 40px;
 }
@@ -50,206 +139,246 @@
 .detail-row {
   display: flex;
   justify-content: space-between;
-  font-size: 16px;
-  margin-bottom: 8px;
+  font-size: 14px;
+  color: #64748b;
+  margin-bottom: 12px;
 }
 
 .detail-row.total {
-  font-weight: 500;
-  font-size: 18px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #1f2937;
 }
 
 .left-panel hr {
   border: 0;
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-top: 1px solid #bae6fd;
   margin: 20px 0;
 }
 
+/* Right Panel */
 .right-panel {
   flex: 1;
-  background: rgb(255, 255, 255);
+  background: #ffffff;
   padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  font-family: Inter;
-  box-shadow: -5px 0px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: -5px 0px 15px rgba(0, 0, 0, 0.05);
+  font-family: 'Inter';
 }
 
 .right-panel h3 {
   font-size: 20px;
   font-weight: 600;
-  color: #1a1a1a;
+  color: #0f172a;
   margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.right-panel h3::before {
+  content: "";
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 17h2a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H2v9Zm20 0h-2a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h2v9Zm-18-9v9h16v-9H4Z'%3E%3C/path%3E%3Cpath d='M12 8V4m-4 4V6m8 2V6'%3E%3C/path%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .right-panel p {
   font-size: 14px;
-  color: #666;
+  color: #6b7280;
   margin: 0 0 20px;
 }
 
 .right-panel label {
   display: block;
   font-size: 14px;
-  color: #333;
-  margin-bottom: 5px;
+  color: #1f2937;
+  margin-bottom: 8px;
+  font-weight: 500;
 }
 
 .right-panel input {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-size: 14px;
   margin-bottom: 20px;
   box-sizing: border-box;
+  transition: all 0.3s ease;
 }
 
+.right-panel input:focus {
+  border-color: #0ea5e9;
+  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  outline: none;
+}
+
+/* Pay Button */
 .pay-button {
-  background: #4b86a3; /* Green button */
+  background: #0ea5e9;
   color: white;
   border: none;
   padding: 12px 24px;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 600;
-  transition: background 0.2s;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.3s ease;
   width: 100%;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
 }
 
 .pay-button:hover {
-  background: #4151a9; /* Darker green on hover */
+  background: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(14, 165, 233, 0.35);
 }
 
+/* Upgrade and Annuler Buttons */
+.btn-upgrade {
+  color: white;
+  background: #0ea5e9;
+  border-radius: 8px;
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
+}
+
+.btn-upgrade:hover {
+  background: #0284c7;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(14, 165, 233, 0.35);
+}
+
+.btn-annuler {
+  color: #374151;
+  background: #e5e7eb;
+  border-radius: 8px;
+  margin: 0 10px;
+  padding: 10px 20px;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-annuler:hover {
+  background: #d1d5db;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Footer */
 .footer {
   text-align: center;
   font-size: 12px;
-  color: #666;
+  color: #6b7280;
   margin-top: 20px;
 }
 
 .footer a {
-  color: #666;
+  color: #0ea5e9;
   text-decoration: none;
+  transition: all 0.3s ease;
 }
 
 .footer a:hover {
   text-decoration: underline;
+  color: #0284c7;
 }
 
-/* payment-confirmation.component.css */
-
-/* Existing styles for .confirmation-container, .left-panel, .right-panel, etc. remain unchanged */
-
-.btn-upgrade {
-  color: white;
-  background-color: rgb(44, 79, 162);
-  border-radius: 5px;
-  margin : 0px 10px;
-  padding: 10px;
-  border : 0px;
-  font-family: Inter;
-  font-size: 13px;
-}
-
-.btn-upgrade:hover{
-  background-color: rgb(51, 44, 156);
-}
-
-.btn-annuler:hover{
-  background-color: rgb(238, 237, 237);
-}
-.btn-annuler {
-  color: rgb(0, 0, 0);
-  background-color: rgb(255, 255, 255);
-  border-radius: 5px;
-  margin : 10px;
-  padding: 10px;
-  border : 0.5px solid rgb(178, 178, 178);
-  font-family: Inter;
-  font-size: 13px;
-}
-
-/* General Toast Styles */
-.toast {
+/* Toast Notification (Updated to match abonnement.component.css) */
+.custom-toast {
   position: fixed;
   top: 20px;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #57955a; /* Default success green background */
-  color: white;
-  padding: 12px 24px;
+  min-width: 300px;
+  padding: 16px 40px 16px 60px;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-  z-index: 1000;
   display: flex;
   align-items: center;
-  animation: fadeInOut 5s ease-in-out forwards;
-  min-width: 300px; 
+  justify-content: space-between;
+  animation: slideIn 0.5s ease-in-out;
+  font-size: 15px;
+  font-weight: 500;
+  z-index: 1050;
 }
 
-/* Success Toast Specific Styling */
-.toast.success {
-  background-color: #57955a; /* Dark green, success color */
+.custom-toast.success {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
 }
 
-/* Error Toast Specific Styling */
-.toast.error {
-  background-color: #d9534f; /* Red background for error */
+.custom-toast.error {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #b91c1c;
+  border: 1px solid #f87171;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
 }
 
-/* Toast Icon Styles */
 .toast-icon {
-  margin-right: 12px;
-}
-
-.toast-icon svg {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
   width: 24px;
   height: 24px;
 }
 
-/* Toast Content Styles */
-.toast-content {
+.custom-toast.success .toast-icon svg,
+.custom-toast.error .toast-icon svg {
+  stroke: currentColor;
+}
+
+.custom-toast .toast-content {
   display: flex;
   flex-direction: column;
 }
 
-.toast-title {
-  font-weight: bold;
+.custom-toast .toast-title {
+  font-weight: 600;
   font-size: 16px;
   margin: 0;
 }
 
-.toast-message {
+.custom-toast .toast-message {
   font-size: 14px;
   margin: 2px 0 0 0;
 }
 
-/* Animation for the toast */
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-    transform: translateY(-20px);
-  }
-  20% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  80% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
+.custom-toast .toast-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: inherit;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+  transition: all 0.3s ease;
 }
 
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translate(-50%, -20px); }
-  10% { opacity: 1; transform: translate(-50%, 0); }
-  90% { opacity: 1; transform: translate(-50%, 0); }
-  100% { opacity: 0; transform: translate(-50%, -20px); }
+.custom-toast .toast-close:hover {
+  transform: scale(1.2);
+}
+
+/* Animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translate(-50%, -20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
 }

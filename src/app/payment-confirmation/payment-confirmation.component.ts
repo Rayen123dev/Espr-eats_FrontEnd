@@ -81,7 +81,7 @@ export class PaymentConfirmationComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.subscriptionDetails = response;
-          this.showSuccessToast('Subscription details loaded successfully');
+          this.showSuccessToast('Email sent with verification code');
         },
         error: (err) => {
           console.error('Error fetching abonnement:', err);

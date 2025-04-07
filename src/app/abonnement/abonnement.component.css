@@ -1,134 +1,235 @@
-/* abonnement.component.css */
+/* Import Google Fonts (Switch to Poppins for consistency) */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+/* Root Variables (Copied from abonnement-report.component.css) */
+:root {
+  --primary: #0ea5e9;
+  --primary-light: #38bdf8;
+  --secondary: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --dark: #0f172a;
+  --light: #f8fafc;
+}
+
+/* Base Styles (Updated to use Poppins) */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f1f5f9;
+  color: #334155;
+}
+
+/* Subscription Container (Adapted from .billing-container) */
 .subscription-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  background-color: #f9fafb;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  padding: 40px 20px;
+  padding: 40px 24px;
+  color: #334155;
+  background: linear-gradient(145deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  max-width: 1400px; /* Adjusted to match plans-container max-width */
+  margin: 0 auto;
 }
+
+.subscription-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.08) 0%, rgba(14, 165, 233, 0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Pricing Small Title (Keep existing styles, add SVG icon like .page-title) */
 .pricing-smalltitle {
   font-size: 16px;
   font-weight: 500;
   color: #6c6d6f;
   text-align: center;
   margin-bottom: 40px;
-  position: relative; 
+  position: relative;
   display: inline-block;
-  padding: 0 2px; 
+  padding: 0 2px;
 }
 
 .pricing-smalltitle::before,
 .pricing-smalltitle::after {
   content: '';
   position: absolute;
-  top: 50%; /* Center the lines vertically */
-  transform: translateY(-50%); /* Adjust for the height of the line */
-  width: 40px; /* Length of each line */
-  height: 2px; /* Thickness of the line */
-  background-color: #2c5beb; /* Cyan color matching the image */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 2px;
+  background-color: #2c5beb;
 }
 
 .pricing-smalltitle::before {
-  left: -60px; /* Position the left line */
+  left: -60px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232c5beb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'%3E%3C/path%3E%3Cpolyline points='7.5 4.21 12 6.81 16.5 4.21'%3E%3C/polyline%3E%3Cpolyline points='7.5 19.79 7.5 14.6 3 12'%3E%3C/polyline%3E%3Cpolyline points='21 12 16.5 14.6 16.5 19.79'%3E%3C/polyline%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'%3E%3C/polyline%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
 }
 
 .pricing-smalltitle::after {
-  right: -60px; /* Position the right line */
+  right: -60px;
 }
 
+/* Pricing Title (Adapted from .page-title) */
 .pricing-title {
   font-size: 36px;
   font-weight: 700;
-  color: #1f2937;
+  color: #0f172a;
   text-align: center;
   margin-bottom: 40px;
+  position: relative;
+  padding-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* Toast container */
+.pricing-title::before {
+  content: "";
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230ea5e9' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'%3E%3C/path%3E%3Cpolyline points='7.5 4.21 12 6.81 16.5 4.21'%3E%3C/polyline%3E%3Cpolyline points='7.5 19.79 7.5 14.6 3 12'%3E%3C/polyline%3E%3Cpolyline points='21 12 16.5 14.6 16.5 19.79'%3E%3C/polyline%3E%3Cpolyline points='3.27 6.96 12 12.01 20.73 6.96'%3E%3C/polyline%3E%3Cline x1='12' y1='22.08' x2='12' y2='12'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  margin-right: 16px;
+}
+
+.pricing-title::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  background: linear-gradient(90deg, #0ea5e9 0%, #38bdf8 80%, rgba(56, 189, 248, 0.4) 100%);
+  border-radius: 4px;
+}
+
+/* Toast Container (Adapted from .notification.warning) */
 .custom-toast {
   position: fixed;
   top: 20px;
   right: 20px;
   min-width: 300px;
-  background-color: #d32f2f; /* Red background */
-  color: white;
-  border: 1px solid #b71c1c; /* Darker red border */
-  border-radius: 4px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1050; /* Ensure it appears above other elements */
-}
-
-/* Toast header */
-.toast-header {
+  padding: 16px 40px 16px 60px;
+  border-radius: 8px;
+  margin-bottom: 24px;
   display: flex;
   align-items: center;
-  padding: 8px 16px;
-  background-color: #b71c1c; /* Darker red for the header */
-  border-bottom: 1px solid #9a0007;
+  justify-content: space-between;
+  animation: slideIn 0.5s ease-in-out;
+  font-size: 15px;
+  font-weight: 500;
+  background: linear-gradient(135deg, #fee7c7 0%, #fde68a 100%);
+  color: #92400e;
+  border: 1px solid #fcd34d;
+  box-shadow: 0 4px 15px rgba(251, 191, 36, 0.2);
+  z-index: 1050;
 }
 
-/* Exclamation icon */
+/* Toast Header (Updated to match .notification) */
+.toast-header {
+  display: none; /* Remove the header since .notification combines icon and message */
+}
+
+/* Toast Icon (Adapted from .notification-icon) */
 .toast-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  background-color: white;
-  color: #d32f2f;
-  border-radius: 50%;
-  font-weight: bold;
-  margin-right: 8px;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2392400e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'%3E%3C/path%3E%3Cline x1='12' y1='9' x2='12' y2='13'%3E%3C/line%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
-/* Toast title */
+/* Toast Title (Not needed since .notification combines message) */
 .toast-title {
-  flex-grow: 1;
-  font-size: 16px;
+  display: none;
 }
 
-/* Close button */
+/* Toast Close Button (Adapted from .close-btn) */
 .toast-close {
   background: none;
   border: none;
-  color: white;
   font-size: 20px;
-  line-height: 1;
+  color: #92400e;
   cursor: pointer;
-  padding: 0;
+  padding: 0 8px;
+  line-height: 1;
+  transition: all 0.3s ease;
 }
 
-/* Toast body */
+.toast-close:hover {
+  color: #713f12;
+  transform: scale(1.2);
+}
+
+/* Toast Body (Updated to match .notification content) */
 .toast-body {
-  padding: 8px 16px;
-  font-size: 14px;
+  padding: 0; /* Padding is handled by .custom-toast */
+  font-size: 15px;
+  color: #92400e;
 }
 
+/* Plans Container (Adapted from .stats-cards) */
 .plans-container {
-  display: flex;
-  justify-content: space-between; /* Distribute cards evenly across the page */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 24px;
-  width: 100%; /* Full width of the container */
-  max-width: 1400px; /* Optional: Increase max-width for larger screens */
-  flex-wrap: nowrap; /* Keep cards in a single row by default */
+  width: 100%;
+  max-width: 1400px;
 }
 
+/* Plan Card (Adapted from .plan-details.card) */
 .plan-card {
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
   padding: 24px;
-  flex: 1; /* Each card takes equal width to fill the container */
-  min-width: 220px; /* Ensure cards don’t shrink too much */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border-radius: 14px;
+  transition: all 0.3s ease;
   position: relative;
-  transition: transform 0.3s;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 1px solid #bae6fd;
+}
+
+.plan-card::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 120px;
+  height: 120px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2338bdf8' stroke-width='1' stroke-linecap='round' stroke-linejoin='round' opacity='0.2'%3E%3Cpath d='M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z'%3E%3C/path%3E%3Cline x1='16' y1='8' x2='2' y2='22'%3E%3C/line%3E%3Cline x1='17.5' y1='15' x2='9' y2='15'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .plan-card:hover {
   transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(56, 189, 248, 0.15);
+  border-color: #7dd3fc;
 }
 
 .plan-card.recommended {
@@ -151,9 +252,22 @@
 
 .plan-card h3 {
   font-size: 24px;
-  font-weight: 600;
-  color: #1f2937;
+  font-weight: 700;
+  color: #0369a1;
   margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plan-card h3::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230369a1' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='22 12 16 12 14 15 10 15 8 12 2 12'%3E%3C/polyline%3E%3Cpath d='M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z'%3E%3C/path%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
 }
 
 .description {
@@ -165,7 +279,7 @@
 .price {
   font-size: 32px;
   font-weight: 700;
-  color: #1f2937;
+  color: #0891b2;
   margin: 0 0 8px 0;
   display: flex;
   align-items: baseline;
@@ -173,8 +287,8 @@
 
 .price span {
   font-size: 14px;
-  font-weight: 400;
-  color: #6b7280;
+  font-weight: 500;
+  color: #0891b2;
   margin-left: 4px;
   display: block;
 }
@@ -182,20 +296,31 @@
 .subscribe-button {
   width: 100%;
   padding: 12px;
-  background: #e5eefe;
-  color: #3b82f6;
-  border: 1px solid #3b82f6;
-  border-radius: 6px;
+  background: linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
   margin-bottom: 20px;
-  transition: background 0.3s, color 0.3s;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
 }
 
 .subscribe-button:hover {
-  background: #b8d7ff;
-  color: #2563eb;
+  background: linear-gradient(90deg, #0284c7 0%, #0369a1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(14, 165, 233, 0.35);
+}
+
+.subscribe-button:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(14, 165, 233, 0.2);
 }
 
 .features h4 {
@@ -228,27 +353,25 @@
 
 hr {
   border: 0;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e2e8f0;
   margin: 20px 0;
 }
 
-/* Responsive Design */
+/* Responsive Design (Updated to match .stats-cards responsiveness) */
 @media (max-width: 1000px) {
   .plans-container {
-    flex-wrap: wrap; /* Allow cards to wrap on smaller screens */
-    justify-content: center; /* Center cards when wrapping */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    justify-items: center;
   }
 
   .plan-card {
-    flex: 1 1 300px; /* Allow cards to grow but with a minimum width */
-    max-width: 350px; /* Limit max width for wrapped cards */
+    max-width: 350px;
   }
 }
 
 @media (max-width: 600px) {
   .plans-container {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: 1fr;
     gap: 32px;
   }
 
@@ -262,7 +385,7 @@ hr {
   }
 }
 
-/* Modal Styling (unchanged) */
+/* Modal Styling (Updated with .section styles) */
 .modal {
   position: fixed;
   top: 0;
@@ -277,26 +400,44 @@ hr {
 }
 
 .modal-content {
-  background: white;
-  border-radius: 8px;
+  background: #ffffff;
+  border-radius: 16px;
   width: 400px;
   max-width: 90%;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(226, 232, 240, 0.8);
   position: relative;
   overflow: hidden;
+}
+
+.modal-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(to bottom, #0ea5e9 0%, #38bdf8 100%);
+  border-radius: 4px 0 0 4px;
+}
+
+.modal-content:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
   background: #f9fafb;
   padding: 16px 24px;
   position: relative;
-  border-bottom: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .modal-header h3 {
   font-size: 18px;
   font-weight: 600;
-  color: #1f2937;
+  color: #334155;
   margin: 0 0 4px 0;
 }
 
@@ -342,7 +483,7 @@ hr {
 .modal-body input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid #e2e8f0;
   border-radius: 6px;
   font-size: 14px;
   color: #1f2937;
@@ -402,18 +543,21 @@ hr {
 .pay-button {
   width: 100%;
   padding: 12px;
-  background: #3b82f6;
+  background: linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%);
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(14, 165, 233, 0.25);
 }
 
 .pay-button:hover {
-  background: #2563eb;
+  background: linear-gradient(90deg, #0284c7 0%, #0369a1 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(14, 165, 233, 0.35);
 }
 
 .pay-button:disabled {
@@ -427,7 +571,7 @@ hr {
   align-items: center;
   padding: 12px 24px;
   background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid #e2e8f0;
 }
 
 .modal-footer p {
@@ -444,12 +588,12 @@ hr {
 .modal-footer .payment-icons span {
   font-size: 12px;
   color: #6b7280;
-  background: #e5e7eb;
+  background: #e2e8f0;
   padding: 4px 8px;
   border-radius: 4px;
 }
 
-/* Style for the renewal option toggle switch */
+/* Style for the Renewal Option Toggle Switch (Enhanced with .toggle-switch styles) */
 .renewal-option {
   margin: 15px 0;
   text-align: center;
@@ -459,34 +603,23 @@ hr {
   display: flex;
   align-items: center;
   gap: 10px;
+  position: relative;
   cursor: pointer;
 }
 
 .toggle-switch input {
-  display: none; /* Hide the default checkbox */
-}
-
-.toggle-label {
-  font-size: 14px;
-  color: #666;
-  font-weight: 500;
-}
-
-.toggle-label.off {
-  color: #999; /* Gray when off */
-}
-
-.toggle-label.on {
-  color: #007bff; /* Blue when on */
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .toggle-slider {
   position: relative;
   width: 40px;
   height: 20px;
-  background: #e0e0e0; /* Gray background when off */
+  background: #e0e0e0;
   border-radius: 20px;
-  transition: background 0.3s;
+  transition: background 0.4s;
 }
 
 .toggle-slider::before {
@@ -498,22 +631,165 @@ hr {
   height: 16px;
   background: white;
   border-radius: 50%;
-  transition: transform 0.3s;
+  transition: transform 0.4s;
 }
 
-/* When the toggle is checked (on) */
 .toggle-switch input:checked + .toggle-slider {
-  background: #007bff; /* Blue background when on */
+  background: #007bff;
 }
 
 .toggle-switch input:checked + .toggle-slider::before {
-  transform: translateX(20px); /* Slide the circle to the right */
+  transform: translateX(20px);
 }
 
-.toggle-switch input:checked ~ .toggle-label.off {
-  color: #666; /* Dim the "Off" label when on */
+.toggle-switch input:not(:checked) + .toggle-slider {
+  background-color: #e0e0e0;
 }
 
-.toggle-switch input:checked ~ .toggle-label.on {
-  color: #007bff; /* Highlight the "On" label when on */
+.toggle-label {
+  font-size: 14px;
+  color: #666;
+  font-weight: 500;
+}
+
+.toggle-label.off {
+  color: #999;
+}
+
+.toggle-label.on {
+  color: #007bff;
+}
+
+.toggle-switch:hover .toggle-slider {
+  opacity: 0.9;
+}
+
+.toggle-switch input:active + .toggle-slider {
+  opacity: 0.8;
+}
+
+/* Add Error and Success Messages for Potential Use */
+.error-message {
+  padding: 24px;
+  background: #f68c8c;
+  color: #b91c1c;
+  border: 1px solid #ff8181;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.error-message::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23b91c1c' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.error-message::after {
+  content: "";
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f87171' stroke-width='1' stroke-linecap='round' stroke-linejoin='round' opacity='0.1'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.success-message {
+  padding: 24px;
+  background: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+  border-radius: 12px;
+  text-align: center;
+  font-weight: 500;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.success-message::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23065f46' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.success-message::after {
+  content: "";
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 150px;
+  height: 150px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='1' stroke-linecap='round' stroke-linejoin='round' opacity='0.1'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* Add Loading Spinner for Potential Use */
+.loading-spinner {
+  text-align: center;
+  padding: 40px;
+  color: #64748b;
+  background: #f8fafc;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+.loading-spinner::before {
+  content: "";
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 3px solid rgba(14, 165, 233, 0.2);
+  border-radius: 50%;
+  border-top-color: #0ea5e9;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0% { opacity: 0.7; }
+  50% { opacity: 1; }
+  100% { opacity: 0.7; }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
 }

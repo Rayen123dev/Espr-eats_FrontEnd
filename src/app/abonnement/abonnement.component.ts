@@ -223,8 +223,7 @@ export class AbonnementComponent implements OnInit {
           } else {
             this.showToast = true;
             this.toastTitle = 'Danger';
-            this.toastMessage =
-              'Error creating subscription. Please try again.';
+            this.toastMessage = 'Tu as déjà créé un abonnement.';
           }
           setTimeout(() => this.closeToast(), 5000);
         },
