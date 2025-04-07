@@ -177,7 +177,12 @@ export class AbonnementReportComponent implements OnInit {
       this.abonnementService.getAbonnementsByType(this.selectedType).subscribe({
         next: (abonnements) => {
           this.abonnements = abonnements;
+          // Force some abonnements to be blocked for testing
+          if (this.abonnements.length > 0) {
+            this.abonnements[0].isBlocked = true;
+          }
           this.isLoadingTable = false;
+          console.log('Fetched abonnements by type:', this.abonnements);
         },
         error: (err) => {
           console.error('Error fetching abonnements by type:', err);
@@ -193,6 +198,7 @@ export class AbonnementReportComponent implements OnInit {
           next: (abonnements) => {
             this.abonnements = abonnements;
             this.isLoadingTable = false;
+            console.log('Fetched abonnements by status:', this.abonnements);
           },
           error: (err) => {
             console.error('Error fetching abonnements by status:', err);

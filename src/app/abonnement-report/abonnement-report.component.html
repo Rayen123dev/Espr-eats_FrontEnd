@@ -166,12 +166,14 @@
                 <label class="toggle-switch">
                   <input
                     type="checkbox"
-                    [checked]="abonnement.isBlocked"
+                    [checked]="abonnement.abonnementStatus === 'SUSPENDED'"
                     (change)="toggleBlockedStatus(abonnement.idAbonnement)"
+                    [attr.data-status]="abonnement.abonnementStatus"
                   />
                   <span class="slider"></span>
                 </label>
               </td>
+              
             </tr>
           </tbody>
         </table>
