@@ -1,0 +1,326 @@
+// Variables for an enhanced color scheme, typography, spacing, and form styles
+$primary-color: #6a5acd; // Vibrant purple
+$accent-color: #00c39a; // Mint green
+$error-color: #ff5252; // Bright red
+$neutral-color: #566a80; // Blue-gray
+$background-color: #f7f9fc; // Light blue-gray
+$card-bg-color: #ffffff;
+$border-radius: 16px;
+$font-family: 'Poppins', Arial, sans-serif;
+$transition-speed: 0.3s;
+$input-bg-color: #f8f9ff;
+$input-border-color: #e0e6ff;
+$input-focus-border-color: $primary-color;
+$input-hover-bg-color: #f0f4ff;
+$shadow-color: rgba(106, 90, 205, 0.15);
+
+// Enhanced mixins
+@mixin box-shadow($color, $blur: 10px, $spread: 2px) {
+  box-shadow: 0 8px $blur $color, 0 2px $spread $color;
+}
+
+@mixin button-style($bg-color, $hover-bg-color) {
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  border: none;
+  border-radius: $border-radius;
+  cursor: pointer;
+  transition: all $transition-speed cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  background-color: $bg-color;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+
+  &:hover {
+    background-color: $hover-bg-color;
+    transform: translateY(-3px);
+  }
+}
+
+// Main container with enhanced styling
+.reclamation-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  background: linear-gradient(135deg, $background-color, darken($background-color, 5%));
+  min-height: 100vh;
+  perspective: 1000px;
+
+  .reclamation-form-wrapper {
+    background-color: $card-bg-color;
+    padding: 35px;
+    border-radius: $border-radius;
+    box-shadow: 
+      0 15px 35px $shadow-color,
+      0 5px 15px rgba(0, 0, 0, 0.05),
+      0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+    width: 100%;
+    max-width: 600px;
+    font-family: $font-family;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+    overflow: hidden;
+    
+    &::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(
+        circle at center,
+        rgba($primary-color, 0.05) 0%,
+        rgba($primary-color, 0) 70%
+      );
+      transform: rotate(45deg);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    &:hover {
+      transform: translateY(-10px) rotateX(2deg);
+      box-shadow: 
+        0 20px 40px $shadow-color,
+        0 10px 20px rgba(0, 0, 0, 0.05),
+        0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+    }
+
+    .form-title {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 25px;
+      text-align: center;
+      position: relative;
+      background: linear-gradient(45deg, $primary-color, $accent-color);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      
+      &::after {
+        content: '';
+        display: block;
+        width: 80px;
+        height: 4px;
+        background: linear-gradient(to right, $primary-color, $accent-color);
+        margin: 10px auto 0;
+        border-radius: 50px;
+      }
+    }
+
+    .reclamation-form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      position: relative;
+      z-index: 1;
+
+      // Enhanced input fields
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: all $transition-speed ease;
+        
+        &:hover {
+          transform: translateX(5px);
+        }
+
+        .form-label {
+          font-size: 15px;
+          font-weight: 600;
+          color: $neutral-color;
+          display: flex;
+          align-items: center;
+          
+          &::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: $primary-color;
+            margin-right: 8px;
+            border-radius: 50%;
+          }
+        }
+
+        .form-control {
+          padding: 14px 16px;
+          font-size: 16px;
+          border: 2px solid $input-border-color;
+          border-radius: calc($border-radius - 4px);
+          background-color: $input-bg-color;
+          transition: all $transition-speed cubic-bezier(0.4, 0, 0.2, 1);
+          color: #333;
+          
+          &::placeholder {
+            color: rgba($neutral-color, 0.6);
+            font-style: italic;
+          }
+
+          &:focus {
+            outline: none;
+            border-color: $primary-color;
+            background-color: white;
+            box-shadow: 0 0 0 4px rgba($primary-color, 0.15);
+            transform: translateY(-2px);
+          }
+
+          &:hover {
+            background-color: $input-hover-bg-color;
+            border-color: darken($input-border-color, 10%);
+          }
+        }
+        
+        .textarea {
+          resize: vertical;
+          min-height: 120px;
+          line-height: 1.6;
+        }
+
+        .error-messages {
+          margin-top: 8px;
+          font-size: 13px;
+          color: $error-color;
+
+          .error {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            
+            &::before {
+              content: '•';
+              margin-right: 6px;
+              font-size: 18px;
+              line-height: 0;
+            }
+          }
+        }
+      }
+
+      // Enhanced buttons
+      .form-actions {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        margin-top: 10px;
+
+        .btn {
+          @include button-style($primary-color, darken($primary-color, 8%));
+          padding: 14px 30px;
+          width: 48%;
+          position: relative;
+          overflow: hidden;
+          z-index: 1;
+          
+          &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+              120deg, 
+              transparent 0%, 
+              rgba(255,255,255,0.4) 50%, 
+              transparent 100%
+            );
+            transition: all 0.6s ease;
+            z-index: -1;
+          }
+          
+          &:hover::before {
+            left: 100%;
+          }
+        }
+
+        .btn-cancel {
+          @include button-style($neutral-color, darken($neutral-color, 10%));
+          background: linear-gradient(to right, lighten($neutral-color, 10%), $neutral-color);
+        }
+
+        .btn-submit {
+          background: linear-gradient(to right, $primary-color, darken($primary-color, 15%));
+          
+          &:disabled {
+            background: linear-gradient(to right, #bbb, #999);
+            opacity: 0.8;
+            cursor: not-allowed;
+            transform: scale(0.98);
+            box-shadow: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Enhanced animations
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes floatingBtn {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+  100% { transform: translateY(0); }
+}
+
+// Apply animations
+.form-title {
+  animation: fadeIn 0.8s ease forwards;
+}
+
+.form-group {
+  animation: fadeIn 0.6s ease forwards;
+  
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+}
+
+.form-actions {
+  animation: fadeIn 0.6s ease forwards;
+  animation-delay: 0.3s;
+  
+  .btn {
+    &:hover {
+      animation: floatingBtn 2s ease infinite;
+    }
+  }
+}
+
+// Responsive adjustments
+@media screen and (max-width: 768px) {
+  .reclamation-container {
+    padding: 20px 15px;
+    
+    .reclamation-form-wrapper {
+      padding: 25px 20px;
+      margin: 0;
+      
+      .form-title {
+        font-size: 24px;
+      }
+      
+      .form-actions {
+        flex-direction: column;
+        
+        .btn {
+          width: 100%;
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
+}
