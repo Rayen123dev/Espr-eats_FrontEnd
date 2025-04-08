@@ -5,38 +5,42 @@ import { AddReclamationComponent } from './add-reclamation/add-reclamation.compo
 import { UserReclamationsComponent } from './user-reclamations/user-reclamations.component';
 import { AuthRoutingModule } from './Auth-routing.module';
 import { GestionUsersComponent } from './gestion-users/gestion-users.component';
-import { MenuComponent } from './components/menu/menu.component';
-import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component';
-import { PlatComponent } from './components/plat/plat.component';
-import { MenuDashboardComponent } from './components/menu-dashboard/menu-dashboard.component';
-import { AuthGuard } from './auth.guard';
+import { ProfilNutritionnelComponent } from './profil-nutritionnel/profil-nutritionnel.component';
+import { ProfilNutritionnelFormComponent } from './profil-nutritionnel-form/profil-nutritionnel-form.component';
+import { ProfilNutritionnelDetailComponent } from './profil-nutritionnel-detail/profil-nutritionnel-detail.component';
+import { ConsulterMedecinComponent } from './consulter-medecin/consulter-medecin.component';
+import { MesConsultationsComponent } from './mes-consultations/mes-consultations.component';
+import { ConsultationsMedecinComponent } from './medecin/consultations-medecin/consultations-medecin.component';
+import { DashboardComponent } from './medecin/dashboard/dashboard.component';
+import { HeaderMedecinComponent } from './medecin/header-medecin/header-medecin.component';
+import { ConsultationDetailComponent } from './medecin/consultation-detail/consultation-detail.component';
+import { VisioComponent } from './visio/visio.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'add-reclamation', component: AddReclamationComponent },
+  { path: 'user-reclamations', component: UserReclamationsComponent },
+  { path: 'gestionuser', component: GestionUsersComponent},
+  { path: 'profil-nutritionnel', component: ProfilNutritionnelComponent },
+  { path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent },
+  { path: 'profil-nutritionnel', component: ProfilNutritionnelComponent},
+  { path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent},
+  { path: 'profil-nutritionnel/mon-profil', component: ProfilNutritionnelDetailComponent},
+  { path: 'consulter-medecin', component: ConsulterMedecinComponent },
+  { path: 'mes-consultations', component: MesConsultationsComponent },
+  { path: 'medecin/dashboard', component: DashboardComponent },
+  { path: 'medecin/consultations', component: ConsultationsMedecinComponent},
+  { path: 'medecin/consultation/:id', component: ConsultationDetailComponent},
+  { path: 'header-medecin', component: HeaderMedecinComponent},
+  { path: 'visio/:id', component: VisioComponent }
 
-  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'add-reclamation', component: AddReclamationComponent, canActivate: [AuthGuard],
-    data: { expectedRole: 'User' } },   
-  { path: 'user-reclamations', component: UserReclamationsComponent, canActivate: [AuthGuard] },
-  { path: 'gestionuser', component: GestionUsersComponent, canActivate: [AuthGuard],
-    data: { expectedRole: 'Admin' } },
-  { path: 'menu', component: MenuComponent, canActivate: [AuthGuard] },
-  {
-    path: 'staffdashboard',
-    component: StaffDashboardComponent,
-    canActivate: [AuthGuard],
-    data: { expectedRoles: ['Staff', 'Medcin'] }
-  },
-  { path: 'plat/:id', component: PlatComponent, canActivate: [AuthGuard],
-    data: { expectedRole: 'Staff' } },
-  { path: 'MenuDashboardComponent', component: MenuDashboardComponent, canActivate: [AuthGuard],
-    data: { expectedRoles: ['Staff', 'Admin', 'Medcin'] } },
+
 
 ];
 
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule,AuthRoutingModule]
 })
 export class AppRoutingModule { }

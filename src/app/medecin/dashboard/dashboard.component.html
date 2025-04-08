@@ -1,0 +1,81 @@
+<div class="dashboard-wrapper">
+  <h2 class="dashboard-title">Bienvenue, Docteur {{ userName }}</h2>
+
+  <!-- 🔗 Liens rapides (3 boutons stylés) -->
+  <div class="card-container">
+    <a routerLink="/medecin/validation-menus" class="card shortcut">
+      <i class="icon icon-menu"></i>
+      <div>
+        <h3>Menus à valider</h3>
+        <p>Consultez, acceptez ou rejetez les menus proposés.</p>
+      </div>
+    </a>
+
+    <a routerLink="/medecin/consultations" class="card shortcut">
+      <i class="icon icon-stethoscope"></i>
+      <div>
+        <h3>Consultations</h3>
+        <p>Suivez et gérez les rendez-vous médicaux.</p>
+      </div>
+    </a>
+
+    <a routerLink="/medecin/suivi-etudiant" class="card shortcut">
+      <i class="icon icon-bar-chart"></i>
+      <div>
+        <h3>Suivi étudiants</h3>
+        <p>Analysez les données santé des étudiants.</p>
+      </div>
+    </a>
+  </div>
+
+  <!-- 📊 Statistiques clés -->
+  <div class="stats-cards">
+    <div class="stat-card">
+      <span>🔬</span>
+      <div><strong>Total profils :</strong> {{ totalProfils }}</div>
+    </div>
+    <div class="stat-card">
+      <span>⚖️</span>
+      <div><strong>Poids moyen :</strong> {{ moyennePoids }} kg</div>
+    </div>
+    <div class="stat-card">
+      <span>📏</span>
+      <div><strong>Taille moyenne :</strong> {{ moyenneTaille }} cm</div>
+    </div>
+    <div class="stat-card">
+      <span>👨‍⚕️</span>
+      <div><strong>Hommes :</strong> {{ hommes }}</div>
+    </div>
+    <div class="stat-card">
+      <span>👩‍⚕️</span>
+      <div><strong>Femmes :</strong> {{ femmes }}</div>
+    </div>
+    <div class="stat-card">
+      <span>🚬</span>
+      <div><strong>Fumeurs :</strong> {{ nbFumeurs }}</div>
+    </div>
+  </div>
+
+  <!-- 📈 Graphiques stylisés -->
+  <div class="charts-grid">
+    <div class="chart-box">
+      <h3>📊 Statistiques des consultations</h3>
+      <canvas baseChart [data]="barChartData" [options]="barChartOptions" chartType="bar"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <h3>📋 Recommandations</h3>
+      <canvas baseChart [data]="pieChartData" [options]="pieChartOptions" chartType="bar"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <h3>🌿 Allergies fréquentes</h3>
+      <canvas baseChart [data]="allergiesChartData" [options]="allergiesChartOptions" chartType="pie"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <h3>🥗 Types de régimes</h3>
+      <canvas baseChart [data]="regimesChartData" [options]="regimesChartOptions" chartType="pie"></canvas>
+    </div>
+  </div>
+</div>

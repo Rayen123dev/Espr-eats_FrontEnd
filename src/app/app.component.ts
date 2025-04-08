@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { LoginService } from './login.service'; // <-- important !
 
 @Component({
   selector: 'app-root',
@@ -7,11 +8,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(public router: Router) {}
+  constructor(public router: Router, private loginService: LoginService) {}
 
-  // Method to check if header should be hidden
   shouldHideHeader(): boolean {
     const hiddenRoutes = ['/login', '/signup', '/forgot-password', '/verify-email', '/reset-password'];
     return hiddenRoutes.includes(this.router.url);
+  }
+
+  isMedecinDashboard(): boolean {
+    return this.loginService.getRole() === 'Medcin'; // 🔥 Vérifie bien l’orthographe du rôle
   }
 }
