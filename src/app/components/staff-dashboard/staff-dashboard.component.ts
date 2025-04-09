@@ -24,8 +24,14 @@ export class StaffDashboardComponent implements OnInit {
   regimeTypes: number = 0;
   validationRate: number = 0;
   validatedMenus: number = 0;
+ // Pagination pour les plats (5 plats par page)
+ itemsPerPage: number = 5; // Fixé à 5 plats par page
+ currentPage: number = 1;
+ totalPages: number = 1;
+  
 
   plats: Plat[] = [];
+  displayedPlats: Plat[] = []; // Plats affichés sur la page courante
   regimes: RegimeAlimentaire[] = [];
   menus: Menu[] = [];
 
@@ -43,6 +49,8 @@ export class StaffDashboardComponent implements OnInit {
   selectedRegime: RegimeAlimentaire | null = null;
   selectedPlatIds: number[] = [];
   selectedRegimeId: number | null = null;
+  notificationMessage: string = '';  // Message à afficher dans la bannière
+  notificationType: 'success' | 'error' | null = null;  // Type de notification
 
 
   // Ajout pour le formulaire de régime
@@ -176,6 +184,18 @@ export class StaffDashboardComponent implements OnInit {
   toggleRegime(regimeId: number): void {
     this.selectedRegimeId = this.selectedRegimeId === regimeId ? null : regimeId;
   }
+  // Méthodes ajoutées pour la notification
+  showNotification(message: string, type: 'success' | 'error'): void {
+    this.notificationMessage = message;
+    this.notificationType = type;
+    setTimeout(() => this.clearNotification(), 5000);
+  }
+
+  clearNotification(): void {
+    this.notificationMessage = '';
+    this.notificationType = null;
+  }
+
 
   loadStats(): void {
     if (this.userId === null) return;
@@ -183,6 +203,7 @@ export class StaffDashboardComponent implements OnInit {
       this.plats = plats;
       this.totalPlats = plats.length;
       this.totalCategories = new Set(plats.map(plat => plat.categorie)).size;
+      this.updatePagination();
       this.updateBarChartData();
     });
 
@@ -199,15 +220,36 @@ export class StaffDashboardComponent implements OnInit {
       this.regimes = regimes;
       this.totalRegimes = regimes.length;
       this.regimeTypes = new Set(regimes.map(regime => regime.type)).size;
+      
     });
   }
 
+// Méthode de pagination
+updatePagination(): void {
+  this.totalPages = Math.ceil(this.plats.length / this.itemsPerPage);
+  const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+  const endIndex = startIndex + this.itemsPerPage;
+  this.displayedPlats = this.plats.slice(startIndex, endIndex);
+}
 
- 
+previousPage(): void {
+  if (this.currentPage > 1) {
+    this.currentPage--;
+    this.updatePagination();
+  }
+}
+
+nextPage(): void {
+  if (this.currentPage < this.totalPages) {
+    this.currentPage++;
+    this.updatePagination();
+  }
+}
 
   loadPlats(): void {
     this.platService.getAllPlats().subscribe(plats => {
       this.plats = plats;
+      this.updatePagination();
     });
   }
 
@@ -297,57 +339,54 @@ export class StaffDashboardComponent implements OnInit {
  // Méthode modifiée pour soumettre un plat
  submitPlat(): void {
   if (this.addPlatForm.valid && this.userId !== null) {
-      const nomPlat = this.addPlatForm.get('nom')?.value.trim().toLowerCase();
+    const nomPlat = this.addPlatForm.get('nom')?.value.trim().toLowerCase();
+    const platExiste = this.plats.some(plat => 
+      plat.nom.trim().toLowerCase() === nomPlat && 
+      (!this.isEditMode || plat.id !== this.currentPlatId)
+    );
 
-      const platExiste = this.plats.some(plat => 
-          plat.nom.trim().toLowerCase() === nomPlat && 
-          (!this.isEditMode || plat.id !== this.currentPlatId)
-      );
+    if (platExiste) {
+      this.showNotification('Un plat avec ce nom existe déjà. Veuillez choisir un autre nom.', 'error');
+      return;
+    }
 
-      if (platExiste) {
-          alert('Un plat avec ce nom existe déjà. Veuillez choisir un autre nom.');
-          return;
-      }
+    const formData = new FormData();
+    formData.append('nom', this.addPlatForm.get('nom')?.value || '');
+    formData.append('description', this.addPlatForm.get('description')?.value || '');
+    formData.append('categorie', this.addPlatForm.get('categorie')?.value || '');
+    formData.append('calories', this.addPlatForm.get('calories')?.value.toString() || '0');
+    if (this.selectedFile) {
+      formData.append('image', this.selectedFile);
+    }
+    formData.append('userId', this.userId.toString());
 
-      const formData = new FormData();
-      formData.append('nom', this.addPlatForm.get('nom')?.value || '');
-      formData.append('description', this.addPlatForm.get('description')?.value || '');
-      formData.append('categorie', this.addPlatForm.get('categorie')?.value || '');
-      formData.append('calories', this.addPlatForm.get('calories')?.value.toString() || '0');
-      if (this.selectedFile) {
-          formData.append('image', this.selectedFile);
-      }
-      formData.append('userId', this.userId.toString());
-
-   
-
-      if (this.isEditMode && this.currentPlatId) {
-          this.platService.updatePlatWithImage(this.currentPlatId, this.userId, formData).subscribe({
-              next: (response) => {
-                  this.loadPlats();
-                  this.loadStats();
-                  this.toggleAddPlatForm();
-                  alert('Plat modifié avec succès.');
-              },
-              error: (err) => {
-                  console.error('Erreur lors de la modification du plat:', err);
-                  alert('Une erreur est survenue lors de la modification du plat.');
-              }
-          });
-      } else {
-          this.platService.addPlatWithImage(formData, this.userId).subscribe({
-              next: (response) => {
-                  this.loadPlats();
-                  this.loadStats();
-                  this.toggleAddPlatForm();
-                  alert('Plat ajouté avec succès.');
-              },
-              error: (err) => {
-                  console.error('Erreur lors de l\'ajout du plat:', err);
-                  alert('Une erreur est survenue lors de l\'ajout du plat.');
-              }
-          });
-      }
+    if (this.isEditMode && this.currentPlatId) {
+      this.platService.updatePlatWithImage(this.currentPlatId, this.userId, formData).subscribe({
+        next: (response) => {
+          this.loadPlats();
+          this.loadStats();
+          this.toggleAddPlatForm();
+          this.showNotification('Plat modifié avec succès.', 'success');
+        },
+        error: (err) => {
+          console.error('Erreur lors de la modification du plat:', err);
+          this.showNotification('Une erreur est survenue lors de la modification du plat.', 'error');
+        }
+      });
+    } else {
+      this.platService.addPlatWithImage(formData, this.userId).subscribe({
+        next: (response) => {
+          this.loadPlats();
+          this.loadStats();
+          this.toggleAddPlatForm();
+          this.showNotification('Plat ajouté avec succès.', 'success');
+        },
+        error: (err) => {
+          console.error('Erreur lors de l\'ajout du plat:', err);
+          this.showNotification('Une erreur est survenue lors de l\'ajout du plat.', 'error');
+        }
+      });
+    }
   }
 }
 
@@ -364,29 +403,39 @@ getImageUrl(filename: string): string {
   return '/assets/default-avatar.png';
 }
 
-  openEditPlatModal(plat: Plat): void {
-    this.isEditMode = true;
-    this.currentPlatId = plat.id;
-    this.showAddPlatForm = true;
+openEditPlatModal(plat: Plat): void {
+  this.isEditMode = true;
+  this.currentPlatId = plat.id;
+  this.showAddPlatForm = true;
 
-    this.addPlatForm.patchValue({
-      nom: plat.nom,
-      description: plat.description,
-      categorie: plat.categorie,
-      calories: plat.calories
-    });
+  this.addPlatForm.patchValue({
+    nom: plat.nom,
+    description: plat.description,
+    categorie: plat.categorie,
+    calories: plat.calories
+  });
 
-    if (plat.imagePath) {
-      this.imagePreview = plat.imagePath;
-    }
+  if (plat.imagePath) {
+    this.imagePreview = plat.imagePath;
   }
+
+  // Ajout d'une notification pour informer l'utilisateur
+  this.showNotification(`Mode édition activé pour le plat "${plat.nom}".`, 'success');
+}
 
   deletePlat(platId: number): void {
     if (this.userId === null) return;
     if (confirm('Êtes-vous sûr de vouloir supprimer ce plat ?')) {
-      this.platService.deletePlat(platId, this.userId).subscribe(() => {
-        this.loadPlats();
-        this.loadStats();
+      this.platService.deletePlat(platId, this.userId).subscribe({
+        next: () => {
+          this.loadPlats();
+          this.loadStats();
+          this.showNotification('Plat supprimé avec succès.', 'success'); // Notification de succès
+        },
+        error: (err) => {
+          console.error('Erreur lors de la suppression du plat:', err);
+          this.showNotification('Une erreur est survenue lors de la suppression du plat.', 'error'); // Notification d'erreur
+        }
       });
     }
   }
@@ -402,28 +451,27 @@ getImageUrl(filename: string): string {
   // Méthode modifiée pour soumettre un régime
   submitRegime(): void {
     if (!this.addRegimeForm.valid) {
-      alert('Veuillez remplir tous les champs requis.');
+      this.showNotification('Veuillez remplir tous les champs requis.', 'error');
       return;
     }
 
     if (this.userId === null) {
-      alert('Utilisateur non connecté. Veuillez vous reconnecter.');
+      this.showNotification('Utilisateur non connecté. Veuillez vous reconnecter.', 'error');
       return;
     }
 
     const typeValue = this.addRegimeForm.get('type')?.value;
     if (!typeValue || !Object.values(RegimeAlimentaireType).includes(typeValue)) {
-      alert('Type de régime invalide. Veuillez sélectionner un type valide.');
+      this.showNotification('Type de régime invalide. Veuillez sélectionner un type valide.', 'error');
       return;
     }
 
-    // Vérifier si un régime avec le même type existe déjà
     const regimeExiste = this.regimes.some(regime => 
       regime.type === typeValue
     );
 
     if (regimeExiste) {
-      alert('Un régime de ce type existe déjà. Veuillez choisir un autre type.');
+      this.showNotification('Un régime de ce type existe déjà. Veuillez choisir un autre type.', 'error');
       return;
     }
 
@@ -439,19 +487,18 @@ getImageUrl(filename: string): string {
         this.loadRegimes();
         this.loadStats();
         this.toggleAddRegimeForm();
-        alert('Régime ajouté avec succès.');
+        this.showNotification('Régime ajouté avec succès.', 'success');
       },
       error: (err) => {
         console.error('Erreur lors de l\'ajout du régime:', err);
-        alert('Une erreur est survenue lors de l\'ajout du régime: ' + (err.error?.message || err.message));
+        this.showNotification('Une erreur est survenue lors de l\'ajout du régime: ' + (err.error?.message || err.message), 'error');
       }
     });
   }
 
-  // Nouvelle méthode pour supprimer un régime
   deleteRegime(regimeId: number): void {
     if (this.userId === null) {
-      alert('Utilisateur non connecté. Veuillez vous reconnecter.');
+      this.showNotification('Utilisateur non connecté. Veuillez vous reconnecter.', 'error');
       return;
     }
 
@@ -460,16 +507,16 @@ getImageUrl(filename: string): string {
         next: () => {
           this.loadRegimes();
           this.loadStats();
-          alert('Régime supprimé avec succès.');
+          this.showNotification('Régime supprimé avec succès.', 'success');
         },
         error: (err) => {
           console.error('Erreur lors de la suppression du régime:', err);
           if (err.status === 403) {
-            alert('Vous n\'avez pas les permissions nécessaires pour supprimer un régime.');
+            this.showNotification('Vous n\'avez pas les permissions nécessaires pour supprimer un régime.', 'error');
           } else if (err.status === 404) {
-            alert('Régime non trouvé.');
+            this.showNotification('Régime non trouvé.', 'error');
           } else {
-            alert('Une erreur est survenue lors de la suppression du régime: ' + err.message);
+            this.showNotification('Une erreur est survenue lors de la suppression du régime: ' + err.message, 'error');
           }
         }
       });
@@ -482,9 +529,16 @@ getImageUrl(filename: string): string {
       ...regime,
       type: prompt('Nouveau type de régime (NORMAL, DIABETIQUE, SPORTIF, VEGETARIEN) :', regime.type) as RegimeAlimentaireType || regime.type
     };
-    this.regimeService.updateRegime(regime.id, this.userId, updatedRegime).subscribe(() => {
-      this.loadRegimes();
-      this.loadStats();
+    this.regimeService.updateRegime(regime.id, this.userId, updatedRegime).subscribe({
+      next: () => {
+        this.loadRegimes();
+        this.loadStats();
+        this.showNotification(`Régime "${regime.type}" modifié avec succès.`, 'success'); // Notification de succès
+      },
+      error: (err) => {
+        console.error('Erreur lors de la modification du régime:', err);
+        this.showNotification('Une erreur est survenue lors de la modification du régime.', 'error'); // Notification d'erreur
+      }
     });
   }
 
@@ -516,7 +570,7 @@ getImageUrl(filename: string): string {
     if (this.selectedRegime && this.selectedPlatIds.length > 0 && this.userId !== null) {
       const token = localStorage.getItem('token');
       if (!token) {
-        alert('Vous devez être connecté pour assigner des plats. Veuillez vous reconnecter.');
+        this.showNotification('Vous devez être connecté pour assigner des plats. Veuillez vous reconnecter.', 'error');
         return;
       }
       console.log('Assignation - regimeId:', this.selectedRegime.id, 'platIds:', this.selectedPlatIds);
@@ -526,27 +580,27 @@ getImageUrl(filename: string): string {
           this.loadRegimes();
           this.loadStats();
           this.closeAssignPlatsModal();
-          alert(response.message);
+          this.showNotification(response.message, 'success');
         },
         error: (err) => {
           console.error('Erreur lors de l\'assignation des plats :', err);
           if (err.status === 403) {
-            alert('Vous n\'avez pas les permissions nécessaires pour assigner des plats.');
+            this.showNotification('Vous n\'avez pas les permissions nécessaires pour assigner des plats.', 'error');
           } else if (err.status === 0) {
-            alert('Impossible de contacter le serveur. Vérifiez votre connexion.');
+            this.showNotification('Impossible de contacter le serveur. Vérifiez votre connexion.', 'error');
           } else {
-            alert('Une erreur est survenue : ' + err.message);
+            this.showNotification('Une erreur est survenue : ' + err.message, 'error');
           }
         }
       });
     } else {
-      alert('Veuillez sélectionner au moins un plat ou vérifier votre connexion.');
+      this.showNotification('Veuillez sélectionner au moins un plat ou vérifier votre connexion.', 'error');
     }
   }
 
   unassignPlatFromRegime(regimeId: number, platId: number): void {
     if (this.userId === null) {
-      alert('Utilisateur non connecté. Veuillez vous reconnecter.');
+      this.showNotification('Utilisateur non connecté. Veuillez vous reconnecter.', 'error');
       return;
     }
 
@@ -556,16 +610,16 @@ getImageUrl(filename: string): string {
           console.log('Réponse du serveur :', response);
           this.loadRegimes();
           this.loadStats();
-          alert('Plat désassigné avec succès.');
+          this.showNotification('Plat désassigné avec succès.', 'success');
         },
         error: (err) => {
           console.error('Erreur lors de la désassignation du plat :', err);
           if (err.status === 403) {
-            alert('Vous n\'avez pas les permissions nécessaires pour désassigner des plats.');
+            this.showNotification('Vous n\'avez pas les permissions nécessaires pour désassigner des plats.', 'error');
           } else if (err.status === 0) {
-            alert('Impossible de contacter le serveur. Vérifiez votre connexion.');
+            this.showNotification('Impossible de contacter le serveur. Vérifiez votre connexion.', 'error');
           } else {
-            alert('Une erreur est survenue : ' + err.message);
+            this.showNotification('Une erreur est survenue : ' + err.message, 'error');
           }
         }
       });
