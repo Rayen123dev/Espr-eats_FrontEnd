@@ -7,12 +7,12 @@ import { ForgetPasswordComponent } from './forget-password/forgot-password.compo
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 const authRoutes: Routes = [
-  { path: 'login', component: LoginComponent },   
-  { path: 'signup', component: SignupComponent },   
-  { path: 'verify-email', component: EmailVerificationComponent },   
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
+  { path: 'verify-email', component: EmailVerificationComponent },
   { path: 'forgot-password', component: ForgetPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent }, // Assuming the same component handles both
-  { path: 'verify-email', component: EmailVerificationComponent }, // Assuming the same component handles both
+  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'verify-email', component: EmailVerificationComponent },
 ];
 
 @NgModule({

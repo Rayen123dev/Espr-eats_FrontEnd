@@ -10,8 +10,8 @@ const routes: Routes = [
   { path: 'dashboard', component: DashboardComponent },
   { path: 'consultations', component: ConsultationsMedecinComponent },
   { path: 'consultation/:id', component: ConsultationDetailComponent },
-  { path: 'medecin/validation-menus', component: ValidationsMenuComponent } ,// ✅ AJOUTÉ ICI
-  { path: 'medecin/suivi-etudiant', component: SuiviEtudiantComponent } ,// ✅ AJOUTÉ ICI
+  { path: 'medecin/validation-menus', component: ValidationsMenuComponent } ,
+  { path: 'medecin/suivi-etudiant', component: SuiviEtudiantComponent } ,
 
 
 ];

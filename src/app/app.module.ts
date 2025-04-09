@@ -18,6 +18,7 @@ import { CommonModule } from '@angular/common';
 import { NgChartsModule } from 'ng2-charts';
 import { CalendarModule, DateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { RecaptchaModule } from 'ng-recaptcha';
 
 
 
@@ -87,6 +88,8 @@ import { VisioComponent } from './visio/visio.component';
     NgChartsModule,
     CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
     BrowserAnimationsModule,
+    RecaptchaModule,
+
 
 
   ],
