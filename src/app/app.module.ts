@@ -36,6 +36,8 @@ import { StaffDashboardComponent } from './components/staff-dashboard/staff-dash
 import { NgChartsModule } from 'ng2-charts';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
+import { MatPaginatorModule } from '@angular/material/paginator';
+
 
 @NgModule({
   declarations: [
@@ -82,7 +84,8 @@ import { MatSelectModule } from '@angular/material/select';
     MatCardModule,
     MatIconModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatPaginatorModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
