@@ -279,12 +279,11 @@
           </div>
           <!-- Integrated User Table -->
           <div class="card-body table-responsive">
-          <input
+            <input
             type="text"
-            placeholder="Search by name..."
             [(ngModel)]="searchQuery"
-            (input)="onSearchChange()"
-            class="search-input"
+            (ngModelChange)="searchUsers()"
+            placeholder="Search users..."
           />
             <table class="table table-hover">
               <thead class="text-warning">

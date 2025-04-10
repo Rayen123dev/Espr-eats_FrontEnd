@@ -236,4 +236,10 @@ export class LoginService {
       }
     );
   }
+  
+  searchUsers(query: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/search?query=${encodeURIComponent(query)}`);
+  }
+
+
 }

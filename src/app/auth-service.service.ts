@@ -18,6 +18,7 @@ export class AuthService {
   private baseUrl = 'http://localhost:8081';
 
   constructor(private http: HttpClient) { }
+  
 
   /**
    * Redirige vers le point d'entrée OAuth2 Google du backend

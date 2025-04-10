@@ -20,7 +20,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   userName: string = 'User';
   userProfileImage: string = 'assets/default-avatar.png';
   userRole: string | null = null;
-  Users: User[] = [];
+  Users: any[] = [];
   nbUsers: number = 0;
   nbAdmins: number = 0;
   nbUsersT: number = 0;
@@ -39,7 +39,6 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   filteredUsers: User[] = [];
   Chartist: any = Chartist;
   userId: number | null = null;
-
 
   searchQuery: string = '';
 
@@ -148,14 +147,31 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       }, 0);
     });
     this.subscriptions.push(sub);
-  }
+}
+
+searchUsers(): void {
+  this.loginService.searchUsers(this.searchQuery).subscribe({
+    next: (response) => {
+      this.Users = response || [];
+      this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+      console.log(response);
+
+      // Update filteredUsers after getting the response
+      this.filteredUsers = this.getFilteredUsers();
+    },
+    error: (error) => {
+      console.error('Error searching users:', error);
+      this.Users = [];
+    }
+  });
+}
+
+   
 
   loadPaginatedUsers(): void {
     const params = {
       page: this.currentPage,
       size: this.pageSize,
-      filter: this.statusFilter !== 'ALL' ? this.statusFilter : undefined,
-      search: this.searchQuery || undefined
     };
 
     const sub = this.loginService.getPaginatedUsers(params).subscribe({
@@ -163,6 +179,8 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
         this.filteredUsers = response.data;
         this.totalItems = response.totalItems || 0;
         this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
+
+        this.searchUsers();
       },
       error: (error) => {
         console.error('Error fetching users:', error);
@@ -509,5 +527,19 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   }
 
 
+  getFilteredUsers(): User[] {
+    return this.Users
+      .filter(u => this.statusFilter === 'ALL' || u.role === this.statusFilter)
+      .filter(u => {
+        const q = this.searchQuery.toLowerCase();
+        return (
+          u.nom?.toLowerCase().includes(q) ||
+          u.prenom?.toLowerCase().includes(q) ||
+          u.email?.toLowerCase().includes(q) ||
+          u.role?.toLowerCase().includes(q)
+        );
+      });
+  }
+  
 
 }
