@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
 import { LineChart } from 'chartist';
 import { BarChart } from 'chartist';

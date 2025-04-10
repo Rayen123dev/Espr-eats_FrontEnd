@@ -39,6 +39,7 @@ import { StaffDashboardComponent } from './components/staff-dashboard/staff-dash
 import { NgChartsModule } from 'ng2-charts';
 import { AuthService } from './auth-service.service';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
+import { MatPaginatorModule } from '@angular/material/paginator';
 @NgModule({
   declarations: [
     AppComponent,
@@ -98,7 +99,8 @@ import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
     MatCardModule,
     MatIconModule,
     MatSelectModule,
-    MatOptionModule
+    MatOptionModule,
+    MatPaginatorModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]
