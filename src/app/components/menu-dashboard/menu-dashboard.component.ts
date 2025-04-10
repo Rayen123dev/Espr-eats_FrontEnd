@@ -14,7 +14,8 @@ export class MenuDashboardComponent implements OnInit {
 
   menus: Menu[] = [];
   filteredMenus: Menu[] = []; // Liste des menus filtrés
-  errorMessage: string = '';
+  notificationMessage: string = ''; // Remplace successMessage et errorMessage
+  notificationType: 'success' | 'error' | null = null; // Type de notification
   isLoading: boolean = false;
   regimeTypes = Object.values(RegimeAlimentaireType); // Liste des types de régimes
   selectedRegimeType: string = 'ALL'; // Type de régime sélectionné (par défaut : tous)
@@ -29,8 +30,22 @@ export class MenuDashboardComponent implements OnInit {
     if (this.userId) {
       this.getMenus();
     } else {
-      this.errorMessage = 'Utilisateur non identifié. Veuillez vous connecter.';
+      this.showNotification('Utilisateur non identifié. Veuillez vous connecter.', 'error');
     }
+  }
+
+  // Méthode pour afficher une notification
+  showNotification(message: string, type: 'success' | 'error'): void {
+    this.notificationMessage = message;
+    this.notificationType = type;
+    setTimeout(() => this.clearNotification(), 5000);
+  }
+
+  // Méthode pour effacer la notification
+  clearNotification(): void {
+    this.notificationMessage = '';
+    this.notificationType = null;
+    this.cdr.detectChanges();
   }
 
   getMenus(): void {
@@ -39,12 +54,12 @@ export class MenuDashboardComponent implements OnInit {
     this.menuService.getAllMenus(this.userId).subscribe({
       next: (data) => {
         this.menus = data;
-        this.filterMenus(); // Appliquer le filtre initial
+        this.filterMenus();
         this.isLoading = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.errorMessage = 'Erreur de récupération des menus';
+        this.showNotification('Erreur de récupération des menus', 'error');
         this.isLoading = false;
         console.error(err);
       }
@@ -72,13 +87,13 @@ export class MenuDashboardComponent implements OnInit {
     if (!this.userId || !this.canGenerateMenus()) return;
     this.isLoading = true;
     this.menuService.generateMenus(this.userId).subscribe({
-      next: (message) => {
+      next: (response) => {
         this.isLoading = false;
-        alert(message);
+        this.showNotification(response.message || 'Menus générés avec succès', 'success');
         this.getMenus();
       },
       error: (err) => {
-        this.errorMessage = 'Erreur lors de la génération des menus';
+        this.showNotification('Erreur lors de la génération des menus', 'error');
         this.isLoading = false;
         console.error(err);
       }
@@ -90,17 +105,16 @@ export class MenuDashboardComponent implements OnInit {
     const doctorId = this.userId;
     this.menuService.validateMenus(doctorId, menuIds, { responseType: 'text' }).subscribe({
       next: (message) => {
-        console.log(message);
-        alert(message);
+        this.showNotification(message, 'success');
         this.filteredMenus = this.filteredMenus.map(menu =>
           menuIds.includes(menu.id) ? { ...menu, isValidated: true } : menu
         );
-        menuIds.forEach(id => this.rejectedMenuIds.delete(id)); // Clear rejection if validated
+        menuIds.forEach(id => this.rejectedMenuIds.delete(id));
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Erreur lors de la validation des menus', err);
-        this.errorMessage = 'Erreur lors de la validation des menus';
+        this.showNotification('Erreur lors de la validation des menus', 'error');
       }
     });
   }
@@ -110,29 +124,26 @@ export class MenuDashboardComponent implements OnInit {
     if (!this.userId || !this.canValidateMenus() || !rejectionReason) return;
     const doctorId = this.userId;
     this.menuService.rejectMenus(doctorId, menuIds, rejectionReason).subscribe({
-      next: () => {
-        this.filteredMenus = this.filteredMenus.map(menu =>
-          menuIds.includes(menu.id) ? { ...menu, isValidated: false } : menu
-        );
-        menuIds.forEach(id => this.rejectedMenuIds.add(id)); // Mark as rejected locally
+      next: (message) => {
+        this.showNotification(message || 'Menu rejeté avec succès', 'success');
+        menuIds.forEach(id => this.rejectedMenuIds.add(id));
         this.cdr.detectChanges();
       },
-      error: (err) => {
-        this.errorMessage = 'Erreur lors du rejet';
-        console.error(err);
-      }
+      
     });
+       this.showNotification('Menu rejeté avec succès', 'success');
   }
 
   regenerateMenus(): void {
     if (!this.userId || !this.canGenerateMenus()) return;
     this.menuService.regenerateMenus(this.userId).subscribe({
-      next: (message) => {
-        alert(message);
+      next: (response) => {
+        this.isLoading = false;
+        this.showNotification(response.message || 'Menus régénérés avec succès', 'success');
         this.getMenus();
       },
       error: (err) => {
-        this.errorMessage = 'Erreur lors de la régénération des menus';
+        this.showNotification('Erreur lors de la régénération des menus', 'error');
         console.error(err);
       }
     });

@@ -12,7 +12,6 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ForgetPasswordComponent } from './forget-password/forgot-password.component';
@@ -26,19 +25,20 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { AuthRoutingModule } from './Auth-routing.module';
 import { GestionUsersComponent } from './gestion-users/gestion-users.component';
-import { AuthService } from './auth-service.service';
-import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { MenuComponent } from './components/menu/menu.component';
 import { PlatComponent } from './components/plat/plat.component';
 import { MenuDashboardComponent } from './components/menu-dashboard/menu-dashboard.component';
+
 import { RegimeComponent } from './components/regime/regime.component';
-import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component';
-import { NgChartsModule } from 'ng2-charts';
-import { MatOptionModule } from '@angular/material/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { MatPaginatorModule } from '@angular/material/paginator';
-
-
+import { MatOptionModule } from '@angular/material/core';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component'; // Assurez-vous d'importer MatCheckbox
+import { NgChartsModule } from 'ng2-charts';
+import { AuthService } from './auth-service.service';
+import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,6 +54,10 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     FooterComponent,
     GestionUsersComponent,
     MenuComponent,
+    PlatComponent,
+    RegimeComponent,
+    MenuDashboardComponent,
+    StaffDashboardComponent,
     MenuDashboardComponent,
     PlatComponent,
     RegimeComponent,
@@ -75,6 +79,16 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     BrowserModule,
     BrowserAnimationsModule,
     MatTooltipModule,
+    MatCardModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatCheckboxModule,
+    FormsModule,
+    NgChartsModule,
+    RecaptchaModule,
+    RecaptchaFormsModule,
+    
     RecaptchaModule,
     RecaptchaFormsModule,
     AuthRoutingModule,
@@ -84,8 +98,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatCardModule,
     MatIconModule,
     MatSelectModule,
-    MatOptionModule,
-    MatPaginatorModule
+    MatOptionModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

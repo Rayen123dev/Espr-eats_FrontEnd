@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as Chartist from 'chartist';
 import { LineChart } from 'chartist';
 import { BarChart } from 'chartist';
@@ -37,11 +37,14 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   reclamations: any[] = [];
   statusFilter: string = 'ALL';
   filteredUsers: User[] = [];
+  Chartist: any = Chartist;
+  userId: number | null = null;
+
 
   searchQuery: string = '';
 
 
-  
+
   // Make Math accessible to template
   Math = Math;
 
@@ -59,7 +62,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   reclamationStatusChart: any;
   monthlyReclamationsChart: any;
   weeklyTrendsChart: any;
-  
+
   // Store subscriptions for proper cleanup
   private subscriptions: Subscription[] = [];
 
@@ -71,7 +74,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
 
   filterUser(status: string): void {
     this.statusFilter = status;
-    this.filteredUsers = status === 'ALL' 
+    this.filteredUsers = status === 'ALL'
       ? this.Users
       : this.Users.filter(u => u.role === status);
   }
@@ -93,7 +96,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   loadUserProfile(): void {
     const userId = this.loginService.getUserIdFromToken();
     this.id = userId;
-    
+
     if (userId) {
       const sub = this.loginService.getUserById(userId).subscribe({
         next: (user: User) => {
@@ -115,7 +118,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
     this.currentPage = event.pageIndex + 1; // MatPaginator is 0-based
     this.loadPaginatedUsers(); // Re-fetch users with new page info
   }
-  
+
 
   loadUserDataForStat(): void {
     const sub = this.loginService.getUsers().subscribe(users => {
@@ -125,7 +128,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       this.nbUsers = users.filter(user => user.role === 'User').length;
       this.nbMedecins = users.filter(user => user.role === 'Medecin').length;
       console.log('Daaaaaaaaaaaaata:',users );
-      
+
       // Initialize chart after data is loaded
       setTimeout(() => {
         this.initUserDistributionChart();
@@ -138,7 +141,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
     this.loadPaginatedUsers();
     const sub = this.loginService.getUsersP().subscribe(users => {
       this.Users = users;
-      
+
       // Initialize chart after data is loaded
       setTimeout(() => {
         this.initUserDistributionChart();
@@ -154,7 +157,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       filter: this.statusFilter !== 'ALL' ? this.statusFilter : undefined,
       search: this.searchQuery || undefined
     };
-  
+
     const sub = this.loginService.getPaginatedUsers(params).subscribe({
       next: (response) => {
         this.filteredUsers = response.data;
@@ -166,7 +169,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
         this.filteredUsers = [];
       }
     });
-  
+
     this.subscriptions.push(sub);
   }
 
@@ -188,23 +191,23 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   // Calculate visible page numbers
   pageRange(): number[] {
     const maxVisiblePages = 5;
-    
+
     if (!this.totalPages || this.totalPages <= 0) {
       return [1];
     }
-    
+
     if (this.totalPages <= maxVisiblePages) {
       return Array.from({ length: this.totalPages }, (_, i) => i + 1);
     }
-    
+
     let startPage = Math.max(this.currentPage - Math.floor(maxVisiblePages / 2), 1);
     let endPage = startPage + maxVisiblePages - 1;
-    
+
     if (endPage > this.totalPages) {
       endPage = this.totalPages;
       startPage = Math.max(endPage - maxVisiblePages + 1, 1);
     }
-    
+
     return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
   }
 
@@ -220,7 +223,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       this.nbReclamationsI = this.reclamations.filter(r => r.status === 'IN_PROGRESS').length;
       this.nbReclamationsR = this.reclamations.filter(r => r.status === 'RESOLVED').length;
       this.nbReclamationsC = this.reclamations.filter(r => r.status === 'CLOSED').length;
-      
+
       // Initialize charts after data is available
       setTimeout(() => {
         this.initReclamationStatusChart();
@@ -242,9 +245,9 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       const data = {
         labels: ['Admin', 'User', 'Medecin', 'Staff'],
         series: [
-          this.nbAdmins, 
-          this.nbUsers, 
-          this.nbMedecins, 
+          this.nbAdmins,
+          this.nbUsers,
+          this.nbMedecins,
           this.nbUsersT - (this.nbAdmins + this.nbUsers + this.nbMedecins)
         ]
       };
@@ -303,7 +306,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
           }
         }]
       ];
-      
+
       this.reclamationStatusChart = new Chartist.BarChart('#reclamationStatusChart', data);
       this.startAnimationForLineChart(this.reclamationStatusChart);
       this.applyBarChartColors();
@@ -385,7 +388,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       };
 
       this.weeklyTrendsChart = new Chartist.BarChart('#weeklyTrendsChart', weeklyData, options);
-      
+
       // Stack the bars and apply colors
       this.weeklyTrendsChart.on('draw', function(data: any) {
         if(data.type === 'bar') {
@@ -393,7 +396,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
           data.element.attr({
             style: 'stroke: ' + colors[data.seriesIndex] + '; stroke-width: 30px'
           });
-          
+
           // Animation
           data.element.animate({
             y2: {
@@ -475,7 +478,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   onSearchChange(): void {
     this.currentPage = 1; // Reset to first page
     this.loadPaginatedUsers();
-  }  
+  }
 
   BloquerUser(id: any) {
     const sub = this.loginService.BlocUser(id).subscribe({
@@ -506,5 +509,5 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   }
 
 
-  
+
 }

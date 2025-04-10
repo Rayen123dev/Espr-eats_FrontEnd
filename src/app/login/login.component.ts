@@ -168,8 +168,8 @@ export class LoginComponent implements OnInit {
       case 'Staff':
         this.router.navigate(['/staffdashboard']);
         break;
-      case 'Medcin':
-        this.router.navigate(['/profile']);
+      case 'Medecin':
+        this.router.navigate(['/staffdashboard']);
         break;
       default:
         this.router.navigate(['/home']);

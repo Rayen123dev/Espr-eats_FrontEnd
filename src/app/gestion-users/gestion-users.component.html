@@ -13,10 +13,10 @@
           <span class="nav-text">Apps</span>
         </a>
       </li>
-      <li><a href="#">
-          <i class="flaticon-bar-chart-1"></i>
-          <span class="nav-text">Charts</span>
-        </a>
+      <li><a  href="#" routerLink="/staffdashboard">
+        <i class="flaticon-bar-chart-1"></i>
+        <span class="nav-text">Menus</span>
+      </a>
       </li>
       <li><a href="#">
           <i class="flaticon-web"></i>
@@ -239,36 +239,36 @@
             <div class="d-flex justify-content-between pb-3">
               <h4 class="mb-0 text-black fs-20">Liste des ulisateurs</h4>
               <div class="filter-actions">
-                <button 
-                  (click)="filterUser('ALL')" 
+                <button
+                  (click)="filterUser('ALL')"
                   [class.active]="statusFilter === 'ALL'"
                   class="filter-btn"
                 >
                   Toutes
                 </button>
-                <button 
-                  (click)="filterUser('Admin')" 
+                <button
+                  (click)="filterUser('Admin')"
                   [class.active]="statusFilter === 'Admin'"
                   class="filter-btn"
                 >
                   Admin
                 </button>
-                <button 
-                  (click)="filterUser('User')" 
+                <button
+                  (click)="filterUser('User')"
                   [class.active]="statusFilter === 'User'"
                   class="filter-btn"
                 >
                   User
                 </button>
-                <button 
-                  (click)="filterUser('Staff')" 
+                <button
+                  (click)="filterUser('Staff')"
                   [class.active]="statusFilter === 'Staff'"
                   class="filter-btn"
                 >
                 Staff
                 </button>
-                <button 
-                  (click)="filterUser('Medcin')" 
+                <button
+                  (click)="filterUser('Medcin')"
                   [class.active]="statusFilter === 'Medcin'"
                   class="filter-btn"
                 >

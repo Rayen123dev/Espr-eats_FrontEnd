@@ -164,7 +164,7 @@
 }
 
 .btn-validate {
-  width: 100%;
+  flex: 1; /* Prend la moitié de l'espace disponible */
   background-color: #2ecc71;
   color: white;
   padding: 0.8rem;
@@ -311,8 +311,8 @@
   }
 }
 .btn-reject {
-  width: 100%;
-  background-color: #c82333;
+  flex: 1; /* Prend la moitié de l'espace disponible */
+  background-color: #dc3545;
   color: white;
   padding: 0.8rem;
   border-radius: 12px;
@@ -324,7 +324,7 @@
 }
 
 .btn-reject:hover {
-  background-color: #c82333; /* Darker red on hover */
+  background-color: #c82333;
 }
 
 .btn-reject:disabled {
@@ -336,3 +336,93 @@
   font-weight: bold;
   font-size: 0.9rem;
 }
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+/* Bannière de notification */
+.notification-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 600px;
+  width: 90%;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification-banner.success {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.notification-banner.error {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.banner-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.banner-content p {
+  margin: 0;
+  font-size: 0.95rem;
+  flex-grow: 1;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.btn-close:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-50%) translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Ajuster le padding du conteneur principal pour éviter le chevauchement */
+.menu-dashboard-container {
+  padding-top: 90px; /* Augmenté pour laisser de la place à la bannière */
+}
+
+/* Supprimez ou commentez les anciens styles si présents */
+.success-banner, .error-banner {
+  display: none; /* Désactive les anciens styles si vous ne les supprimez pas */
+}
+
+/* Gardez vos autres styles existants pour le reste du composant */
+.menu-dashboard-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
