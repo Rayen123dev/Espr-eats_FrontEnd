@@ -28,6 +28,8 @@ export class GestionUsersComponent implements OnInit {
   statusFilter: string = 'ALL';
   filteredUsers: User[] = [];
   Chartist: any = Chartist;
+  userId: number | null = null;
+  
 
 
   // Chart instances

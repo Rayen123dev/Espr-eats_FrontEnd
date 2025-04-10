@@ -2,18 +2,24 @@
   <!-- Barre de navigation -->
   <nav class="section-nav mb-4" >
     <ul>
+      <li *ngIf="userRole === 'Admin'">
+        <a  href="#" routerLink="/gestionuser">
+          <i class="fas fa-arrow-left"></i> <!-- Icône de retour -->
+        </a>
+      </li>
     <li><a (click)="scrollToSection('stats')">Statistiques</a></li>
     <li><a (click)="scrollToSection('charts')">Graphiques</a></li>
     <!-- Limiter les sections de gestion au rôle 'staff' -->
-    <li *ngIf="userRole === 'Staff'"><a (click)="scrollToSection('plats')">Gestion des Plats</a></li>
+    <li *ngIf="userRole === 'Staff'||userRole === 'Admin'"><a (click)="scrollToSection('plats')">Gestion des Plats</a></li>
     <li *ngIf="userRole === 'Staff'"><a (click)="scrollToSection('regimes')">Gestion des Régimes</a></li>
     <li><a (click)="scrollToSection('menus')">Gestion des Menus</a></li>
+   
   </ul>
   </nav>
 
   <!-- Titre et sous-titre -->
   <div class="dashboard-header">
-    <h1>Tableau de Bord Staff</h1>
+    <h1 *ngIf="userRole === 'Staff'">Tableau de Bord Staff</h1>
     <p>Gestion et analyse des menus, plats et régimes alimentaires</p>
   </div>
   <!-- Bannière de notification -->
@@ -84,12 +90,12 @@
   </div>
 
   <!-- Gestion des plats -->
-  <div class="management-section" id="plats" *ngIf="userRole === 'Staff'">
+  <div class="management-section" id="plats" *ngIf="userRole === 'Staff'|| userRole === 'Admin'">
     <h2>Gestion des Plats</h2>
-    <button class="btn-add" (click)="toggleAddPlatForm()">Ajouter un Plat</button>
+    <button class="btn-add" (click)="toggleAddPlatForm()" *ngIf="userRole === 'Staff'">Ajouter un Plat</button>
 
-    <div class="form-container" *ngIf="showAddPlatForm">
-      <form [formGroup]="addPlatForm" (ngSubmit)="submitPlat()">
+    <div class="form-container" *ngIf="showAddPlatForm" >
+      <form [formGroup]="addPlatForm" (ngSubmit)="submitPlat()" >
         <div class="form-group">
           <label for="nom">Nom du Plat</label>
           <input type="text" id="nom" formControlName="nom" class="form-control" placeholder="Entrez le nom du plat">
@@ -143,7 +149,7 @@
             <th>Catégorie</th>
             <th>Calories</th>
             <th>Image</th>
-            <th>Actions</th>
+            <th *ngIf="userRole === 'Staff'">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -157,8 +163,8 @@
               <img *ngIf="plat.imagePath" [src]="getImageUrl(plat.imagePath)" alt="{{plat.nom}}" class="plat-image">
             </td>
             <td>
-              <button class="btn-edit" (click)="openEditPlatModal(plat)">Modifier</button>
-              <button class="btn-delete" (click)="deletePlat(plat.id)">Supprimer</button>
+              <button class="btn-edit" (click)="openEditPlatModal(plat)" *ngIf="userRole === 'Staff'">Modifier</button>
+              <button class="btn-delete" (click)="deletePlat(plat.id)" *ngIf="userRole === 'Staff'">Supprimer</button>
             </td>
           </tr>
         </tbody>
@@ -182,7 +188,7 @@
 <!-- Gestion des régimes -->
 <div class="management-section" id="regimes" *ngIf="userRole === 'Staff'">
   <h2>Gestion des Régimes Alimentaires</h2>
-  <button class="btn-add" (click)="toggleAddRegimeForm()">Ajouter un Régime</button>
+  <button class="btn-add" (click)="toggleAddRegimeForm()" >Ajouter un Régime</button>
 
   <!-- Formulaire d'ajout de régime -->
   <div class="form-container" *ngIf="showAddRegimeForm">
@@ -255,7 +261,7 @@
 </div>
 
   <!-- Gestion des Menus -->
-  <div class="management-section" id="menus" *ngIf="userId && userRole && (userRole === 'Staff' || userRole === 'Medecin')">
+  <div class="management-section" id="menus" *ngIf="userId && userRole && (userRole === 'Staff' || userRole === 'Medecin'|| userRole === 'Admin')">
    
     <app-menu-dashboard [userId]="userId" [userRole]="userRole"></app-menu-dashboard>
   </div>
