@@ -14,7 +14,7 @@
 
 /* Base Styles (Updated to use Poppins) */
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Inter', sans-serif;
   background-color: #f1f5f9;
   color: #334155;
 }
@@ -286,7 +286,7 @@ body {
 }
 
 .price span {
-  font-size: 14px;
+  font-size: 18px;
   font-weight: 500;
   color: #0891b2;
   margin-left: 4px;
@@ -647,7 +647,7 @@ hr {
 }
 
 .toggle-label {
-  font-size: 14px;
+  font-size: 15px;
   color: #666;
   font-weight: 500;
 }
@@ -777,6 +777,200 @@ hr {
   border-radius: 50%;
   border-top-color: #0ea5e9;
   animation: spin 1s linear infinite;
+}
+
+/* Subscribe Button (Adapted from the first button example with original gradient) */
+.subscribe-button {
+  --width: 100%;
+  --height: 45px;
+  --tooltip-height: 35px;
+  --tooltip-width: 120px;
+  --gap-between-tooltip-to-button: 18px;
+  --tooltip-color: #fff;
+  width: var(--width);
+  height: var(--height);
+  background: linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%); /* Original background */
+  position: relative;
+  text-align: center;
+  border-radius: 8px; /* Matches your design */
+  
+  font-size: 16px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+  margin-bottom: 20px; /* Matches your original spacing */
+  display: flex; /* To align text and icon */
+  align-items: center;
+  justify-content: center;
+}
+
+.subscribe-button::before {
+  position: absolute;
+  content: attr(data-tooltip); /* Will use "Price: [cost]" from HTML */
+  width: var(--tooltip-width);
+  height: var(--tooltip-height);
+  background-color: #555;
+  font-size: 0.9rem;
+  color: var(--tooltip-color);
+  border-radius: .25em;
+  line-height: var(--tooltip-height);
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) + 10px);
+  left: calc(50% - var(--tooltip-width) / 2);
+}
+
+.subscribe-button::after {
+  position: absolute;
+  content: '';
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-top-color: #555;
+  left: calc(50% - 10px);
+  bottom: calc(100% + var(--gap-between-tooltip-to-button) - 10px);
+}
+
+.subscribe-button::after,
+.subscribe-button::before {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.5s ease;
+}
+
+.subscribe-button .text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-wrapper,
+.subscribe-button .text,
+.subscribe-button .icon {
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  color: #fff;
+}
+
+.subscribe-button .text {
+  top: 0;
+  transition: top 0.5s ease;
+}
+
+.subscribe-button .icon {
+  color: #fff;
+  top: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: top 0.5s ease;
+}
+
+.subscribe-button .icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.subscribe-button:hover {
+  background: linear-gradient(90deg, #0284c7 0%, #0369a1 100%); /* Original hover background */
+}
+
+.subscribe-button:hover .text {
+  top: -100%;
+}
+
+.subscribe-button:hover .icon {
+  top: 0;
+}
+
+.subscribe-button:hover::before,
+.subscribe-button:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
+.subscribe-button:hover::after {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button) - 20px);
+}
+
+.subscribe-button:hover::before {
+  bottom: calc(var(--height) + var(--gap-between-tooltip-to-button));
+}
+
+/* Update .price to stack original price above the main price line */
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0 8px 0;
+}
+
+/* Style the original price (strikethrough) */
+.original-price {
+  font-size: 24px;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: line-through;
+  margin-bottom: 4px;
+}
+
+/* New container for current price and monthly cost on the same line */
+.price-line {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+/* Style the current (discounted) price */
+.current-price {
+  font-size: 32px;
+  font-weight: 700;
+  color: #f59e0b; /* Orange color */
+}
+
+/* Style the monthly cost */
+.monthly-cost {
+  font-size: 16px;
+  font-weight: 500;
+  color: #f59e0b;
+}
+
+.discount {
+  display: none; /* Hidden as per the image; re-enable if needed */
+}
+
+/* Add styles for the discount badge */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #a3e635; /* Bright green like in the image */
+  color: #1f2937; /* Dark text for contrast */
+  font-size: 16px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px; /* Rounded rectangle */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+
+
+/* Ensure the h3 and description are not overlapped by badges */
+.plan-card h3 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #0369a1;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.plan-card .description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
 }
 
 @keyframes spin {

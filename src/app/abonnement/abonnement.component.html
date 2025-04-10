@@ -19,17 +19,23 @@
       <!-- Recommended Badge -->
       <div *ngIf="plan.isRecommended" class="recommended-badge"></div>
 
+      <!-- Discount Badge -->
+      <div *ngIf="plan.discount" class="discount-badge">
+        -{{ plan.discount.replace(' off', '') }}
+      </div>
+
       <h3>{{ plan.type | titlecase }}</h3>
       <p class="description">{{ plan.description }}</p>
       <br/>
       <br/>
       <!-- Display total cost and monthly cost -->
       <div class="price">
-        {{ plan.cost.toFixed(2) }} Dt <span *ngIf="plan.type !== 'MENSUEL'">({{ plan.monthlyCost.toFixed(2) }} Dt/Mois)</span>
+        <!-- Show original price with strikethrough if there's a discount -->
+        <span *ngIf="plan.discount" class="original-price">{{ plan.originalCost.toFixed(2) }} Dt</span>
+        <!-- Show discounted price (or original if no discount) -->
+        <span class="current-price">{{ plan.cost.toFixed(2) }} Dt</span>
+        <span *ngIf="plan.type !== 'MENSUEL'" class="monthly-cost">({{ plan.monthlyCost.toFixed(2) }} Dt/Mois)</span>
       </div>
-      
-      <!-- Display discount if available -->
-      <p *ngIf="plan.discount" class="discount">{{ plan.discount }}</p>
 
       <!-- Display user count if available -->
       <p *ngIf="plan.userCount" class="user-count">Choisi par {{ plan.userCount }} utilisateurs</p>
@@ -43,6 +49,16 @@
         </label>
       </div>
 
-      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.cost, plan.renouvellementAutomatique)">Choisir Plan</button>
-      <br/>
-      <br/>
+      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.cost, plan.renouvellementAutomatique)" [attr.data-tooltip]="'Price: ' + plan.cost.toFixed(2) + ' Dt'">
+        <div class="button-wrapper">
+          <div class="text">Choisir Plan</div>
+          <span class="icon">
+            <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" height="16" width="16" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 0 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 0 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
+            </svg>
+          </span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

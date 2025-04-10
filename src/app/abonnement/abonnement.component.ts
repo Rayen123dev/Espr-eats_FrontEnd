@@ -18,13 +18,14 @@ export class AbonnementComponent implements OnInit {
   subscriptionPlans: {
     type: string;
     cost: number;
+    originalCost: number; // Add original cost
     monthlyCost: number;
-    discount: string;
+    discount: string | null; // Update to store actual discount percentage or null
     description: string;
     features: string[];
     renouvellementAutomatique: boolean;
     isRecommended?: boolean;
-    userCount?: number; // Add this to store the number of users (optional)
+    userCount?: number;
   }[] = [];
   showToast: boolean = false;
   toastMessage: string = '';
@@ -45,33 +46,15 @@ export class AbonnementComponent implements OnInit {
       this.router.navigate(['/login']);
       return;
     }
-    this.loadRecommendedType(); // Load recommended type first
+    this.loadRecommendedType();
   }
 
   loadRecommendedType(): void {
-    // Use getRecommendedSubscriptionTypeWithCounts if you implemented user counts
     this.abonnementService.getRecommendedSubscriptionType().subscribe({
       next: (type) => {
         this.recommendedType = type;
         console.log('Recommended subscription type:', this.recommendedType);
-        // Load subscription plans after the recommended type is fetched
         this.loadSubscriptionPlans();
-      },
-      error: (error) => {
-        console.error('Error fetching recommended subscription type:', error);
-        this.recommendedType = 'MENSUEL';
-        // Load subscription plans even if there's an error
-        this.loadSubscriptionPlans();
-      },
-    });
-
-    // If you implemented user counts, use this instead:
-    /*
-    this.abonnementService.getRecommendedSubscriptionTypeWithCounts().subscribe({
-      next: (response) => {
-        this.recommendedType = response.recommendedType;
-        console.log('Recommended subscription type:', this.recommendedType);
-        this.loadSubscriptionPlans(response.counts);
       },
       error: (error) => {
         console.error('Error fetching recommended subscription type:', error);
@@ -79,7 +62,6 @@ export class AbonnementComponent implements OnInit {
         this.loadSubscriptionPlans();
       },
     });
-    */
   }
 
   loadSubscriptionPlans(counts?: { [key: string]: number }): void {
@@ -89,12 +71,22 @@ export class AbonnementComponent implements OnInit {
           console.error('Invalid subscription data:', data);
           return;
         }
+
+        // Define base costs (same as calculateCout in AbonnementService)
+        const baseCosts = {
+          MENSUEL: 30.0,
+          TRIMESTRIEL: 80.0,
+          SEMESTRIEL: 150.0,
+          ANNUEL: 280.0,
+        };
+
         this.subscriptionPlans = [
           {
             type: 'MENSUEL',
             cost: data['MENSUEL'] || 0,
+            originalCost: baseCosts['MENSUEL'],
             monthlyCost: data['MENSUEL'] || 0,
-            discount: 'Save 0Dt',
+            discount: null, // Will be calculated below
             description: 'Un Plan pour un mois',
             features: [
               '3 templates',
@@ -104,13 +96,14 @@ export class AbonnementComponent implements OnInit {
             ],
             renouvellementAutomatique: false,
             isRecommended: this.recommendedType === 'MENSUEL',
-            userCount: counts ? counts['MENSUEL'] : undefined, // Set user count if available
+            userCount: counts ? counts['MENSUEL'] : undefined,
           },
           {
             type: 'TRIMESTRIEL',
             cost: data['TRIMESTRIEL'] || 0,
+            originalCost: baseCosts['TRIMESTRIEL'],
             monthlyCost: (data['TRIMESTRIEL'] || 0) / 3,
-            discount: 'Save 10Dt',
+            discount: null,
             description: 'Un Plan pour trois mois',
             features: [
               '5 templates',
@@ -126,8 +119,9 @@ export class AbonnementComponent implements OnInit {
           {
             type: 'SEMESTRIEL',
             cost: data['SEMESTRIEL'] || 0,
+            originalCost: baseCosts['SEMESTRIEL'],
             monthlyCost: (data['SEMESTRIEL'] || 0) / 6,
-            discount: 'Save 30Dt',
+            discount: null,
             description: 'Un Plan pour six mois',
             features: [
               '10 templates',
@@ -143,8 +137,9 @@ export class AbonnementComponent implements OnInit {
           {
             type: 'ANNUEL',
             cost: data['ANNUEL'] || 0,
+            originalCost: baseCosts['ANNUEL'],
             monthlyCost: (data['ANNUEL'] || 0) / 12,
-            discount: 'Save 80Dt',
+            discount: null,
             description: 'Un plan pour un an',
             features: [
               'Unlimited templates',
@@ -158,6 +153,18 @@ export class AbonnementComponent implements OnInit {
             userCount: counts ? counts['ANNUEL'] : undefined,
           },
         ];
+
+        // Calculate actual discounts
+        this.subscriptionPlans.forEach((plan) => {
+          if (plan.cost < plan.originalCost) {
+            const discountPercentage = Math.round(
+              ((plan.originalCost - plan.cost) / plan.originalCost) * 100
+            );
+            plan.discount = `${discountPercentage}% off`;
+          } else {
+            plan.discount = null;
+          }
+        });
       },
       error: (error) => {
         console.error('Error fetching subscription plans:', error);
