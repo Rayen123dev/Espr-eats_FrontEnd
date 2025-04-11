@@ -137,7 +137,11 @@ export class LoginComponent implements OnInit {
           this.errorMessage = 'Invalid email or password';
         } else if (error.status === 403) {
           this.errorMessage = 'Account is locked or inactive';
-        } else {
+        } 
+        else if (error.status === 429) {
+          this.errorMessage = error.error; // <-- Message comme "Compte bloqué temporairement..."
+        }
+        else {
           this.errorMessage = 'Connection error. Please try again later.';
         }
         
