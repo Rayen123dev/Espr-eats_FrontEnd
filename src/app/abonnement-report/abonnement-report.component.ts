@@ -6,9 +6,16 @@ import {
   TypeAbonnement,
   AbonnementStatus,
   Discount,
-} from '../../abonnement.service'; // Adjust this path based on your folder structure
+} from '../../abonnement.service';
 import { ChartOptions, ChartType } from 'chart.js';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
 
 @Component({
   selector: 'app-abonnement-report',
@@ -20,10 +27,14 @@ export class AbonnementReportComponent implements OnInit {
   isLoading: boolean = false;
   errorMessage: string = '';
 
-  // Table data
+  // Table data with pagination
   abonnements: Abonnement[] = [];
   isLoadingTable: boolean = false;
   tableErrorMessage: string = '';
+  totalItems: number = 0;
+  pageSize: number = 10;
+  currentPage: number = 1;
+  totalPages: number = 1;
 
   // Toggle action states
   toggleErrorMessage: string = '';
@@ -41,13 +52,13 @@ export class AbonnementReportComponent implements OnInit {
   // Discount form
   discountForm: FormGroup;
   showDiscountForm: boolean = false;
-  discountSuccessMessage: string = ''; // We'll keep this for now, but it can be removed if not needed
-  discountErrorMessage: string = ''; // We'll keep this for now, but it can be removed if not needed
+  discountSuccessMessage: string = '';
+  discountErrorMessage: string = '';
 
   // Custom toast properties
   showToast: boolean = false;
   toastMessage: string = '';
-  toastTitle: string = 'Success'; // Default to 'Success', can be 'Danger' for errors
+  toastTitle: string = 'Success';
 
   // Line Chart for Monthly Growth
   lineChartData: {
@@ -117,24 +128,36 @@ export class AbonnementReportComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private fb: FormBuilder
   ) {
-    // Initialize discount form
-    this.discountForm = this.fb.group({
-      percentage: [
-        '',
-        [Validators.required, Validators.min(0), Validators.max(100)],
-      ],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      type: ['', Validators.required],
-      isActive: [true],
-    });
+    // Custom validator for date range
+    const dateRangeValidator: ValidatorFn = (
+      formGroup: AbstractControl
+    ): ValidationErrors | null => {
+      const startDate = formGroup.get('startDate')?.value;
+      const endDate = formGroup.get('endDate')?.value;
+      if (!startDate || !endDate) {
+        return null; // Let required validator handle empty fields
+      }
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      return end >= start ? null : { dateRange: true };
+    };
 
-    // Debug the types array
-    console.log('Types initialized:', this.types);
+    this.discountForm = this.fb.group(
+      {
+        percentage: [
+          '',
+          [Validators.required, Validators.min(0), Validators.max(100)],
+        ],
+        startDate: ['', Validators.required],
+        endDate: ['', Validators.required],
+        type: ['', Validators.required],
+        isActive: [true],
+      },
+      { validators: dateRangeValidator }
+    );
   }
 
   ngOnInit(): void {
-    // If types is empty, log a warning and use a fallback
     if (!this.types || this.types.length === 0) {
       console.warn('Types array is empty. Using fallback values.');
       this.types = ['MENSUEL', 'TRIMESTRIEL', 'SEMESTRIEL', 'ANNUEL'];
@@ -142,6 +165,7 @@ export class AbonnementReportComponent implements OnInit {
     }
 
     this.fetchSubscriptionReport();
+    this.fetchAbonnements();
   }
 
   fetchSubscriptionReport(): void {
@@ -153,13 +177,12 @@ export class AbonnementReportComponent implements OnInit {
         this.isLoading = false;
         this.errorMessage = '';
 
-        // Show notification if there are blocked subscriptions
         if (report.blockedSubscriptions > 0) {
           this.showBlockedNotification = true;
           setTimeout(() => {
             this.showBlockedNotification = false;
             this.cdr.detectChanges();
-          }, 5000); // Auto-hide after 5 seconds
+          }, 5000);
         }
       },
       error: (err) => {
@@ -207,16 +230,17 @@ export class AbonnementReportComponent implements OnInit {
     this.tableErrorMessage = '';
     this.abonnements = [];
 
+    const startIndex = (this.currentPage - 1) * this.pageSize;
+    const endIndex = startIndex + this.pageSize;
+
     if (this.selectedType && this.selectedStatus) {
-      this.fetchByTypeAndStatus();
+      this.fetchByTypeAndStatus(startIndex, endIndex);
     } else if (this.selectedType) {
       this.abonnementService.getAbonnementsByType(this.selectedType).subscribe({
         next: (abonnements) => {
-          this.abonnements = abonnements;
-          // Force some abonnements to be blocked for testing
-          if (this.abonnements.length > 0) {
-            this.abonnements[0].isBlocked = true;
-          }
+          this.totalItems = abonnements.length;
+          this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+          this.abonnements = abonnements.slice(startIndex, endIndex);
           this.isLoadingTable = false;
           console.log('Fetched abonnements by type:', this.abonnements);
         },
@@ -232,7 +256,9 @@ export class AbonnementReportComponent implements OnInit {
         .getAbonnementsByStatus(this.selectedStatus)
         .subscribe({
           next: (abonnements) => {
-            this.abonnements = abonnements;
+            this.totalItems = abonnements.length;
+            this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+            this.abonnements = abonnements.slice(startIndex, endIndex);
             this.isLoadingTable = false;
             console.log('Fetched abonnements by status:', this.abonnements);
           },
@@ -245,22 +271,35 @@ export class AbonnementReportComponent implements OnInit {
         });
     } else {
       this.isLoadingTable = false;
+      this.totalItems = 0;
+      this.totalPages = 1;
     }
   }
 
-  fetchByTypeAndStatus(): void {
+  fetchByTypeAndStatus(startIndex: number, endIndex: number): void {
     this.abonnementService.getAbonnementsByType(this.selectedType).subscribe({
       next: (abonnementsByType) => {
         this.abonnementService
           .getAbonnementsByStatus(this.selectedStatus)
           .subscribe({
             next: (abonnementsByStatus) => {
-              this.abonnements = abonnementsByType.filter((abonnement) =>
-                abonnementsByStatus.some(
-                  (a) => a.idAbonnement === abonnement.idAbonnement
-                )
+              const filteredAbonnements = abonnementsByType.filter(
+                (abonnement) =>
+                  abonnementsByStatus.some(
+                    (a) => a.idAbonnement === abonnement.idAbonnement
+                  )
+              );
+              this.totalItems = filteredAbonnements.length;
+              this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+              this.abonnements = filteredAbonnements.slice(
+                startIndex,
+                endIndex
               );
               this.isLoadingTable = false;
+              console.log(
+                'Fetched abonnements by type and status:',
+                this.abonnements
+              );
             },
             error: (err) => {
               console.error('Error fetching abonnements by status:', err);
@@ -279,7 +318,25 @@ export class AbonnementReportComponent implements OnInit {
     });
   }
 
+  changePage(page: number): void {
+    if (page < 1 || page > this.totalPages) return;
+    this.currentPage = page;
+    this.fetchAbonnements();
+  }
+
+  getPageNumbers(): number[] {
+    const pages: number[] = [];
+    if (this.currentPage <= this.totalPages) {
+      pages.push(this.currentPage);
+      if (this.currentPage + 1 <= this.totalPages) {
+        pages.push(this.currentPage + 1);
+      }
+    }
+    return pages;
+  }
+
   onFilterChange(): void {
+    this.currentPage = 1;
     this.fetchAbonnements();
   }
 
@@ -287,7 +344,11 @@ export class AbonnementReportComponent implements OnInit {
     this.selectedType = '';
     this.selectedStatus = '';
     this.abonnements = [];
+    this.totalItems = 0;
+    this.currentPage = 1;
+    this.totalPages = 1;
     this.tableErrorMessage = '';
+    this.cdr.detectChanges();
   }
 
   toggleBlockedStatus(idAbonnement: number): void {
@@ -295,50 +356,54 @@ export class AbonnementReportComponent implements OnInit {
     const abonnement = this.abonnements.find(
       (a) => a.idAbonnement === idAbonnement
     );
-    console.log('Current state:', abonnement?.isBlocked);
+    console.log('Current state:', abonnement?.abonnementStatus);
 
-    // Optimistically update the UI
     const index = this.abonnements.findIndex(
       (a) => a.idAbonnement === idAbonnement
     );
     if (index !== -1 && abonnement) {
-      this.abonnements[index].isBlocked = !abonnement.isBlocked; // Toggle locally
+      const newStatus =
+        abonnement.abonnementStatus === 'SUSPENDED' ? 'ACTIVE' : 'SUSPENDED';
+      this.abonnements[index].abonnementStatus = newStatus;
       this.abonnements = [...this.abonnements];
       this.cdr.detectChanges();
       console.log(
         'Local state updated optimistically:',
-        this.abonnements[index].isBlocked
+        this.abonnements[index].abonnementStatus
       );
     }
 
     this.toggleErrorMessage = '';
     this.toggleSuccessMessage = '';
 
-    // Sync with API
     this.abonnementService.unblockAbonnement(idAbonnement).subscribe({
       next: (updatedAbonnement) => {
-        console.log('API response - New state:', updatedAbonnement.isBlocked);
+        console.log(
+          'API response - New state:',
+          updatedAbonnement.abonnementStatus
+        );
 
-        // Update local state with API response
         if (index !== -1) {
-          this.abonnements[index].isBlocked = updatedAbonnement.isBlocked;
+          this.abonnements[index].abonnementStatus =
+            updatedAbonnement.abonnementStatus;
           this.abonnements = [...this.abonnements];
           this.cdr.detectChanges();
           console.log(
             'Updated local state from API:',
-            this.abonnements[index].isBlocked
+            this.abonnements[index].abonnementStatus
           );
         }
 
         this.toggleSuccessMessage = `Abonnement ${
-          updatedAbonnement.isBlocked ? 'blocked' : 'unblocked'
-        } successfully!`;
+          updatedAbonnement.abonnementStatus === 'SUSPENDED'
+            ? 'bloqué'
+            : 'débloqué'
+        } avec succès !`;
         setTimeout(() => (this.toggleSuccessMessage = ''), 3000);
 
-        // Update charts without full reload
         if (this.report) {
           this.report.blockedSubscriptions = this.abonnements.filter(
-            (a) => a.isBlocked
+            (a) => a.abonnementStatus === 'SUSPENDED'
           ).length;
           this.updateCharts();
         }
@@ -346,11 +411,12 @@ export class AbonnementReportComponent implements OnInit {
       error: (error) => {
         console.error('API Error:', error);
         if (index !== -1 && abonnement) {
-          this.abonnements[index].isBlocked = abonnement.isBlocked; // Revert on error
+          this.abonnements[index].abonnementStatus =
+            abonnement.abonnementStatus;
           this.abonnements = [...this.abonnements];
           this.cdr.detectChanges();
         }
-        this.toggleErrorMessage = 'Failed to update status';
+        this.toggleErrorMessage = 'Échec de la mise à jour du statut';
         setTimeout(() => (this.toggleErrorMessage = ''), 3000);
       },
     });
@@ -373,11 +439,17 @@ export class AbonnementReportComponent implements OnInit {
 
   submitDiscountForm(): void {
     if (this.discountForm.invalid) {
-      this.discountErrorMessage =
-        'Veuillez remplir tous les champs correctement.';
+      // Check for date range error specifically
+      if (this.discountForm.hasError('dateRange')) {
+        this.discountErrorMessage =
+          'La date de fin ne peut pas être antérieure à la date de début.';
+      } else {
+        this.discountErrorMessage =
+          'Veuillez remplir tous les champs correctement.';
+      }
       this.showToast = true;
       this.toastTitle = 'Danger';
-      this.toastMessage = 'Veuillez remplir tous les champs correctement.';
+      this.toastMessage = this.discountErrorMessage;
       setTimeout(() => this.closeToast(), 3000);
       return;
     }
@@ -390,33 +462,35 @@ export class AbonnementReportComponent implements OnInit {
       isActive: this.discountForm.value.isActive,
     };
 
-    // For now, we'll use a hardcoded userId (e.g., admin user). In a real app, you'd get this from authentication.
-    const userId = 1; // Replace with actual user ID from authentication service if available
+    const userId = 1;
 
     this.abonnementService.createDiscount(userId, discount).subscribe({
       next: (createdDiscount) => {
-        // Show success toast
         this.showToast = true;
         this.toastTitle = 'Success';
         this.toastMessage = `Remise de ${createdDiscount.percentage}% pour ${createdDiscount.type} créée avec succès !`;
         setTimeout(() => this.closeToast(), 3000);
 
-        // Reset form and hide it
         this.discountForm.reset({ isActive: true });
         this.showDiscountForm = false;
-        this.discountSuccessMessage = ''; // Clear the existing success message
+        this.discountSuccessMessage = '';
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error creating discount:', err);
-        // Show error toast
         this.showToast = true;
         this.toastTitle = 'Danger';
-        this.toastMessage =
-          'Erreur lors de la création de la remise. Veuillez réessayer.';
+        // Check if the error is related to date validation from the backend
+        if (err?.error === 'End date cannot be before start date.') {
+          this.toastMessage =
+            'La date de fin ne peut pas être antérieure à la date de début.';
+          this.discountErrorMessage = this.toastMessage;
+        } else {
+          this.toastMessage =
+            'Erreur lors de la création de la remise. Veuillez réessayer.';
+          this.discountErrorMessage = this.toastMessage;
+        }
         setTimeout(() => this.closeToast(), 3000);
-        this.discountErrorMessage =
-          'Erreur lors de la création de la remise. Veuillez réessayer.';
         this.cdr.detectChanges();
       },
     });
@@ -425,7 +499,7 @@ export class AbonnementReportComponent implements OnInit {
   closeToast(): void {
     this.showToast = false;
     this.toastMessage = '';
-    this.toastTitle = 'Success'; // Reset to default
+    this.toastTitle = 'Success';
     this.cdr.detectChanges();
   }
 }

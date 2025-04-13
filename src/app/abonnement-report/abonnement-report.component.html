@@ -133,6 +133,15 @@
                 >
                   Veuillez sélectionner une date de fin.
                 </div>
+                <div
+                  *ngIf="
+                    discountForm.hasError('dateRange') &&
+                    discountForm.get('endDate')?.touched
+                  "
+                  class="text-danger"
+                >
+                  La date de fin ne peut pas être antérieure à la date de début.
+                </div>
               </div>
             </div>
             <!-- Is Active -->
@@ -276,46 +285,77 @@
         Chargement des abonnements...
       </div>
 
-      <!-- Table -->
-      <div *ngIf="!isLoadingTable && abonnements.length > 0" class="billing-history">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Type</th>
-              <th>Statut</th>
-              <th>Coût (Dt)</th>
-              <th>Date Début</th>
-              <th>Date Fin</th>
-              <th>Bloqué</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let abonnement of abonnements">
-              <td>{{ abonnement.idAbonnement }}</td>
-              <td>{{ abonnement.typeAbonnement }}</td>
-              <td>{{ abonnement.abonnementStatus }}</td>
-              <td>{{ abonnement.cout.toFixed(2) }}</td>
-              <td>{{ abonnement.dateDebut | date: 'shortDate' }}</td>
-              <td>{{ abonnement.dateFin | date: 'shortDate' }}</td>
-              <td>
-                <label class="toggle-switch">
-                  <input
-                    type="checkbox"
-                    [checked]="abonnement.abonnementStatus === 'SUSPENDED'"
-                    (change)="toggleBlockedStatus(abonnement.idAbonnement)"
-                    [attr.data-status]="abonnement.abonnementStatus"
-                  />
-                  <span class="slider"></span>
-                </label>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+      <!-- Table and Pagination -->
+      <div *ngIf="!isLoadingTable" class="billing-history">
+        <!-- Table -->
+        <div *ngIf="abonnements.length > 0; ">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Statut</th>
+                <th>Coût (Dt)</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+                <th>Bloqué</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let abonnement of abonnements">
+                <td>{{ abonnement.idAbonnement }}</td>
+                <td>{{ abonnement.typeAbonnement }}</td>
+                <td>{{ abonnement.abonnementStatus }}</td>
+                <td>{{ abonnement.cout.toFixed(2) }}</td>
+                <td>{{ abonnement.dateDebut | date: 'shortDate' }}</td>
+                <td>{{ abonnement.dateFin | date: 'shortDate' }}</td>
+                <td>
+                  <label class="toggle-switch">
+                    <input
+                      type="checkbox"
+                      [checked]="abonnement.abonnementStatus === 'SUSPENDED'"
+                      (change)="toggleBlockedStatus(abonnement.idAbonnement)"
+                      [attr.data-status]="abonnement.abonnementStatus"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Custom Pagination (Always shown if there was data or filters are applied) -->
+        <div *ngIf="totalItems > 0 || selectedType || selectedStatus" class="custom-pagination">
+          <button
+            class="pagination-btn prev-btn"
+            [disabled]="currentPage === 1"
+            (click)="changePage(currentPage - 1)"
+          >
+            << Précédent
+          </button>
+          <div class="page-numbers">
+            <button
+              *ngFor="let page of getPageNumbers()"
+              class="page-btn"
+              [class.active]="page === currentPage"
+              (click)="changePage(page)"
+            >
+              {{ page }}
+            </button>
+          </div>
+          <button
+            class="pagination-btn next-btn"
+            [disabled]="currentPage === totalPages"
+            (click)="changePage(currentPage + 1)"
+          >
+            Suivant >>
+          </button>
+        </div>
       </div>
 
-      <!-- No Data Message -->
-      <div *ngIf="!isLoadingTable && abonnements.length === 0 && !tableErrorMessage" class="no-transactions">
+      <!-- No Data Message (Initial State) -->
+      <div *ngIf="!isLoadingTable && totalItems === 0 && !selectedType && !selectedStatus && !tableErrorMessage" class="no-transactions">
         <div class="no-data-icon"></div>
         <p>Aucun abonnement trouvé</p>
         <span>Veuillez sélectionner un type ou un statut.</span>
