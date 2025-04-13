@@ -116,10 +116,21 @@ export class PaymentConfirmationComponent implements OnInit {
       .confirmAbonnement(this.currentUserId, this.generatedCode)
       .subscribe({
         next: (response: Abonnement) => {
-          console.log('Subscription confirmed successfully:', response);
-          this.subscriptionDetails = response; // Update subscriptionDetails with the response
+          console.log('Response received:', response);
+          this.subscriptionDetails = response;
 
-          // Create userInfo by fetching the user
+          // Check if abonnement is blocked
+          if (response.isBlocked) {
+            this.submitting = false;
+            this.showErrorToast(
+              'Your subscription has been blocked due to too many incorrect code attempts. Please contact support.'
+            );
+            this.router.navigate(['/abonnement']); // Or a support page
+            return;
+          }
+
+          // Proceed with success
+          console.log('Subscription confirmed successfully:', response);
           let userInfo: UserInfo;
           if (this.subscriptionDetails?.user) {
             console.log(
@@ -138,7 +149,6 @@ export class PaymentConfirmationComponent implements OnInit {
               .pipe(
                 catchError((error) => {
                   console.error('Error fetching user info:', error);
-                  // Provide a default user if fetching fails
                   return of({
                     id: this.currentUserId!,
                     nom: 'Utilisateur Inconnu',
@@ -156,11 +166,13 @@ export class PaymentConfirmationComponent implements OnInit {
 
           this.showSuccessToast('Subscription confirmed successfully');
         },
-        error: () => {
+        error: (err) => {
           this.submitting = false;
-          this.showErrorToast(
-            'Invalid code or confirmation failed. Please try again.'
-          );
+          // Extract specific error message from backend
+          const errorMessage =
+            err.error?.message ||
+            'Invalid code or confirmation failed. Please try again.';
+          this.showErrorToast(errorMessage);
         },
         complete: () => {
           this.submitting = false;

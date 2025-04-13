@@ -5,8 +5,10 @@ import {
   Abonnement,
   TypeAbonnement,
   AbonnementStatus,
-} from 'src/abonnement.service';
+  Discount,
+} from '../../abonnement.service'; // Adjust this path based on your folder structure
 import { ChartOptions, ChartType } from 'chart.js';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-abonnement-report',
@@ -35,6 +37,17 @@ export class AbonnementReportComponent implements OnInit {
   statuses: string[] = Object.values(AbonnementStatus);
   selectedType: string = '';
   selectedStatus: string = '';
+
+  // Discount form
+  discountForm: FormGroup;
+  showDiscountForm: boolean = false;
+  discountSuccessMessage: string = ''; // We'll keep this for now, but it can be removed if not needed
+  discountErrorMessage: string = ''; // We'll keep this for now, but it can be removed if not needed
+
+  // Custom toast properties
+  showToast: boolean = false;
+  toastMessage: string = '';
+  toastTitle: string = 'Success'; // Default to 'Success', can be 'Danger' for errors
 
   // Line Chart for Monthly Growth
   lineChartData: {
@@ -101,10 +114,33 @@ export class AbonnementReportComponent implements OnInit {
 
   constructor(
     private abonnementService: AbonnementService,
-    private cdr: ChangeDetectorRef
-  ) {}
+    private cdr: ChangeDetectorRef,
+    private fb: FormBuilder
+  ) {
+    // Initialize discount form
+    this.discountForm = this.fb.group({
+      percentage: [
+        '',
+        [Validators.required, Validators.min(0), Validators.max(100)],
+      ],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      type: ['', Validators.required],
+      isActive: [true],
+    });
+
+    // Debug the types array
+    console.log('Types initialized:', this.types);
+  }
 
   ngOnInit(): void {
+    // If types is empty, log a warning and use a fallback
+    if (!this.types || this.types.length === 0) {
+      console.warn('Types array is empty. Using fallback values.');
+      this.types = ['MENSUEL', 'TRIMESTRIEL', 'SEMESTRIEL', 'ANNUEL'];
+      this.cdr.detectChanges();
+    }
+
     this.fetchSubscriptionReport();
   }
 
@@ -322,6 +358,74 @@ export class AbonnementReportComponent implements OnInit {
 
   closeBlockedNotification(): void {
     this.showBlockedNotification = false;
+    this.cdr.detectChanges();
+  }
+
+  toggleDiscountForm(): void {
+    this.showDiscountForm = !this.showDiscountForm;
+    if (!this.showDiscountForm) {
+      this.discountForm.reset({ isActive: true });
+      this.discountSuccessMessage = '';
+      this.discountErrorMessage = '';
+    }
+    this.cdr.detectChanges();
+  }
+
+  submitDiscountForm(): void {
+    if (this.discountForm.invalid) {
+      this.discountErrorMessage =
+        'Veuillez remplir tous les champs correctement.';
+      this.showToast = true;
+      this.toastTitle = 'Danger';
+      this.toastMessage = 'Veuillez remplir tous les champs correctement.';
+      setTimeout(() => this.closeToast(), 3000);
+      return;
+    }
+
+    const discount: Discount = {
+      percentage: this.discountForm.value.percentage,
+      startDate: new Date(this.discountForm.value.startDate).toISOString(),
+      endDate: new Date(this.discountForm.value.endDate).toISOString(),
+      type: this.discountForm.value.type,
+      isActive: this.discountForm.value.isActive,
+    };
+
+    // For now, we'll use a hardcoded userId (e.g., admin user). In a real app, you'd get this from authentication.
+    const userId = 1; // Replace with actual user ID from authentication service if available
+
+    this.abonnementService.createDiscount(userId, discount).subscribe({
+      next: (createdDiscount) => {
+        // Show success toast
+        this.showToast = true;
+        this.toastTitle = 'Success';
+        this.toastMessage = `Remise de ${createdDiscount.percentage}% pour ${createdDiscount.type} créée avec succès !`;
+        setTimeout(() => this.closeToast(), 3000);
+
+        // Reset form and hide it
+        this.discountForm.reset({ isActive: true });
+        this.showDiscountForm = false;
+        this.discountSuccessMessage = ''; // Clear the existing success message
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Error creating discount:', err);
+        // Show error toast
+        this.showToast = true;
+        this.toastTitle = 'Danger';
+        this.toastMessage =
+          'Erreur lors de la création de la remise. Veuillez réessayer.';
+        setTimeout(() => this.closeToast(), 3000);
+        this.discountErrorMessage =
+          'Erreur lors de la création de la remise. Veuillez réessayer.';
+        this.cdr.detectChanges();
+      },
+    });
+  }
+
+  closeToast(): void {
+    this.showToast = false;
+    this.toastMessage = '';
+    this.toastTitle = 'Success'; // Reset to default
     this.cdr.detectChanges();
   }
 }

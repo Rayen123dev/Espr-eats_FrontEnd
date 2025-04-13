@@ -1,4 +1,11 @@
 <div class="billing-container">
+  <!-- Custom Toast Notification -->
+  <div *ngIf="showToast" class="notification" [ngClass]="toastTitle === 'Success' ? 'success' : 'warning'">
+    <span class="notification-icon"></span>
+    <span>{{ toastMessage }}</span>
+    <button class="close-btn" (click)="closeToast()">×</button>
+  </div>
+
   <!-- Notification for Blocked Subscriptions -->
   <div *ngIf="showBlockedNotification" class="notification warning">
     <span class="notification-icon"></span>
@@ -24,6 +31,135 @@
 
   <!-- Dashboard Content -->
   <div *ngIf="!isLoading && report" class="dashboard-content">
+    <!-- Discount Form Section -->
+    <div class="section discount-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>Gérer les Remises</h2>
+          <button
+            class="download-btn"
+            (click)="toggleDiscountForm()"
+          >
+            {{ showDiscountForm ? 'Annuler' : 'Ajouter une Remise' }}
+          </button>
+        </div>
+        <div class="card-body" *ngIf="showDiscountForm">
+          <form [formGroup]="discountForm" (ngSubmit)="submitDiscountForm()">
+            <div class="row">
+              <!-- Percentage -->
+              <div class="col-md-6 mb-3">
+                <label for="percentage" class="form-label">Pourcentage (%)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="percentage"
+                  formControlName="percentage"
+                  placeholder="Ex: 20"
+                  min="0"
+                  max="100"
+                />
+                <div
+                  *ngIf="
+                    discountForm.get('percentage')?.invalid &&
+                    discountForm.get('percentage')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Le pourcentage doit être entre 0 et 100.
+                </div>
+              </div>
+              <!-- Subscription Type -->
+              <div class="col-md-6 mb-3">
+                <label for="type" class="form-label">Type d'Abonnement</label>
+                <div class="relative">
+                  <select
+                    class="form-control"
+                    id="type"
+                    formControlName="type"
+                  >
+                    <option value="" disabled>Sélectionner un type</option>
+                    <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+                  </select>
+                  <span class="pointer-events-none">
+                    <i class="fas fa-chevron-down"></i>
+                  </span>
+                </div>
+                <div
+                  *ngIf="
+                    discountForm.get('type')?.invalid &&
+                    discountForm.get('type')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Veuillez sélectionner un type d'abonnement.
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Start Date -->
+              <div class="col-md-6 mb-3">
+                <label for="startDate" class="form-label">Date de Début</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="startDate"
+                  formControlName="startDate"
+                />
+                <div
+                  *ngIf="
+                    discountForm.get('startDate')?.invalid &&
+                    discountForm.get('startDate')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Veuillez sélectionner une date de début.
+                </div>
+              </div>
+              <!-- End Date -->
+              <div class="col-md-6 mb-3">
+                <label for="endDate" class="form-label">Date de Fin</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="endDate"
+                  formControlName="endDate"
+                />
+                <div
+                  *ngIf="
+                    discountForm.get('endDate')?.invalid &&
+                    discountForm.get('endDate')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Veuillez sélectionner une date de fin.
+                </div>
+              </div>
+            </div>
+            <!-- Is Active -->
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="isActive"
+                  formControlName="isActive"
+                />
+                <label class="form-check-label" for="isActive">Remise Active</label>
+              </div>
+            </div>
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="download-btn"
+              [disabled]="discountForm.invalid"
+            >
+              Créer la Remise
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <!-- General Statistics Cards -->
     <div class="section stats-section">
       <h2>Statistiques Générales</h2>
@@ -55,7 +191,7 @@
         <div class="plan-details card">
           <div class="plan-info">
             <div class="plan-name">Revenu Total</div>
-            <div class="plan-cost">{{ report.totalRevenue.toFixed(2) }} Dt</div>
+            <div class="plan-cost">{{ (report?.totalRevenue ?? 0).toFixed(2) }} Dt</div>
           </div>
         </div>
       </div>
@@ -173,7 +309,6 @@
                   <span class="slider"></span>
                 </label>
               </td>
-              
             </tr>
           </tbody>
         </table>

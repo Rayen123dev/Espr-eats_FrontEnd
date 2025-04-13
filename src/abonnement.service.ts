@@ -14,6 +14,16 @@ export interface SubscriptionReport {
   subscriptionsByType: { [key: string]: number };
 }
 
+export interface Discount {
+  idDiscount?: number;
+  percentage: number;
+  startDate: string; // ISO string format (e.g., "2025-04-01T00:00:00")
+  endDate: string; // ISO string format
+  isActive: boolean;
+  type: TypeAbonnement;
+  abonnement?: Abonnement;
+}
+
 export enum TransactionStatus {
   SUCCESS = 'SUCCESS',
   FAILED = 'FAILED',
@@ -77,6 +87,7 @@ export interface CreateAbonnementResponse {
 })
 export class AbonnementService {
   private apiUrl = 'http://localhost:8081/api/abonnement';
+  private discountApiUrl = 'http://localhost:8081/api/discount';
 
   constructor(private http: HttpClient) {}
 
@@ -160,6 +171,13 @@ export class AbonnementService {
     return this.http.put<Abonnement>(
       `${this.apiUrl}/${idAbonnement}/unblock`,
       null
+    );
+  }
+
+  createDiscount(userId: number, discount: Discount): Observable<Discount> {
+    return this.http.post<Discount>(
+      `${this.discountApiUrl}/create/${userId}`,
+      discount
     );
   }
 }
