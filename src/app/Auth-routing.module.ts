@@ -13,6 +13,7 @@ const authRoutes: Routes = [
   { path: 'forgot-password', component: ForgetPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent }, // Assuming the same component handles both
   { path: 'verify-email', component: EmailVerificationComponent }, // Assuming the same component handles both
+
 ];
 
 @NgModule({

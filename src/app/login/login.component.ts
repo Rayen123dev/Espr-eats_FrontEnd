@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { LoginService } from '../login.service';
 import { AuthService } from '../auth-service.service';
@@ -28,12 +28,14 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   showPassword = false;
   captchaToken = '';
+  someObject: any;
 
   constructor(
     private formBuilder: FormBuilder,
     private loginService: LoginService,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {
     // Initialize the form in the constructor
     this.loginForm = this.formBuilder.group({
@@ -50,6 +52,13 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     // Check if user is already logged in
     const userId = this.loginService.getUserIdFromToken();
+    this.route.queryParams.subscribe(params => {
+      const token = params['token'];
+      if (token) {
+        // Store the token in localStorage/sessionStorage
+        localStorage.setItem('authToken', token);
+      }
+    });
     
     if (userId) {
       this.loginService.getUserById(userId).subscribe({
@@ -64,6 +73,8 @@ export class LoginComponent implements OnInit {
         }
       });
     }
+
+    this.someObject = this.someObject || {};
     
     // Initialize animations
     this.initFoodAnimation();

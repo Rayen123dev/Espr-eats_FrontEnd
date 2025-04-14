@@ -21,6 +21,7 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   userProfileImage: string = 'assets/default-avatar.png';
   userRole: string | null = null;
   Users: any[] = [];
+  is_verified: boolean = false;
   nbUsers: number = 0;
   nbAdmins: number = 0;
   nbUsersT: number = 0;

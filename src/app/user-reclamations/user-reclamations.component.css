@@ -1,0 +1,30 @@
+/* Button for viewing details */
+.btn-view {
+    background-color: #007bff; /* Blue color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .btn-view:hover {
+    background-color: #0056b3; /* Darker blue for hover */
+  }
+  
+  /* Button for deleting (only shows when status is 'PENDING') */
+  .btn-delete {
+    background-color: #dc3545; /* Red color */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .btn-delete:hover {
+    background-color: #c82333; /* Darker red for hover */
+  }
+  

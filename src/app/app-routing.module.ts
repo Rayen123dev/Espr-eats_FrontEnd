@@ -10,6 +10,7 @@ import { StaffDashboardComponent } from './components/staff-dashboard/staff-dash
 import { PlatComponent } from './components/plat/plat.component';
 import { MenuDashboardComponent } from './components/menu-dashboard/menu-dashboard.component';
 import { AuthGuard } from './auth.guard';
+import { AuthGComponent } from './auth-g/auth-g.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -32,6 +33,7 @@ const routes: Routes = [
   { path: 'MenuDashboardComponent', component: MenuDashboardComponent, canActivate: [AuthGuard],
     data: { expectedRoles: ['Staff', 'Admin', 'Medecin'] } },
 
+  { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
 ];
 
 

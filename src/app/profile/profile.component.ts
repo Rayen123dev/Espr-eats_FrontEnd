@@ -19,6 +19,7 @@ export class ProfileComponent implements OnInit {
     role: '',
     avatarUrl: '',
     link_Image: '',
+    is_verified: false
   };
 
   editMode = false;

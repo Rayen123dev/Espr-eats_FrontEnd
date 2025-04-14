@@ -302,8 +302,11 @@
                   <td>{{user.idUser}}</td>
                   <td>{{user.nom}}</td>
                   <td>{{user.email}}</td>
-                  <td>
+
+                  <td [style.color]="user['is_verified'] ? 'green' : 'red'">
+                    {{ user['is_verified'] ? 'Vérifié' : 'Non vérifié' }}
                   </td>
+                                    
                   <td>{{user.role}}</td>
                   <td>
                   <button class="btn btn-icon btn-distrry" (click)="BloquerUser(user.idUser)" title="Résoudre">
