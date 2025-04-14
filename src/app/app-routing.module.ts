@@ -13,7 +13,7 @@ import { AuthGuard } from './auth.guard';
 import { AuthGComponent } from './auth-g/auth-g.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
 
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'add-reclamation', component: AddReclamationComponent, canActivate: [AuthGuard],

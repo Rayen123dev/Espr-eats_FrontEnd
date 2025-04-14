@@ -41,6 +41,8 @@ import { AuthService } from './auth-service.service';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthGComponent } from './auth-g/auth-g.component';
+import { HomeComponent } from './home/home.component';
+import { CountUpModule } from 'ngx-countup';
 @NgModule({
   declarations: [
     AppComponent,
@@ -64,7 +66,8 @@ import { AuthGComponent } from './auth-g/auth-g.component';
     PlatComponent,
     RegimeComponent,
     StaffDashboardComponent,
-    AuthGComponent
+    AuthGComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -91,7 +94,7 @@ import { AuthGComponent } from './auth-g/auth-g.component';
     NgChartsModule,
     RecaptchaModule,
     RecaptchaFormsModule,
-    
+    CountUpModule,
     RecaptchaModule,
     RecaptchaFormsModule,
     AuthRoutingModule,
