@@ -80,11 +80,12 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentPage = 1; // Reset to first page
-    this.loadPaginatedUsers();
+    
     this.loadUserProfile();
     this.loadReclamationsData();
     this.loadUserData();
     this.loadUserDataForStat();
+    this.loadPaginatedUsers();
   }
 
   ngOnDestroy() {
@@ -110,15 +111,11 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       this.subscriptions.push(sub);
     }
   }
-
-
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1; // MatPaginator is 0-based
     this.loadPaginatedUsers(); // Re-fetch users with new page info
   }
-
-
   loadUserDataForStat(): void {
     const sub = this.loginService.getUsers().subscribe(users => {
       this.filteredUsers = users;
@@ -127,7 +124,6 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       this.nbUsers = users.filter(user => user.role === 'User').length;
       this.nbMedecins = users.filter(user => user.role === 'Medecin').length;
       console.log('Daaaaaaaaaaaaata:',users );
-
       // Initialize chart after data is loaded
       setTimeout(() => {
         this.initUserDistributionChart();
@@ -166,30 +162,36 @@ searchUsers(): void {
   });
 }
 
+
    
 
-  loadPaginatedUsers(): void {
-    const params = {
-      page: this.currentPage,
-      size: this.pageSize,
-    };
-
-    const sub = this.loginService.getPaginatedUsers(params).subscribe({
-      next: (response) => {
-        this.filteredUsers = response.data;
-        this.totalItems = response.totalItems || 0;
-        this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
-
-        this.searchUsers();
-      },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-        this.filteredUsers = [];
-      }
-    });
-
-    this.subscriptions.push(sub);
+loadPaginatedUsers(): void {
+  // Si une recherche est active, utilisez searchUsers
+  if (this.searchQuery && this.searchQuery.trim().length > 0) {
+    this.searchUsers();
+    return;
   }
+
+  // Sinon, chargez normalement
+  const params = {
+    page: this.currentPage,
+    size: this.pageSize,
+  };
+
+  const sub = this.loginService.getPaginatedUsers(params).subscribe({
+    next: (response) => {
+      this.filteredUsers = response.data;
+      this.totalItems = response.totalItems || 0;
+      this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
+    },
+    error: (error) => {
+      console.error('Error fetching users:', error);
+      this.filteredUsers = [];
+    }
+  });
+
+  this.subscriptions.push(sub);
+}
 
   // Update page
   setPage(page: number): void {
@@ -492,7 +494,6 @@ searchUsers(): void {
     });
     this.subscriptions.push(sub);
   }
-
   onSearchChange(): void {
     this.currentPage = 1; // Reset to first page
     this.loadPaginatedUsers();
