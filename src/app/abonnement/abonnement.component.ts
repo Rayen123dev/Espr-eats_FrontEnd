@@ -18,9 +18,9 @@ export class AbonnementComponent implements OnInit {
   subscriptionPlans: {
     type: string;
     cost: number;
-    originalCost: number; // Add original cost
+    originalCost: number;
     monthlyCost: number;
-    discount: string | null; // Update to store actual discount percentage or null
+    discount: string | null;
     description: string;
     features: string[];
     renouvellementAutomatique: boolean;
@@ -31,6 +31,12 @@ export class AbonnementComponent implements OnInit {
   toastMessage: string = '';
   toastTitle: string = 'Danger';
   recommendedType: string | null = null;
+  // Black Friday timer properties
+  days: string = '00';
+  hours: string = '00';
+  minutes: string = '00';
+  seconds: string = '00';
+  showBlackFriday: boolean = false;
 
   constructor(
     private abonnementService: AbonnementService,
@@ -47,6 +53,7 @@ export class AbonnementComponent implements OnInit {
       return;
     }
     this.loadRecommendedType();
+    this.startBlackFridayTimer();
   }
 
   loadRecommendedType(): void {
@@ -86,7 +93,7 @@ export class AbonnementComponent implements OnInit {
             cost: data['MENSUEL'] || 0,
             originalCost: baseCosts['MENSUEL'],
             monthlyCost: data['MENSUEL'] || 0,
-            discount: null, // Will be calculated below
+            discount: null,
             description: 'Un Plan pour un mois',
             features: [
               '3 templates',
@@ -165,6 +172,11 @@ export class AbonnementComponent implements OnInit {
             plan.discount = null;
           }
         });
+
+        // Determine if Black Friday component should be shown
+        this.showBlackFriday = this.subscriptionPlans.some(
+          (plan) => plan.discount !== null
+        );
       },
       error: (error) => {
         console.error('Error fetching subscription plans:', error);
@@ -240,5 +252,63 @@ export class AbonnementComponent implements OnInit {
   closeToast(): void {
     this.showToast = false;
     this.toastMessage = '';
+  }
+
+  // Black Friday timer logic
+  startBlackFridayTimer(): void {
+    // Set target date to a future date (e.g., end of Black Friday sale)
+    const targetDate = new Date('2025-04-16T23:59:59').getTime();
+
+    const updateTimer = () => {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      if (distance < 0) {
+        this.days = '00';
+        this.hours = '00';
+        this.minutes = '00';
+        this.seconds = '00';
+        this.showBlackFriday = false; // Hide component when timer expires
+        return;
+      }
+
+      this.days = Math.floor(distance / (1000 * 60 * 60 * 24))
+        .toString()
+        .padStart(2, '0');
+      this.hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      )
+        .toString()
+        .padStart(2, '0');
+      this.minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))
+        .toString()
+        .padStart(2, '0');
+      this.seconds = Math.floor((distance % (1000 * 60)) / 1000)
+        .toString()
+        .padStart(2, '0');
+    };
+
+    updateTimer();
+    setInterval(updateTimer, 1000);
+  }
+
+  // Handle Black Friday discount link click
+  applyBlackFridayDiscount(event: Event): void {
+    event.preventDefault();
+    this.showToast = true;
+    this.toastTitle = 'Info';
+    this.toastMessage =
+      'Black Friday discount applied! Choose a plan to proceed.';
+    setTimeout(() => this.closeToast(), 5000);
+  }
+
+  // Get maximum discount for display
+  getMaxDiscount(): string {
+    const maxDiscount = Math.max(
+      ...this.subscriptionPlans
+        .filter((plan) => plan.discount)
+        .map((plan) => parseInt(plan.discount!.replace('% off', '')))
+    );
+    return maxDiscount ? `${maxDiscount}% OFF` : '37% OFF';
   }
 }

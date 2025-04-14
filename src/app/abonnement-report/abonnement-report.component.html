@@ -37,9 +37,12 @@
         <div class="card-header">
           <h2>Gérer les Remises</h2>
           <button
-            class="download-btn"
+            class="button"
             (click)="toggleDiscountForm()"
           >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
+        <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+      </svg>
             {{ showDiscountForm ? 'Annuler' : 'Ajouter une Remise' }}
           </button>
         </div>

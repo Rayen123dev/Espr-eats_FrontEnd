@@ -1,23 +1,68 @@
 <div class="subscription-container">
-  <h6 class="pricing-smalltitle"><span>Notre Grille tarifaire</span></h6>
-  <h2 class="pricing-title">Choisir votre Plan d'abonnement</h2>
+  <h6 class="pricing-smalltitle"><span>get started today .</span></h6>
+  <h2 class="pricing-title">Plans & Pricing</h2>
 
-  <!-- Toast Notification -->
-  <div *ngIf="showToast" class="custom-toast" [ngClass]="{'toast-danger': toastTitle === 'Danger', 'toast-warning': toastTitle === 'Warning'}" role="alert">
-    <div class="toast-header">
-      <span class="toast-icon">!</span>
-      <strong class="toast-title">{{ toastTitle }}</strong>
-      <button type="button" class="toast-close" (click)="closeToast()" aria-label="Close">×</button>
+  <p class="greeting-message">Bienvenue ! Découvrez nos offres excitantes et choisissez le plan parfait pour booster votre expérience dès aujourd'hui !</p>
+
+  <!-- Black Friday Component -->
+  <div *ngIf="showBlackFriday" class="black-friday-component" role="region" aria-label="Black Friday Discount">
+    <div class="coupon" aria-describedby="discount-desc">
+      <div class="box"><span>{{ getMaxDiscount().replace(' OFF', '') }}</span><span>OFF</span></div>
+      <div class="diver"></div>
+      <div class="content">
+        <h3>
+          <span>L</span><span>I</span><span>M</span><span>I</span><span>T</span><span>E</span><span class="end">D</span>
+          <span>O</span><span>F</span><span>F</span><span>E</span><span>R</span><span>🎉</span>
+        </h3>
+        <p id="discount-desc">
+          The Limited Time Offer deal is back with <strong>{{ getMaxDiscount() }}</strong> on all abonnements! 
+          <span *ngIf="days !== '00'; else expired">
+            Only <strong>{{ days }} days</strong> left until April 16, 2025!
+          </span>
+          <ng-template #expired>
+            Offer has expired.
+          </ng-template>
+        </p>
+      </div>
     </div>
-    <div class="toast-body">
-      {{ toastMessage }}
+    <div class="timer" role="timer" aria-live="polite">
+      <div class="item">
+        <div class="days"><div class="day"><span>{{ days }}</span></div></div>
+        <p>day</p>
+      </div>
+      <span class="colon">:</span>
+      <div class="item">
+        <div class="hours"><div class="hour"><span>{{ hours }}</span></div></div>
+        <p>hour</p>
+      </div>
+      <span class="colon">:</span>
+      <div class="item">
+        <div class="minutes"><div class="min"><span>{{ minutes }}</span></div></div>
+        <p>min</p>
+      </div>
+      <span class="colon">:</span>
+      <div class="item">
+        <div class="seconds"><div class="sec"><span>{{ seconds }}</span></div></div>
+        <p>sec</p>
+      </div>
     </div>
   </div>
 
-  <div class="plans-container">
-    <div *ngFor="let plan of subscriptionPlans; let i = index" class="plan-card" [class.recommended]="plan.isRecommended">
-      <!-- Recommended Badge -->
-      <div *ngIf="plan.isRecommended" class="recommended-badge"></div>
+  
+  <!-- Toast Notification -->
+  <div *ngIf="showToast" class="custom-toast" [ngClass]="{'toast-danger': toastTitle === 'Danger', 'toast-warning': toastTitle === 'Warning'}" role="alert">
+    <div class="toast-body">
+      {{ toastMessage }}
+    </div>
+    <button type="button" class="toast-close" (click)="closeToast()" aria-label="Close">×</button>
+  </div>
+
+  <div id="plans-container" class="plans-container">
+    <div *ngFor="let plan of subscriptionPlans; let i = index" class="plan-card" [class.most-popular]="plan.isRecommended">
+      <!-- Most Popular Badge -->
+      <div *ngIf="plan.isRecommended" class="most-popular-badge">
+        <span class="crown-icon">👑</span> Most Popular !
+      </div>
 
       <!-- Discount Badge -->
       <div *ngIf="plan.discount" class="discount-badge">
@@ -26,15 +71,35 @@
 
       <h3>{{ plan.type | titlecase }}</h3>
       <p class="description">{{ plan.description }}</p>
-      <br/>
-      <br/>
-      <!-- Display total cost and monthly cost -->
+
+      <!-- Add specific information about the subscription type -->
+      <p class="subscription-info">
+        <ng-container [ngSwitch]="plan.type">
+          <ng-container *ngSwitchCase="'MENSUEL'">
+            Idéal pour les utilisateurs occasionnels. Profitez d'une flexibilité totale avec un abonnement mensuel sans engagement à long terme.
+          </ng-container>
+          <ng-container *ngSwitchCase="'TRIMESTRIEL'">
+            Parfait pour les utilisateurs réguliers. Bénéficiez de 3 mois d'accès continu avec une réduction <br/>avantageuse.
+          </ng-container>
+          <ng-container *ngSwitchCase="'SEMESTRIEL'">
+            Conçu pour les utilisateurs engagés. Profitez de 6 mois d'abonnement avec une remise encore plus <br/>intéressante.
+          </ng-container>
+          <ng-container *ngSwitchCase="'ANNUEL'">
+            La meilleure option pour les utilisateurs intensifs. Accédez à un an complet avec notre meilleure offre et économisez davantage !
+          </ng-container>
+        </ng-container>
+      </p>
+
+      <!-- Display total cost and billing period -->
       <div class="price">
         <!-- Show original price with strikethrough if there's a discount -->
         <span *ngIf="plan.discount" class="original-price">{{ plan.originalCost.toFixed(2) }} Dt</span>
         <!-- Show discounted price (or original if no discount) -->
-        <span class="current-price">{{ plan.cost.toFixed(2) }} Dt</span>
-        <span *ngIf="plan.type !== 'MENSUEL'" class="monthly-cost">({{ plan.monthlyCost.toFixed(2) }} Dt/Mois)</span>
+        <div class="price-line">
+          <span class="current-price">{{ plan.cost.toFixed(2) }} Dt</span>
+          <span *ngIf="plan.type !== 'MENSUEL'" class="monthly-cost">/{{ plan.type === 'ANNUEL' ? 'year' : plan.type === 'SEMESTRIEL' ? '6 months' : 'quarter'}}</span>
+        </div>
+        <span class="billing-note">{{ plan.type === 'MENSUEL' ? 'Billed monthly' : 'Billed ' + (plan.type === 'ANNUEL' ? 'yearly' : plan.type === 'SEMESTRIEL' ? 'semi-annually' : 'quarterly') }}</span>
       </div>
 
       <!-- Display user count if available -->
@@ -49,16 +114,11 @@
         </label>
       </div>
 
-      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.cost, plan.renouvellementAutomatique)" [attr.data-tooltip]="'Price: ' + plan.cost.toFixed(2) + ' Dt'">
-        <div class="button-wrapper">
-          <div class="text">Choisir Plan</div>
-          <span class="icon">
-            <svg viewBox="0 0 16 16" class="bi bi-cart2" fill="currentColor" height="16" width="16" xmlns="http://www.w3.org/2000/svg">
-              <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l1.25 5h8.22l1.25-5H3.14zM5 13a1 1 0 0 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 0 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"></path>
-            </svg>
-          </span>
-        </div>
+      <button class="subscribe-button" (click)="createSubscription(plan.type, plan.cost, plan.renouvellementAutomatique)">
+        Choisir Plan
       </button>
+
+      <p class="user-limit">Up to {{ plan.type === 'MENSUEL' ? '1,000' : plan.type === 'TRIMESTRIEL' ? '5,000' : plan.type === 'SEMESTRIEL' ? '10,000' : '25,000' }} users</p>
     </div>
   </div>
 </div>
