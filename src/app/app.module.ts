@@ -41,6 +41,10 @@ import { AuthService } from './auth-service.service';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { ProductsModule } from './pages/products/products.module';
 
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { AuthGComponent } from './auth-g/auth-g.component';
+import { HomeComponent } from './home/home.component';
+import { CountUpModule } from 'ngx-countup';
 @NgModule({
   declarations: [
     AppComponent,
@@ -63,6 +67,9 @@ import { ProductsModule } from './pages/products/products.module';
     MenuDashboardComponent,
     PlatComponent,
     RegimeComponent,
+    StaffDashboardComponent,
+    AuthGComponent,
+    HomeComponent
     StaffDashboardComponent
   ],
   imports: [
@@ -90,7 +97,8 @@ import { ProductsModule } from './pages/products/products.module';
     NgChartsModule,
     RecaptchaModule,
     RecaptchaFormsModule,
-    
+    CountUpModule,
+
     RecaptchaModule,
     RecaptchaFormsModule,
     AuthRoutingModule,
@@ -102,6 +110,7 @@ import { ProductsModule } from './pages/products/products.module';
     MatSelectModule,
     MatOptionModule,
     ProductsModule,
+    MatPaginatorModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { Plat, CategoriePlat } from '../../core/models/plat.model';
-
 
 @Injectable({
   providedIn: 'root'
 })
 export class PlatService {
   private apiUrl = 'http://localhost:8081/api/plats';
+
 
   constructor(private http: HttpClient) {}
 

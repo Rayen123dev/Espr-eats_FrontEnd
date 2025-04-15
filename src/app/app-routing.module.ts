@@ -10,6 +10,7 @@ import { StaffDashboardComponent } from './components/staff-dashboard/staff-dash
 import { PlatComponent } from './components/plat/plat.component';
 import { MenuDashboardComponent } from './components/menu-dashboard/menu-dashboard.component';
 import { AuthGuard } from './auth.guard';
+import { AuthGComponent } from './auth-g/auth-g.component';
 
 import { ProductListComponent } from './pages/products/product-list/product-list.component';
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
@@ -17,11 +18,12 @@ import { ProduitHistoriqueComponent } from './pages/products/produit-historique/
 import { ProduitDashboardComponent } from './pages/products/produit-dashboard/produit-dashboard.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'add-reclamation', component: AddReclamationComponent, canActivate: [AuthGuard],
-    data: { expectedRole: 'User' } },   
+    data: { expectedRole: 'User' } },
   { path: 'user-reclamations', component: UserReclamationsComponent, canActivate: [AuthGuard] },
   { path: 'gestionuser', component: GestionUsersComponent, canActivate: [AuthGuard],
     data: { expectedRole: 'Admin' } },
@@ -44,6 +46,7 @@ const routes: Routes = [
     { path: 'produit-historique', component: ProduitHistoriqueComponent, canActivate: [AuthGuard] },
     { path: 'product-list', component: ProductListComponent, canActivate: [AuthGuard] },
     { path: 'products/edit/:id', component: ProductFormComponent, canActivate: [AuthGuard] },
+  { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
 ];
 
 

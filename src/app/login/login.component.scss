@@ -51,7 +51,7 @@
 
 .login-left {
   width: 50%;
-  background: linear-gradient(135deg, #3f51b5 0%, #5c6bc0 100%);
+  background: #d10909;
   color: white;
   display: flex;
   align-items: center;
@@ -222,7 +222,7 @@ input {
   
   &:focus {
     outline: none;
-    border-color: #3f51b5;
+    color: #d10909;
     box-shadow: 0 0 0 2px rgba(63, 81, 181, 0.2);
   }
   
@@ -258,7 +258,7 @@ input {
 }
 
 .forgot-password {
-  color: #3f51b5;
+  color: #d10909;
   text-decoration: none;
   
   &:hover {
@@ -269,9 +269,9 @@ input {
 .login-button {
   width: 100%;
   padding: 0.8rem;
-  background: #3f51b5;
-  color: white;
-  border: none;
+  color: #d10909;
+  color: #d10909;
+  border: #d10909;;
   border-radius: 10px;
   font-size: 1rem;
   font-weight: 500;
@@ -284,11 +284,11 @@ input {
   justify-content: center;
   
   &:hover {
-    background: #303f9f;
+    color: #d10909;
   }
   
   &:disabled {
-    background: #9fa8da;
+    background: #eea67f;
     cursor: not-allowed;
   }
 }
@@ -298,7 +298,7 @@ input {
   height: 20px;
   border: 2px solid rgba(255, 255, 255, 0.3);
   border-radius: 50%;
-  border-top-color: white;
+  border-top-color: #d10909;;
   animation: spin 0.8s linear infinite;
   margin: 0 auto;
 }
@@ -317,7 +317,7 @@ input {
     content: "";
     flex: 1;
     height: 1px;
-    background-color: #ddd;
+    background-color: #d10909;;
   }
   
   span {

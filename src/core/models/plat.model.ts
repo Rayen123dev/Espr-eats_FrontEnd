@@ -1,4 +1,3 @@
-import { Produit } from "src/app/models/Produit.model";
 import { RegimeAlimentaire } from "./regime.model";
 import { User } from "./user.model";
 
@@ -17,5 +16,4 @@ export interface Plat {
     imagePath?: string;
     addedBy?: User;
     regimes?: RegimeAlimentaire[];
-  
   }

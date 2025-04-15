@@ -3,13 +3,15 @@ import { catchError, Observable, tap, throwError, from, switchMap } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 export interface User {
+[x: string]: any;
   idUser: number;
   nom: string;
   email: string;
   age: string;
   role: string;
   avatarUrl: string;
-  link_Image: string;  
+  link_Image: string; 
+  is_verified: boolean;
 }
 
 export interface CloudinaryUploadResponse {
@@ -27,6 +29,18 @@ export class LoginService {
   constructor(private http: HttpClient) { }
 
   private baseUrl = 'http://localhost:8081/api/auth';
+
+  getPaginatedUsers(params: { page: number; size: number; filter?: string }): Observable<any> {
+    let httpParams = new HttpParams()
+      .set('page', params.page.toString())
+      .set('size', params.size.toString());
+    
+    if (params.filter) {
+      httpParams = httpParams.set('role', params.filter);
+    }
+    
+    return this.http.get<any>(`${this.baseUrl}/usersp`, { params: httpParams });
+  }
 
   uploadImage(file: File): Observable<any> {
     const formData = new FormData();
@@ -53,6 +67,10 @@ export class LoginService {
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(`${this.baseUrl}/users`);
+  }
+
+  getUsersP(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.baseUrl}/usersp`);
   }
 
   getRole(): string | null {
@@ -112,6 +130,47 @@ export class LoginService {
     );
   }
 
+  BlocUser(userId: string): Observable<User> {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      return throwError(() => new Error('No authentication token found'));
+    }
+  
+    return this.http.put<User>(`${this.baseUrl}/BlocUser/${userId}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      })
+    }).pipe(
+      catchError(error => {
+        console.error('Profile update error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+
+  ActiveUser(userId: string): Observable<User> {
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+      return throwError(() => new Error('No authentication token found'));
+    }
+  
+    return this.http.put<User>(`${this.baseUrl}/ActiveUser/${userId}`, {
+      headers: new HttpHeaders({
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      })
+    }).pipe(
+      catchError(error => {
+        console.error('Profile update error:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
 
 
 
@@ -128,8 +187,7 @@ export class LoginService {
   
     const expiry = decoded.exp * 1000; // exp est en secondes
     return Date.now() < expiry;
-  }
-  
+  }  
 
   register(user: {
     nom: string;
@@ -180,4 +238,10 @@ export class LoginService {
       }
     );
   }
+  
+  searchUsers(query: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/search?query=${encodeURIComponent(query)}`);
+  }
+
+
 }
