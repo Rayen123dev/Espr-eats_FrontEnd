@@ -155,3 +155,14 @@
     </div>
   </div>
 </div>
+
+<!-- Improved error alert container -->
+<div class="alert-container" *ngIf="errorMessage">
+  <div class="alert alert-danger" [@fadeInOut]>
+    <div class="alert-content">
+      <i class="fas fa-exclamation-circle"></i>
+      <span>{{ errorMessage }}</span>
+    </div>
+    <button class="close-btn" (click)="clearError()">×</button>
+  </div>
+</div>

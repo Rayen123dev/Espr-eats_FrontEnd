@@ -15,9 +15,23 @@ export interface OAuthUser {
   providedIn: 'root'
 })
 export class AuthService {
+  private apiUrl = 'http://localhost:8081/api/auth'; // Adjust this URL as needed
+
+  storeAuthToken(token: string): void {
+    // Store the OAuth2 token in localStorage or sessionStorage
+    localStorage.setItem('authToken', token);
+  }
+
+  getUserProfile(token: string): Observable<any> {
+    // Make a request to your backend or OAuth provider to get user info
+    return this.http.get(`${this.apiUrl}/user-profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
   private baseUrl = 'http://localhost:8081';
 
   constructor(private http: HttpClient) { }
+  
 
   /**
    * Redirige vers le point d'entrée OAuth2 Google du backend
@@ -32,15 +46,18 @@ export class AuthService {
    * Récupère les informations de l'utilisateur après authentification OAuth2
    * @param email L'email de l'utilisateur obtenu après authentification réussie
    */
-  handleOAuth2Success(email: string): Observable<OAuthUser> {
-    return this.http.get<OAuthUser>(`${this.baseUrl}/api/auth/oauth2-user`, {
-      params: { email }
+  handleOAuth2Success(token: string): Observable<OAuthUser> {
+    // Store token first
+    localStorage.setItem('jwt_token', token);
+    
+    // Get user details with the token
+    return this.http.get<OAuthUser>(`${this.baseUrl}/api/auth/user-info`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
     }).pipe(
       tap(userData => {
-        // Stocker les informations si nécessaire
-        if (userData.token) {
-          localStorage.setItem('oauth_user', JSON.stringify(userData));
-        }
+        localStorage.setItem('oauth_user', JSON.stringify(userData));
       })
     );
   }
@@ -59,4 +76,6 @@ export class AuthService {
   logoutOAuth(): void {
     localStorage.removeItem('oauth_user');
   }
+
+  
 }

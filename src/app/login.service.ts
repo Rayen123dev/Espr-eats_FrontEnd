@@ -3,13 +3,15 @@ import { catchError, Observable, tap, throwError, from, switchMap } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 export interface User {
+[x: string]: any;
   idUser: number;
   nom: string;
   email: string;
   age: string;
   role: string;
   avatarUrl: string;
-  link_Image: string;  
+  link_Image: string; 
+  is_verified: boolean;
 }
 
 export interface CloudinaryUploadResponse {
@@ -236,4 +238,10 @@ export class LoginService {
       }
     );
   }
+  
+  searchUsers(query: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/search?query=${encodeURIComponent(query)}`);
+  }
+
+
 }

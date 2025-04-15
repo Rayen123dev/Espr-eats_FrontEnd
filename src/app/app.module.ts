@@ -40,6 +40,9 @@ import { NgChartsModule } from 'ng2-charts';
 import { AuthService } from './auth-service.service';
 import { RecaptchaModule, RecaptchaFormsModule } from 'ng-recaptcha';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { AuthGComponent } from './auth-g/auth-g.component';
+import { HomeComponent } from './home/home.component';
+import { CountUpModule } from 'ngx-countup';
 @NgModule({
   declarations: [
     AppComponent,
@@ -62,7 +65,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MenuDashboardComponent,
     PlatComponent,
     RegimeComponent,
-    StaffDashboardComponent
+    StaffDashboardComponent,
+    AuthGComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -89,7 +94,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     NgChartsModule,
     RecaptchaModule,
     RecaptchaFormsModule,
-    
+    CountUpModule,
     RecaptchaModule,
     RecaptchaFormsModule,
     AuthRoutingModule,

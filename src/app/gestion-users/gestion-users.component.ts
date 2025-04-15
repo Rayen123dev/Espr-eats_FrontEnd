@@ -20,7 +20,8 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   userName: string = 'User';
   userProfileImage: string = 'assets/default-avatar.png';
   userRole: string | null = null;
-  Users: User[] = [];
+  Users: any[] = [];
+  is_verified: boolean = false;
   nbUsers: number = 0;
   nbAdmins: number = 0;
   nbUsersT: number = 0;
@@ -39,7 +40,6 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   filteredUsers: User[] = [];
   Chartist: any = Chartist;
   userId: number | null = null;
-
 
   searchQuery: string = '';
 
@@ -81,11 +81,12 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.currentPage = 1; // Reset to first page
-    this.loadPaginatedUsers();
+    
     this.loadUserProfile();
     this.loadReclamationsData();
     this.loadUserData();
     this.loadUserDataForStat();
+    this.loadPaginatedUsers();
   }
 
   ngOnDestroy() {
@@ -111,15 +112,11 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       this.subscriptions.push(sub);
     }
   }
-
-
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.currentPage = event.pageIndex + 1; // MatPaginator is 0-based
     this.loadPaginatedUsers(); // Re-fetch users with new page info
   }
-
-
   loadUserDataForStat(): void {
     const sub = this.loginService.getUsers().subscribe(users => {
       this.filteredUsers = users;
@@ -128,7 +125,6 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       this.nbUsers = users.filter(user => user.role === 'User').length;
       this.nbMedecins = users.filter(user => user.role === 'Medecin').length;
       console.log('Daaaaaaaaaaaaata:',users );
-
       // Initialize chart after data is loaded
       setTimeout(() => {
         this.initUserDistributionChart();
@@ -148,30 +144,55 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
       }, 0);
     });
     this.subscriptions.push(sub);
+}
+
+searchUsers(): void {
+  this.loginService.searchUsers(this.searchQuery).subscribe({
+    next: (response) => {
+      this.Users = response || [];
+      this.totalPages = Math.ceil(this.totalItems / this.pageSize);
+      console.log(response);
+
+      // Update filteredUsers after getting the response
+      this.filteredUsers = this.getFilteredUsers();
+    },
+    error: (error) => {
+      console.error('Error searching users:', error);
+      this.Users = [];
+    }
+  });
+}
+
+
+   
+
+loadPaginatedUsers(): void {
+  // Si une recherche est active, utilisez searchUsers
+  if (this.searchQuery && this.searchQuery.trim().length > 0) {
+    this.searchUsers();
+    return;
   }
 
-  loadPaginatedUsers(): void {
-    const params = {
-      page: this.currentPage,
-      size: this.pageSize,
-      filter: this.statusFilter !== 'ALL' ? this.statusFilter : undefined,
-      search: this.searchQuery || undefined
-    };
+  // Sinon, chargez normalement
+  const params = {
+    page: this.currentPage,
+    size: this.pageSize,
+  };
 
-    const sub = this.loginService.getPaginatedUsers(params).subscribe({
-      next: (response) => {
-        this.filteredUsers = response.data;
-        this.totalItems = response.totalItems || 0;
-        this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
-      },
-      error: (error) => {
-        console.error('Error fetching users:', error);
-        this.filteredUsers = [];
-      }
-    });
+  const sub = this.loginService.getPaginatedUsers(params).subscribe({
+    next: (response) => {
+      this.filteredUsers = response.data;
+      this.totalItems = response.totalItems || 0;
+      this.totalPages = response.totalPages || Math.ceil(this.totalItems / this.pageSize);
+    },
+    error: (error) => {
+      console.error('Error fetching users:', error);
+      this.filteredUsers = [];
+    }
+  });
 
-    this.subscriptions.push(sub);
-  }
+  this.subscriptions.push(sub);
+}
 
   // Update page
   setPage(page: number): void {
@@ -474,7 +495,6 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
     });
     this.subscriptions.push(sub);
   }
-
   onSearchChange(): void {
     this.currentPage = 1; // Reset to first page
     this.loadPaginatedUsers();
@@ -509,5 +529,19 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
   }
 
 
+  getFilteredUsers(): User[] {
+    return this.Users
+      .filter(u => this.statusFilter === 'ALL' || u.role === this.statusFilter)
+      .filter(u => {
+        const q = this.searchQuery.toLowerCase();
+        return (
+          u.nom?.toLowerCase().includes(q) ||
+          u.prenom?.toLowerCase().includes(q) ||
+          u.email?.toLowerCase().includes(q) ||
+          u.role?.toLowerCase().includes(q)
+        );
+      });
+  }
+  
 
 }

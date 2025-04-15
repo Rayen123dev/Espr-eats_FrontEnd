@@ -279,13 +279,15 @@
           </div>
           <!-- Integrated User Table -->
           <div class="card-body table-responsive">
-          <input
-            type="text"
-            placeholder="Search by name..."
-            [(ngModel)]="searchQuery"
-            (input)="onSearchChange()"
-            class="search-input"
-          />
+            <div class="input-with-icon">
+              <input
+                type="text"
+                [(ngModel)]="searchQuery"
+                (ngModelChange)="searchUsers()"
+                placeholder="Search users..."
+              />
+              <i class="fas fa-search"></i>
+            </div>
             <table class="table table-hover">
               <thead class="text-warning">
                 <th>ID</th>
@@ -300,8 +302,11 @@
                   <td>{{user.idUser}}</td>
                   <td>{{user.nom}}</td>
                   <td>{{user.email}}</td>
-                  <td>
+
+                  <td [style.color]="user['is_verified'] ? 'green' : 'red'">
+                    {{ user['is_verified'] ? 'Vérifié' : 'Non vérifié' }}
                   </td>
+                                    
                   <td>{{user.role}}</td>
                   <td>
                   <button class="btn btn-icon btn-distrry" (click)="BloquerUser(user.idUser)" title="Résoudre">
