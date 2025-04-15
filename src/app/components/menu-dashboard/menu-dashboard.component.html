@@ -23,6 +23,16 @@
       </div>
     </div>
   </div>
+<!-- Nouvelle bannière de notification unifiée -->
+<div *ngIf="notificationMessage" class="notification-banner" [ngClass]="{'success': notificationType === 'success', 'error': notificationType === 'error'}">
+  <div class="banner-content">
+    <span class="banner-icon">{{ notificationType === 'success' ? '✓' : '✗' }}</span>
+    <p>{{ notificationMessage }}</p>
+    <button class="btn-close" (click)="clearNotification()">×</button>
+  </div>
+</div>
+
+
 
   <!-- Barre de filtrage -->
   <div class="filter-bar">
@@ -38,10 +48,7 @@
     <div class="spinner"></div>
   </div>
 
-  <!-- Error Message -->
-  <div *ngIf="errorMessage" class="error-banner">
-    <p>{{ errorMessage }}</p>
-  </div>
+
 
   <!-- Menus Grid -->
   <div class="menus-grid" *ngIf="filteredMenus.length > 0">
@@ -96,21 +103,23 @@
         </div>
       </div>
 
-      <div class="menu-card-footer">
-        <button 
-          *ngIf="!menu.isValidated && canValidateMenus()" 
-          class="btn btn-validate"
-          (click)="validateMenus([menu.id])">
-          Valider le menu
-        </button>
-        <button 
-    *ngIf="!menu.isValidated && !isRejected(menu.id) && canValidateMenus()" 
-    class="btn btn-reject"
-    (click)="rejectMenus([menu.id])">
-    Rejeter le menu
-  </button>
-      </div>
-    </div>
+     <!-- Dans le template HTML, modifiez menu-card-footer -->
+<div class="menu-card-footer">
+  <div class="action-buttons">
+    <button 
+      *ngIf="!menu.isValidated && canValidateMenus()" 
+      class="btn btn-validate"
+      (click)="validateMenus([menu.id])">
+      Valider
+    </button>
+    <button 
+      *ngIf="!menu.isValidated && !isRejected(menu.id) && canValidateMenus()" 
+      class="btn btn-reject"
+      (click)="rejectMenus([menu.id])">
+      Rejeter
+    </button>
+  </div>
+</div>
   </div>
 
   <!-- Empty State -->

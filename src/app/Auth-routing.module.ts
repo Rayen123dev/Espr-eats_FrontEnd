@@ -5,14 +5,17 @@ import { EmailVerificationComponent } from './email-verification/email-verificat
 import { SignupComponent } from './signup/signup.component';
 import { ForgetPasswordComponent } from './forget-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { HomeComponent } from './home/home.component';
 
 const authRoutes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'verify-email', component: EmailVerificationComponent },
+  { path: 'login', component: LoginComponent },   
+  { path: 'signup', component: SignupComponent },   
+  { path: 'verify-email', component: EmailVerificationComponent },   
   { path: 'forgot-password', component: ForgetPasswordComponent },
-  { path: 'reset-password', component: ResetPasswordComponent },
-  { path: 'verify-email', component: EmailVerificationComponent },
+  { path: 'reset-password', component: ResetPasswordComponent }, // Assuming the same component handles both
+  { path: 'verify-email', component: EmailVerificationComponent }, // Assuming the same component handles both
+  { path: 'home', component:HomeComponent}
+
 ];
 
 @NgModule({
