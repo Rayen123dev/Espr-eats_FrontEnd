@@ -1,7 +1,7 @@
 <div class="dashboard-wrapper">
   <h2 class="dashboard-title">Bienvenue, Docteur {{ userName }}</h2>
 
-  <!-- 🔗 Liens rapides (3 boutons stylés) -->
+  <!-- 🔗 Liens rapides -->
   <div class="card-container">
     <a routerLink="/medecin/validation-menus" class="card shortcut">
       <i class="icon icon-menu"></i>
@@ -29,30 +29,30 @@
   </div>
 
   <!-- 📊 Statistiques clés -->
-  <div class="stats-cards">
+  <div class="stats-grid">
     <div class="stat-card">
-      <span>🔬</span>
-      <div><strong>Total profils :</strong> {{ totalProfils }}</div>
+      <span class="icon-circle">🔬</span>
+      <div><strong>Total profils</strong> : {{ totalProfils }}</div>
     </div>
     <div class="stat-card">
-      <span>⚖️</span>
-      <div><strong>Poids moyen :</strong> {{ moyennePoids }} kg</div>
+      <span class="icon-circle">⚖️</span>
+      <div><strong>Poids moyen</strong> : {{ moyennePoids }} kg</div>
     </div>
     <div class="stat-card">
-      <span>📏</span>
-      <div><strong>Taille moyenne :</strong> {{ moyenneTaille }} cm</div>
+      <span class="icon-circle">📏</span>
+      <div><strong>Taille moyenne</strong> : {{ moyenneTaille }} cm</div>
     </div>
     <div class="stat-card">
-      <span>👨‍⚕️</span>
-      <div><strong>Hommes :</strong> {{ hommes }}</div>
+      <span class="icon-circle">👨‍⚕️</span>
+      <div><strong>Hommes</strong> : {{ hommes }}</div>
     </div>
     <div class="stat-card">
-      <span>👩‍⚕️</span>
-      <div><strong>Femmes :</strong> {{ femmes }}</div>
+      <span class="icon-circle">👩‍⚕️</span>
+      <div><strong>Femmes</strong> : {{ femmes }}</div>
     </div>
     <div class="stat-card">
-      <span>🚬</span>
-      <div><strong>Fumeurs :</strong> {{ nbFumeurs }}</div>
+      <span class="icon-circle">🚬</span>
+      <div><strong>Fumeurs</strong> : {{ nbFumeurs }}</div>
     </div>
   </div>
 

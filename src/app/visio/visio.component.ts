@@ -11,7 +11,7 @@ declare var JitsiMeetExternalAPI: any;
 export class VisioComponent implements OnInit, AfterViewInit {
   roomId: string = '';
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     const consultationId = this.route.snapshot.paramMap.get('id');

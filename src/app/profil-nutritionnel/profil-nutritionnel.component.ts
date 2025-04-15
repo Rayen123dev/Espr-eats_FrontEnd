@@ -5,7 +5,7 @@ import { ProfilNutritionnelService } from 'src/app/services/profil-nutritionnel.
 @Component({
   selector: 'app-profil-nutritionnel',
   templateUrl: './profil-nutritionnel.component.html',
-  styleUrls: ['./profil-nutritionnel.component.css']
+  styleUrls: ['./profil-nutritionnel.component.scss']
 })
 export class ProfilNutritionnelComponent implements OnInit {
   loading = true;

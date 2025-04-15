@@ -10,7 +10,7 @@ import { Router } from '@angular/router'; // ⬅️ Ajoute ceci en haut
 @Component({
   selector: 'app-consultations-medecin',
   templateUrl: './consultations-medecin.component.html',
-  styleUrls: ['./consultations-medecin.component.css']
+  styleUrls: ['./consultations-medecin.component.scss']
 })
 export class ConsultationsMedecinComponent implements OnInit {
   consultations: Consultation[] = [];
