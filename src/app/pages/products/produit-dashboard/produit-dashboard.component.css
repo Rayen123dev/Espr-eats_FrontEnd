@@ -1,0 +1,282 @@
+/* Base styles */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  height: 100%;
+}
+/*side bar*/
+
+
+/* Outer wrapper for horizontal sliding */
+.dashboard-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Allows horizontal scrolling if needed */
+  min-height: 100%;
+  display: flex; /* For horizontal positioning */
+  justify-content: flex-start;
+  transform: translateX(400px); /* Slides it more to the left */
+}
+
+/* Inner container with actual content */
+.dashboard-container {
+  max-width: 1400px; /* Fixed max width, prevents overflow */
+  width: 100%; /* Make it responsive */
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+/* Align options */
+.align-left { justify-content: flex-start; }
+.align-center { justify-content: center; }
+.align-right { justify-content: flex-end; }
+
+/* Dashboard Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 60px; 
+  margin-bottom: 30px; 
+}
+
+
+/* Dashboard Title */
+.dashboard-title {
+  font-size: 26px;
+  color: #2c3e50;
+  margin: 0;
+}
+
+/* Actions buttons */
+.dashboard-actions button {
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.dashboard-actions button:hover {
+  background-color: #d88e16;
+}
+
+/* Stats grid */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+
+.stat-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 5px;
+  height: 100%;
+}
+
+.stat-card.total-products::before { background-color: #3498db; }
+.stat-card.avg-stock::before { background-color: #2ecc71; }
+.stat-card.low-stock::before { background-color: #f39c12; }
+.stat-card.out-of-stock::before { background-color: #e74c3c; }
+.stat-card.expired::before { background-color: #9b59b6; }
+.stat-card.total-value::before { background-color: #1abc9c; }
+
+.stat-title {
+  font-size: 15px;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-size: 36px;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.stat-info {
+  margin-top: 10px;
+  font-size: 15px;
+  color: #7f8c8d;
+}
+
+/* Progress indicators */
+.progress-bar {
+  height: 7px;
+  background-color: #ecf0f1;
+  border-radius: 3px;
+  margin-top: 18px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+
+.fill-total { background-color: #3498db; }
+.fill-avg { background-color: #2ecc71; }
+.fill-low { background-color: #f39c12; }
+.fill-out { background-color: #e74c3c; }
+.fill-expired { background-color: #9b59b6; }
+.fill-value { background-color: #1abc9c; }
+
+/* Near expiry products section */
+.expiry-section {
+  background-color: white;
+  border-radius: 10px;
+  padding: 24px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 32px;
+   min-height: 300px;
+}
+
+.expiry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #ecf0f1;
+  padding-bottom: 12px;
+}
+
+.expiry-title {
+  font-size: 20px;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.expiry-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.expiry-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 4px;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.expiry-item:last-child {
+  border-bottom: none;
+}
+
+.expiry-item:hover {
+  background-color: #f8f9fa;
+}
+
+.product-info {
+  display: flex;
+  align-items: center;
+}
+
+.product-name {
+  font-weight: 500;
+  margin-right: 10px;
+  font-size: 16px;
+}
+
+.product-code {
+  color: #7f8c8d;
+  font-size: 15px;
+}
+
+.days-label {
+  background-color: #f39c12;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.critical {
+  background-color: #e74c3c;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr); /* Change to 2 columns */
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    width: 100%; /* Make it responsive on small screens */
+    padding: 20px;
+  }
+  
+  .stats-grid {
+    grid-template-columns: 1fr; /* Single column for mobile */
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .dashboard-actions {
+    margin-top: 15px;
+  }
+}
+@keyframes slideInFromRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.dashboard-container {
+  animation: slideInFromRight 0.5s ease-out;
+}
+.icon-large {
+  font-size: 24px;
+  color: #444;
+  margin-bottom: 5px;
+}
+.stat-card i {
+  display: block;
+  text-align: left;
+  margin-bottom: 6px;
+}
+.expiry-item i {
+  margin-right: 6px;
+  color: #888;
+}
+
