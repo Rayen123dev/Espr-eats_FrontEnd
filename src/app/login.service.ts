@@ -28,7 +28,7 @@ export class LoginService {
   [x: string]: any;
   constructor(private http: HttpClient) { }
 
-  private baseUrl = 'http://localhost:8081/api/auth';
+  private baseUrl = 'http://192.168.1.19:8081/api/auth';
 
   getPaginatedUsers(params: { page: number; size: number; filter?: string }): Observable<any> {
     let httpParams = new HttpParams()
@@ -241,6 +241,20 @@ export class LoginService {
   
   searchUsers(query: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/search?query=${encodeURIComponent(query)}`);
+  }
+
+
+  url = 'http://192.168.1.19:5000'
+  vvv(imageUrl: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    
+    return this.http.post<any>(`${this.url}/recognize`, {
+      url: imageUrl
+    }, { headers });
   }
 
 

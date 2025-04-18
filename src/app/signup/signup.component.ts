@@ -194,7 +194,7 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  roleOptions = ['User', 'Staff', 'Admin', 'Medcin'];
+  roleOptions = ['User', 'Staff', 'Admin', 'Medecin'];
 
   selectRole(role: string): void {
     this.signupForm.patchValue({ role: role });
@@ -244,7 +244,7 @@ export class SignupComponent implements OnInit {
       case 'User': return 'fas fa-user';
       case 'Staff': return 'fas fa-users';
       case 'Admin': return 'fas fa-crown';
-      case 'Medcin': return 'fas fa-briefcase-medical';
+      case 'Medecin': return 'fas fa-briefcase-medical';
       default: return 'fas fa-user';
     }
   }

@@ -11,6 +11,8 @@ import { of } from 'rxjs';
   styleUrls: ['./profile.component.scss']
 })
 export class ProfileComponent implements OnInit {
+  selectedFile: File | null = null;
+  imagePreview: string | null = null;
   user: User = {
     idUser: 0,
     nom: '',
@@ -83,6 +85,20 @@ export class ProfileComponent implements OnInit {
     console.log('User ID:', userId);
   }
 
+  // Handle file selection for profile image
+  onFileSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.selectedFile = input.files?.[0] || null;
+    
+    if (this.selectedFile) {
+      const reader = new FileReader();
+      reader.onload = (e: ProgressEvent<FileReader>) => {
+        this.imagePreview = e.target?.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
   // Centralized method to fetch user profile
   private fetchUserProfile(userId: number): void {
     this.isLoading = true;
@@ -122,6 +138,11 @@ export class ProfileComponent implements OnInit {
       age: this.user.age,
       role: this.user.role
     });
+    
+    // If the user has an existing image, we can display it
+    if (this.user.link_Image) {
+      this.imagePreview = this.user.link_Image;
+    }
   }
 
   // Toggle edit mode
@@ -146,33 +167,60 @@ export class ProfileComponent implements OnInit {
       return;
     }
   
-    const updatedUser: User = {
-      ...this.user,
-      ...this.profileForm.value,
-      id: userId
+    // Create a function to update user after potential image upload
+    const updateUserData = (imageUrl?: string) => {
+      const updatedUser: User = {
+        ...this.user,
+        ...this.profileForm.value
+      };
+      
+      // If we have a new image URL, use it
+      if (imageUrl) {
+        updatedUser.link_Image = imageUrl;
+      }
+  
+      this.loginService.updateUserProfile(userId.toString(), updatedUser)
+        .pipe(
+          catchError(error => {
+            console.error('Update error:', error);
+            this.handleError('Failed to update profile');
+            // Reload user data from database
+            this.fetchUserProfile(userId);
+            return of(null);
+          }),
+          finalize(() => this.isLoading = false)
+        )
+        .subscribe(response => {
+          if (response) {
+            this.user = updatedUser;
+            this.editMode = false;
+            // Clear file selection after successful update
+            this.selectedFile = null;
+          }
+        });
     };
   
     this.isLoading = true;
     this.errorMessage = '';
   
-    this.loginService.updateUserProfile(userId.toString(), updatedUser)
-      .pipe(
-        catchError(error => {
-          console.error('Update error:', error);
-          
-          // Reload user data from database
-          this.fetchUserProfile(userId);
-          
-          return of(null);
-        }),
-        finalize(() => this.isLoading = false)
-      )
-      .subscribe(response => {
-        if (response) {
-          this.user = updatedUser;
-          this.editMode = false;
+    // If a new file is selected, upload it first
+    if (this.selectedFile) {
+      this.loginService.uploadImage(this.selectedFile).subscribe({
+        next: (uploadRes) => {
+          const cloudinaryUrl = uploadRes.imageUrl;
+          // Update user with the new image URL
+          updateUserData(cloudinaryUrl);
+        },
+        error: (err) => {
+          this.isLoading = false;
+          this.errorMessage = 'Image upload failed';
+          console.error(err);
         }
       });
+    } else {
+      // No new image, just update the user data
+      updateUserData();
+    }
   }
 
   // Mark all controls as touched to show validation errors
@@ -191,6 +239,10 @@ export class ProfileComponent implements OnInit {
     this.editMode = false;
     this.updateForm();
     this.errorMessage = '';
+    // Reset file selection when canceling
+    this.selectedFile = null;
+    // Reset image preview to the user's current image
+    this.imagePreview = this.user.link_Image || null;
   }
 
   // Logout functionality
@@ -199,18 +251,9 @@ export class ProfileComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  // Handle avatar upload
+  // Handle avatar upload - this is replaced by onFileSelected
   uploadAvatar(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const file = input.files?.[0];
-
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e: ProgressEvent<FileReader>) => {
-        this.user.avatarUrl = e.target?.result as string;
-      };
-      reader.readAsDataURL(file);
-    }
+    this.onFileSelected(event);
   }
 
   // Centralized error handling method

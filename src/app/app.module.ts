@@ -43,6 +43,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthGComponent } from './auth-g/auth-g.component';
 import { HomeComponent } from './home/home.component';
 import { CountUpModule } from 'ngx-countup';
+import { FaceConfirmationComponent } from './face-confirmation/face-confirmation.component';
+import { WebcamModule } from 'ngx-webcam';
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,7 +69,8 @@ import { CountUpModule } from 'ngx-countup';
     RegimeComponent,
     StaffDashboardComponent,
     AuthGComponent,
-    HomeComponent
+    HomeComponent,
+    FaceConfirmationComponent
   ],
   imports: [
     BrowserModule,
@@ -105,7 +108,8 @@ import { CountUpModule } from 'ngx-countup';
     MatIconModule,
     MatSelectModule,
     MatOptionModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    WebcamModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

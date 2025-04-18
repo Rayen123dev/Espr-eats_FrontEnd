@@ -11,6 +11,7 @@ import { PlatComponent } from './components/plat/plat.component';
 import { MenuDashboardComponent } from './components/menu-dashboard/menu-dashboard.component';
 import { AuthGuard } from './auth.guard';
 import { AuthGComponent } from './auth-g/auth-g.component';
+import { FaceConfirmationComponent } from './face-confirmation/face-confirmation.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -34,6 +35,8 @@ const routes: Routes = [
     data: { expectedRoles: ['Staff', 'Admin', 'Medecin'] } },
 
   { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
+
+  { path: 'face-confirmation', component: FaceConfirmationComponent, canActivate: [AuthGuard] },
 ];
 
 
