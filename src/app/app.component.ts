@@ -11,7 +11,7 @@ export class AppComponent {
 
   // Method to check if header should be hidden
   shouldHideHeader(): boolean {
-    const hiddenRoutes = ['/login', '/signup', '/forgot-password', '/verify-email', '/reset-password', '/home', '/auth', '/face-confirmation'];
+    const hiddenRoutes = ['/login', '/signup', '/forgot-password', '/verify-email', '/reset-password', '/home', '/auth', '/face-confirmation', '/email-verification', '/recaptcha', '/plat', '/regime', '/menu', '/staff-dashboard'];
     return hiddenRoutes.includes(this.router.url);
   }
 }

@@ -4,6 +4,7 @@ import { LoginService, User } from '../login.service';
 import { Router } from '@angular/router';
 import { catchError, finalize } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { WeatherServiceService } from '../weather-service.service';
 
 @Component({
   selector: 'app-profile',
@@ -21,8 +22,11 @@ export class ProfileComponent implements OnInit {
     role: '',
     avatarUrl: '',
     link_Image: '',
-    is_verified: false
+    verified: false,
+    lastLogin: new Date()
   };
+
+  currentTime: string = '';
 
   editMode = false;
   profileForm!: FormGroup;
@@ -43,11 +47,13 @@ export class ProfileComponent implements OnInit {
     { value: 'Staff', label: 'Staff' },
     { value: 'Admin', label: 'Admin' }
   ];
+  weatherData: any;
 
   constructor(
     private loginService: LoginService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private weatherService: WeatherServiceService // Assuming you have a WeatherService for fetching weather data
   ) {
     this.initializeForm();
   }
@@ -69,7 +75,8 @@ export class ProfileComponent implements OnInit {
         Validators.min(18), 
         Validators.max(120)
       ]],
-      role: ['', Validators.required]
+      role: ['', Validators.required],
+      is_verified: [false] // Add this line to include is_verified in the form
     });
   }
 
@@ -83,6 +90,16 @@ export class ProfileComponent implements OnInit {
 
     this.fetchUserProfile(userId);
     console.log('User ID:', userId);
+    const U1= this.loginService.getUserById(userId) || this.user;
+    console.log('User:', U1);
+    setInterval(() => {
+      const now = new Date();
+      this.currentTime = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    }, 1000);
+
+    this.weatherService.getCurrentWeather('Tunis').subscribe(data => {
+      this.weatherData = data;
+    });
   }
 
   // Handle file selection for profile image
@@ -115,6 +132,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(userData => {
         if (userData) {
           this.user = userData;
+          console.log('User data:', this.user);
           this.updateForm();
         }
       });
@@ -262,4 +280,6 @@ export class ProfileComponent implements OnInit {
     this.errorMessage = message;
     this.isLoading = false;
   }
+
+
 }

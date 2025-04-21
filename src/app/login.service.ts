@@ -11,7 +11,8 @@ export interface User {
   role: string;
   avatarUrl: string;
   link_Image: string; 
-  is_verified: boolean;
+  verified: boolean;
+  lastLogin: Date;
 }
 
 export interface CloudinaryUploadResponse {
@@ -28,7 +29,7 @@ export class LoginService {
   [x: string]: any;
   constructor(private http: HttpClient) { }
 
-  private baseUrl = 'http://192.168.1.19:8081/api/auth';
+  private baseUrl = 'http://localhost:8081/api/auth';
 
   getPaginatedUsers(params: { page: number; size: number; filter?: string }): Observable<any> {
     let httpParams = new HttpParams()
@@ -200,11 +201,8 @@ export class LoginService {
     console.log('Registering user:', user);
     
     // Add content type header explicitly
-    return this.http.post(`${this.baseUrl}/signup`, user, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    }).pipe(
+    return this.http.post(`${this.baseUrl}/signup`,  user, { responseType: 'text' })
+    .pipe(
       catchError(error => {
         console.error('Signup error details:', error);
         return throwError(() => error);
@@ -212,10 +210,11 @@ export class LoginService {
     );
   }
 
-  verifyEmail(token: string): Observable<any> {
-    const params = new HttpParams().set('token', token);
-    return this.http.get(`${this.baseUrl}/verify-email`, { params });
+  verifyEmail(token: string, email: string): Observable<any> {
+    const url = `${this.baseUrl}/verify-email?token=${token}&email=${email}`;
+    return this.http.get<any>(url);
   }
+  
 
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/forgot-password`, { email });

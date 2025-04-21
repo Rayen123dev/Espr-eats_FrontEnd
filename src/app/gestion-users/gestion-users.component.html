@@ -303,8 +303,8 @@
                   <td>{{user.nom}}</td>
                   <td>{{user.email}}</td>
 
-                  <td [style.color]="user['is_verified'] ? 'green' : 'red'">
-                    {{ user['is_verified'] ? 'Vérifié' : 'Non vérifié' }}
+                  <td [style.color]="user.verified ? 'green' : 'red'">
+                    {{ user.verified ? 'Vérifié' : 'Non vérifié' }}
                   </td>
                                     
                   <td>{{user.role}}</td>

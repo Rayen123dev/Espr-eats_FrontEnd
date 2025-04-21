@@ -125,6 +125,7 @@ export class FaceConfirmationComponent implements OnInit {
             } else {
               this.verificationResult = 'failure';
               this.errorMessage = "Face verification failed. Your face doesn't match our records.";
+              this.loginService.logout();
               setTimeout(() => {
                 this.retryCapture();
               }, 3000);

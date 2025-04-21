@@ -1,5 +1,5 @@
 <div class="login-container">
-  <div class="login-card extended-form">
+  <div class="login-card extended-form" [class.success-state]="verificationSent">
     <div class="login-left">
       <div class="login-content">
         <h1 class="welcome-text">University Restaurant</h1>
@@ -18,7 +18,26 @@
       </div>
     </div>
     <div class="login-right">
-      <div class="login-form-container">
+      <!-- Success View (shows after successful registration) -->
+      <div class="verification-container" *ngIf="verificationSent" [@fadeInOut]>
+        <div class="success-animation">
+          <i class="fas fa-check-circle"></i>
+        </div>
+        <h2>Registration Successful!</h2>
+        <p>Your account has been created successfully.</p>
+        <div class="verification-info">
+          <i class="fas fa-envelope"></i>
+          <div class="verification-text">
+            <h3>Please verify your email</h3>
+            <p>We've sent a verification link to <strong>{{ formControls['email'].value }}</strong></p>
+            <p>Please check your inbox and click the link to activate your account.</p>
+          </div>
+        </div>
+        <p class="redirect-message">You will be redirected to the login page in a few seconds...</p>
+      </div>
+
+      <!-- Registration Form -->
+      <div class="login-form-container" *ngIf="!verificationSent">
         <div class="logo-container">
           <div class="university-logo">
             <span>U</span>
@@ -156,7 +175,7 @@
   </div>
 </div>
 
-<!-- Improved error alert container -->
+<!-- Error alert container -->
 <div class="alert-container" *ngIf="errorMessage">
   <div class="alert alert-danger" [@fadeInOut]>
     <div class="alert-content">
@@ -164,5 +183,16 @@
       <span>{{ errorMessage }}</span>
     </div>
     <button class="close-btn" (click)="clearError()">×</button>
+  </div>
+</div>
+
+<!-- Success alert container -->
+<div class="alert-container" *ngIf="successMessage && !verificationSent">
+  <div class="alert alert-success" [@fadeInOut]>
+    <div class="alert-content">
+      <i class="fas fa-check-circle"></i>
+      <span>{{ successMessage }}</span>
+    </div>
+    <button class="close-btn" (click)="clearSuccess()">×</button>
   </div>
 </div>
