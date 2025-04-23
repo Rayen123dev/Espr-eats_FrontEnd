@@ -28,6 +28,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRoles: ['Staff', 'Medecin'] }
   },
+  {
+    path: 'staffdashboard/:data',
+    component: StaffDashboardComponent,
+    canActivate: [AuthGuard],
+    data: { expectedRoles: ['Staff', 'Medecin'] }
+  },
   { path: 'plat/:id', component: PlatComponent, canActivate: [AuthGuard],
     data: { expectedRole: 'Staff' } },
   { path: 'MenuDashboardComponent', component: MenuDashboardComponent, canActivate: [AuthGuard],

@@ -687,3 +687,30 @@
   padding: 5px 10px;
   margin: 0 5px;
 }
+.btn-pdf {
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 400;
+  font-size: 0.95rem;
+  background-color: #eeb415; /* Green shade for recommendation */
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+  align-items: right;
+  gap: 0.5rem;
+  margin-left: auto; /* Push to the extreme right */
+  display: flex; /* Add flexbox */
+  flex-wrap: wrap; /* Allow wrapping for responsiveness */
+  justify-content: space-between; /* Push items to extremes */
+}
+
+.btn-pdf:hover {
+  background-color: #009e7a; /* Slightly darker green on hover */
+  transform: translateY(-5px);
+}
+
+.btn-pdf i {
+  font-size: 1.1rem; /* Adjust icon size */
+}

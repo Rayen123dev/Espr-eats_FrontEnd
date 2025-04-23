@@ -67,7 +67,7 @@ import { CountUpModule } from 'ngx-countup';
     RegimeComponent,
     StaffDashboardComponent,
     AuthGComponent,
-    HomeComponent
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
