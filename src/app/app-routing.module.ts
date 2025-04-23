@@ -11,9 +11,12 @@ import { PlatComponent } from './components/plat/plat.component';
 import { MenuDashboardComponent } from './components/menu-dashboard/menu-dashboard.component';
 import { AuthGuard } from './auth.guard';
 import { AuthGComponent } from './auth-g/auth-g.component';
+import { FaceConfirmationComponent } from './face-confirmation/face-confirmation.component';
+import { EmailVerificationComponent } from './email-verification/email-verification.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'email-verification', component: EmailVerificationComponent },
 
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'add-reclamation', component: AddReclamationComponent, canActivate: [AuthGuard],
@@ -40,6 +43,9 @@ const routes: Routes = [
     data: { expectedRoles: ['Staff', 'Admin', 'Medecin'] } },
 
   { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
+
+  { path: 'face-confirmation', component: FaceConfirmationComponent, canActivate: [AuthGuard] },
+
 ];
 
 

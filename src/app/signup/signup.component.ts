@@ -25,9 +25,11 @@ export class SignupComponent implements OnInit {
   loading = false;
   isSubmitted = false;
   errorMessage = '';
+  successMessage = '';
   showPassword = false;
   imagePreview: string | null = null;
   selectedFile: File | null = null;
+  verificationSent = false;
   
 
   constructor(
@@ -63,7 +65,14 @@ export class SignupComponent implements OnInit {
     this.loginService.register(credentials).subscribe({
       next: (data) => {
         console.log('Registration successful:', data);
-        this.router.navigate(['/login']); // Or wherever you want to redirect
+        this.loading = false;
+        this.verificationSent = true;
+        this.successMessage = 'Registration successful! Please check your email to verify your account.';
+        
+        // After 5 seconds, redirect to login page
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 5000);
       },
       error: (error) => {
         console.error('Registration error:', error);
@@ -93,6 +102,7 @@ export class SignupComponent implements OnInit {
     }
   
     this.loading = true;
+    this.clearMessages();
   
     const formValues = this.signupForm.value;
   
@@ -135,8 +145,6 @@ export class SignupComponent implements OnInit {
     }
   }
   
-  
-  
   // Navigate based on role
   navigateBasedOnRole(): void {
     const role = this.loginService.getRole();
@@ -157,6 +165,15 @@ export class SignupComponent implements OnInit {
   
   clearError(): void {
     this.errorMessage = '';
+  }
+
+  clearSuccess(): void {
+    this.successMessage = '';
+  }
+
+  clearMessages(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
   }
   
   initFoodAnimation(): void {
