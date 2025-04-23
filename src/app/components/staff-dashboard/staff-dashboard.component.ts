@@ -182,28 +182,29 @@ export class StaffDashboardComponent implements OnInit {
   
       if (name && calories && params['imagePath']) {
         fetch(imagePath)
-          .then(res => res.blob())
-          .then(blob => {
-            const file = new File([blob], params['imagePath'], { type: blob.type });
-            this.selectedFile = file;
+        .then(res => res.blob())
+        .then(blob => {
+          const file = new File([blob], params['imagePath'], { type: blob.type });
+          this.selectedFile = file;
+      
   
-            this.addPlatForm.patchValue({
-              nom: name,
-              description: '',
-              categorie: '',
-              calories: parseInt(calories, 10),
-              image: this.selectedFile
-            });
-  
-            const dataTransfer = new DataTransfer();
-            dataTransfer.items.add(file);
-  
-            const fakeInput = document.createElement('input');
-            fakeInput.type = 'file';
-            fakeInput.files = dataTransfer.files;
-  
-            const event = { target: fakeInput } as unknown as Event;
-            this.onFileSelected(event);
+          this.addPlatForm.patchValue({
+            nom: name,
+            description: '',
+            categorie: '',
+            calories: parseInt(calories, 10),
+            image: this.selectedFile
+          });
+          const dataTransfer = new DataTransfer();
+          dataTransfer.items.add(file);
+
+          const fakeInput = document.createElement('input');
+          fakeInput.type = 'file';
+          fakeInput.files = dataTransfer.files;
+
+          const event = { target: fakeInput } as unknown as Event;
+          this.onFileSelected(event);
+
   
             // Set imagePreview from FileReader
             const reader = new FileReader();
@@ -211,8 +212,10 @@ export class StaffDashboardComponent implements OnInit {
               this.imagePreview = reader.result as string;
             };
             reader.readAsDataURL(file);
+
   
             this.showAddPlatForm = true;
+
           });
       }
     });
