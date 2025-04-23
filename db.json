@@ -1,0 +1,24 @@
+{
+  "residence": [
+    {
+      "id": "1",
+      "name": "El fel",
+      "address": "Borj Cedria",
+      "status": "Vendu"
+    },
+    {
+      "id": "12",
+      "name": "Az",
+      "address": "13 rue",
+      "image": "../../assets/images/image.jpg",
+      "status": "Disponible"
+    },
+    {
+      "id": "12",
+      "name": "Az",
+      "address": "ariana",
+      "image": "../../assets/images/image.jpg",
+      "status": "Disponible"
+    }
+  ]
+}

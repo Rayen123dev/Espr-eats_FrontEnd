@@ -1,0 +1,308 @@
+<app-header></app-header>
+<br><br><br><br><br><br>
+
+<div class="forum-container">
+
+  <button class="add-btn" [routerLink]="['/posts/add-post']">
+    <svg class="icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    Add
+</button>
+<!--
+<div class="pagination">
+  <button 
+    (click)="onPageChange(currentPage - 1)" 
+    [disabled]="currentPage === 0">
+    Previous
+  </button>
+  
+  <span>Page {{currentPage + 1}} of {{totalPages}}</span>
+  
+  <button 
+    (click)="onPageChange(currentPage + 1)" 
+    [disabled]="currentPage >= totalPages - 1">
+    Next
+  </button>
+</div>-->
+
+ <!-- Pagination -->
+ <div class="pagination-container" >
+  <div class="pagination-controls">
+    <button class="pagination-btn" 
+            (click)="onPageChange(currentPage - 1)" 
+            [disabled]="currentPage === 0"
+            aria-label="Previous page">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    
+    <div class="page-info">
+      Page <span class="current-page">{{currentPage + 1}}</span> 
+      of <span class="total-pages">{{totalPages}}</span>
+    </div>
+    
+    <button class="pagination-btn" 
+            (click)="onPageChange(currentPage + 1)" 
+            [disabled]="currentPage >= totalPages - 1"
+            aria-label="Next page">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+  </div>
+  
+  <div class="page-size-selector">
+    <select class="custom-select" 
+            [(ngModel)]="pageSize" 
+            (change)="onPageSizeChange()">
+      <option value="5">5 per page</option>
+      <option value="10">10 per page</option>
+      <option value="20">20 per page</option>
+    </select>
+    <i class="fas fa-caret-down select-arrow"></i>
+  </div>
+</div>
+
+<!-- Search -->
+<div class="search-container">
+  <input type="text" 
+         [(ngModel)]="searchKeyword" 
+         (input)="searchPosts()"
+         placeholder="Search posts...">
+  <button (click)="clearSearch()" *ngIf="isSearching || searchKeyword">
+    Clear
+  </button>
+</div>
+
+<!-- Filter -->
+<div class="filter-controls">
+  <button 
+    (click)="filterOption = 'all'"
+    [class.active]="filterOption === 'all'">
+    All Posts
+  </button>
+  <button 
+    (click)="filterOption = 'mine'"
+    [class.active]="filterOption === 'mine'">
+    My Posts
+  </button>
+  <button 
+    (click)="filterOption = 'others'"
+    [class.active]="filterOption === 'others'">
+    Others' Posts
+  </button>
+</div>
+
+
+<br><br>
+
+  <ng-container *ngFor="let post of filteredPosts">
+
+    <div class="engagement-indicator" *ngIf="isTrending(post)">
+      <span class="trending-badge">🔥 Trending</span>
+      <span class="engagement-count">
+       <!-- Engagements: {{ getTotalEngagement(post) }} -->
+      </span>
+    </div>
+
+
+
+    <div *ngIf="!post.parentId" class="post-card" [class.editing]="post.editing">
+    <div *ngIf="!post.editing; else editForm" class="post-content">
+      <div class="user-info">
+        <div class="avatar-placeholder"></div>
+        <span class="username">{{ post.authorUsername || 'Unknown User' }}</span>
+        <span class="post-time">{{ post.createdAt | date:'medium' }}</span>
+          </div>
+      </div>
+
+      <div class="post-body" >
+        <div class="post-text-container">
+          <div class="post-content">
+            <!-- Show original or translated text -->
+            <p *ngIf="translatingPostId !== post.postID">{{ post.content }}</p>
+            <p *ngIf="translatingPostId === post.postID" class="translated-text">
+              {{ translationResults[post.postID] }}
+            </p>
+          </div>
+
+<!-- Translation controls -->
+<div class="translation-controls">
+  <div class="language-selector">
+    <select [(ngModel)]="targetLanguage" class="modern-select">
+      <option *ngFor="let lang of availableLanguages" [value]="lang.code">
+        {{ lang.name }} ({{ lang.code }})
+      </option>
+    </select>
+    <span class="select-icon">🌐</span>
+  </div>
+
+  <button *ngIf="translatingPostId !== post.postID" 
+          (click)="translatePost(post)"
+          [disabled]="isTranslating"
+          class="translate-btn">
+    <span class="btn-icon">✍️</span>
+    <span class="btn-text">{{ isTranslating ? 'Translating...' : 'Translate' }}</span>
+    <span class="btn-spinner" *ngIf="isTranslating">🌀</span>
+  </button>
+
+  <button *ngIf="translatingPostId === post.postID" 
+          (click)="showOriginal(post.postID)"
+          class="show-original-btn">
+    <span class="btn-icon">👀</span>
+    <span class="btn-text">Show Original</span>
+  </button>
+</div>
+
+<div *ngIf="post.translatedText" class="translated-text">
+  <div class="language-badge">{{targetLanguage}}</div>
+  {{post.translatedText}}
+</div>
+
+
+
+        <div *ngIf="post.mediaURL" class="media-container">
+          <div class="description-container">
+            <!-- Lightbulb button with hover effects -->
+            <button 
+              (click)="describeImage(post)"
+              class="lightbulb-btn"
+              aria-label="Generate image description"
+              title="Generate description"
+            >
+              💡
+            </button>
+          
+            <!-- Generated description with fade-in effect -->
+            <div 
+              *ngIf="post.description" 
+              class="image-description"
+            >
+              <strong>Description:</strong> 
+              <span class="description-text">{{ post.description }}</span>
+            </div>
+          </div>
+          <img *ngIf="isImage(post.mediaURL)"
+               [src]="getMediaUrl(post.mediaURL)" 
+               alt="Post image"
+               class="post-media"
+               (error)="handleImageError($event)">
+               
+              
+             
+               <p *ngIf="post.showDescription">{{ post.description }}</p>
+
+          <video *ngIf="isVideo(post.mediaURL)"
+                 controls
+                 class="post-media">
+            <source [src]="getMediaUrl(post.mediaURL)" [type]="getVideoType(post.mediaURL)">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+
+            <!-- Display Unique Reactions Once Per Post-->
+            <div class="reactions-container">
+              <div class="reaction-buttons">
+                <button 
+                  *ngFor="let emoji of emojiList"
+                  class="reaction-button"
+                  (click)="addReaction(post.postID, emoji.type)"
+                  [class.active]="hasReacted(post, emoji.type)"
+                  [title]="emoji.type"
+                  [attr.aria-label]="'React with ' + emoji.type"
+                >
+                  <span class="emoji">{{ emoji.label }}</span>
+                  <span class="count">{{ post.reactionCounts?.[emoji.type] || 0 }}</span>
+                </button>
+              </div>
+            </div>
+
+
+      <div *ngIf="showReplyForm && replyingToPostId" class="reply-form-container">
+        <app-add-post 
+          [isReplyMode]="true"
+          [parentPostId]="replyingToPostId"
+          (replyComplete)="onReplyComplete()">
+        </app-add-post>
+      </div>
+
+
+      <div class="reactions-container">
+        <div class="reactions-bar">
+          <button *ngFor="let emoji of emojiList" 
+                  class="reaction-button"
+                  (click)="addReaction(post.postID, emoji.type)"
+                  [title]="emoji.label">
+            <span class="emoji-icon">{{ emoji.label }}</span>
+          </button>
+        </div>
+      </div>
+      
+      <div class="post-actions-wrapper">
+        <div class="post-actions-group">
+          <div *ngIf="post.authorId === currentUserId" class="author-actions">
+            <button class="btn-edit" (click)="post.editing = true">
+              <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn-delete" (click)="deletePost(post.postID)">
+              <i class="fas fa-trash"></i> Delete
+            </button>
+          </div>
+          
+          <button class="btn-reply" (click)="startReply(post.postID)">
+            <i class="fas fa-reply"></i> Reply
+          </button>
+        </div>
+      </div>
+
+
+      <!-- Display reply count 'posts/post-details/:postID'-->
+      <div [routerLink]="['/posts/post-details', post.postID]" 
+      class="reply-badge" 
+      *ngIf="post.replies?.length > 0"
+      [ngClass]="{'has-replies': post.replies.length > 0}">
+        <div class="reply-content">
+          <i class="fas fa-comments"></i>
+          <span class="reply-count">{{ post.replies.length }}</span>
+          <span class="reply-label">{{ post.replies.length === 1 ? 'Reply' : 'Replies' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <ng-template #editForm>
+      <div class="edit-form">
+        <h3>Edit Post</h3>
+        <textarea [(ngModel)]="post.updatedContent" 
+                  class="edit-textarea"
+                  placeholder="What's on your mind?">{{ post.content }}</textarea>
+
+        <div class="media-upload">
+          <label class="file-upload-label">
+            <input type="file" 
+                   (change)="onFileSelected($event, true)"
+                   accept="image/*, video/mp4"
+                   class="file-input"
+                   #fileInput>
+            <span class="upload-button">
+              <i class="fas fa-upload"></i> 
+              {{ updatedFile ? 'File selected' : 'Choose new media' }}
+            </span>
+          </label>
+          <div *ngIf="post.mediaURL" class="current-media">
+            <span>Current: {{ post.mediaURL }}</span>
+          </div>
+        </div>
+
+        <div class="edit-actions">
+          <button class="btn-save" 
+                  (click)="updatePost(post.postID)"
+                  [disabled]="!post.updatedContent && !updatedFile">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+          <button class="btn-cancel" 
+                  (click)="post.editing = false; updatedFile = null">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+        </div>
+      </div>
+    </ng-template>
+</div>
