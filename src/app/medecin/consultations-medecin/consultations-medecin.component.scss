@@ -1,27 +1,31 @@
 .consultation-wrapper {
-  padding: 40px;
-  max-width: 1100px;
-  margin: auto;
+  padding: 40px 30px;
+  background: #f4f7fb;
   font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
 }
 
+
+
 .title {
-  text-align: center;
+  text-align: left; /* était center */
   font-size: 30px;
   margin-bottom: 30px;
   color: #154360;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start; /* était center */
   gap: 10px;
   align-items: center;
 }
+
 
 .filters {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start; /* était center */
   margin-bottom: 25px;
+
 
   input,
   select {
@@ -208,3 +212,5 @@
     }
   }
 }
+
+

@@ -3,25 +3,21 @@
     <div class="welcome-text">
       <h1>Prendre un rendez-vous médical 🩺</h1>
       <p>Choisissez un type de consultation et décrivez vos symptômes</p>
-
-      <!-- ✅ Liens restaurés -->
       <div class="actions">
         <button class="nav-btn" routerLink="/profil-nutritionnel/mon-profil">Consulter mon profil</button>
-        <button class="nav-btn" routerLink="/menu-semaine">Menu de la semaine</button>
-        <button class="nav-btn" routerLink="/consulter-medecin" disabled>Consulter un médecin</button>
+        <button class="nav-btn" disabled>Consulter un médecin</button>
         <button class="nav-btn secondary" routerLink="/mes-consultations">Voir mes consultations</button>
+        <button class="nav-btn" routerLink="/analyse-plat">Analyser un plat</button>
       </div>
     </div>
   </div>
 
-  <!-- ✅ Message de succès ou d'erreur -->
   <div *ngIf="successMessage" [ngClass]="{ 'toast-message': true, success: successSuccess, error: !successSuccess }">
     <span class="icon">{{ successSuccess ? '✅' : '❌' }}</span>
     <span class="text">{{ successMessage }}</span>
     <button class="close-btn" (click)="successMessage = ''">✖</button>
   </div>
 
-  <!-- ✅ Formulaire de consultation -->
   <div class="profil-card">
     <form [formGroup]="form" (ngSubmit)="prendreConsultation()" class="form-edit-grid">
       <div class="form-group">
@@ -45,7 +41,7 @@
         <label>Date</label>
         <input type="date" formControlName="dateJour" [min]="minDate" />
         <div class="date-info">
-          Le médecin consulte <strong>du lundi au vendredi</strong>, de <strong>9h à 16h</strong>.
+          Le médecin consulte du <strong>lundi au vendredi</strong>, entre <strong>9h et 16h</strong>.
         </div>
       </div>
 
@@ -60,7 +56,7 @@
       </div>
 
       <div class="edit-actions full-width">
-        <button class="btn-primary" type="submit" [disabled]="form.invalid || toutesPrises">
+        <button type="submit" class="btn-primary" [disabled]="form.invalid || toutesPrises">
           Envoyer la demande
         </button>
       </div>

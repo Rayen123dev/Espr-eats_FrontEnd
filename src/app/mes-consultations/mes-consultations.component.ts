@@ -10,6 +10,8 @@ export class MesConsultationsComponent implements OnInit {
   consultations: Consultation[] = [];
   filteredConsultations: Consultation[] = [];
   recommandations: { [key: number]: string } = {};
+  showConfirmDialog = false;
+selectedConsultationIdToCancel: number | null = null;
 
   types: string[] = ['TOUS', 'GENERALE', 'NUTRITIONNELLE', 'PSYCHOLOGIQUE', 'SUIVI_MEDICAL', 'PREVENTION', 'ACTIVITE_PHYSIQUE'];
 
@@ -121,29 +123,46 @@ export class MesConsultationsComponent implements OnInit {
     }
   }
 
-  annulerConsultation(id: number): void {
-    const consultation = this.consultations.find(c => c.id === id);
+  openConfirmationDialog(id: number): void {
+    this.selectedConsultationIdToCancel = id;
+    this.showConfirmDialog = true;
+  }
+
+  confirmAnnulation(): void {
+    if (!this.selectedConsultationIdToCancel) return;
+
+    const consultation = this.consultations.find(c => c.id === this.selectedConsultationIdToCancel);
     if (!consultation) return;
 
-    if (confirm('Voulez-vous vraiment annuler ce rendez-vous ?')) {
-      const updatedConsultation: Consultation = {
-        ...consultation,
-        statut: 'ANNULEE'
-      };
+    const updatedConsultation: Consultation = {
+      ...consultation,
+      statut: 'ANNULEE'
+    };
 
-      this.consultationService.updateConsultation(id, updatedConsultation).subscribe({
-        next: () => {
-          this.successSuccess = true;
-          this.successMessage = 'Consultation annulée avec succès.';
-          this.fetchConsultations(); // refresh
-        },
-        error: () => {
-          this.successSuccess = false;
-          this.successMessage = "Erreur lors de l'annulation.";
-        }
-      });
-    }
+    this.consultationService.updateConsultation(this.selectedConsultationIdToCancel, updatedConsultation).subscribe({
+      next: () => {
+        this.successSuccess = true;
+        this.successMessage = 'Consultation annulée avec succès.';
+        this.fetchConsultations();
+        this.closeConfirmDialog();
+      },
+      error: () => {
+        this.successSuccess = false;
+        this.successMessage = "Une erreur est survenue lors de l'annulation.";
+        this.closeConfirmDialog();
+      }
+    });
   }
+
+  closeConfirmDialog(): void {
+    this.showConfirmDialog = false;
+    this.selectedConsultationIdToCancel = null;
+
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 5000);
+  }
+
 
   onStatutChange(): void {
     this.currentPage = 1;

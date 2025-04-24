@@ -1,6 +1,4 @@
 <div class="container consultation-detail mt-4">
-  <a routerLink="/medecin/consultations" class="back-link">← Retour à la liste des consultations</a>
-
   <h2 class="page-title text-center mb-4">Détails de la consultation</h2>
 
   <div class="info-grid">
@@ -64,9 +62,11 @@
     </form>
   </ng-template>
 
-  <div *ngIf="showSuccessMessage" class="alert alert-success mt-3 text-center">
-    ✅ Recommandation enregistrée avec succès !
+  <div *ngIf="showSuccessMessage" class="alert alert-success mt-3 success-message text-center">
+    <i class="bi bi-check-circle-fill me-2 animated-icon"></i>
+    Recommandation enregistrée avec succès !
   </div>
+
 </div>
 
 </div>

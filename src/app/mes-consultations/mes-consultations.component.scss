@@ -243,3 +243,90 @@
   }
 }
 
+/* 💬 Boîte de confirmation modale */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 24px 32px;
+  border-radius: 12px;
+  text-align: center;
+  max-width: 420px;
+  width: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease-in-out;
+
+  h3 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: #dc3545;
+  }
+
+  p {
+    font-size: 15px;
+    margin-bottom: 24px;
+    color: #444;
+  }
+
+  .modal-actions {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+
+    button {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .btn-confirm {
+      background-color: #dc3545;
+      color: white;
+
+      &:hover {
+        background-color: #b02a37;
+      }
+    }
+
+    .btn-cancel {
+      background-color: #ccc;
+      color: black;
+
+      &:hover {
+        background-color: #aaa;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.toast-message {
+  margin-bottom: 20px;
+}
+
+
+

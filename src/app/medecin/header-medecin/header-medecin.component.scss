@@ -64,44 +64,45 @@
       padding: 0;
 
       .nav-item {
-        margin: 0 15px;
+        margin: 0 24px;
         position: relative;
 
         a {
-          text-decoration: none;
-          color: color(srgb rgb(98, 96, 96) rgb(116, 119, 116) rgb(87, 87, 88));
-          font-weight: 500;
-          transition: all 0.3s ease;
           position: relative;
-          overflow: hidden;
+          text-decoration: none;
+          color: #333;
+          font-weight: 500;
+          padding: 8px 0;
+          transition: color 0.3s ease;
 
-          &:before {
+          &::after {
             content: '';
             position: absolute;
-            bottom: -2px;
             left: 0;
+            bottom: -2px;
             width: 0;
             height: 2px;
-            background-color: color(srgb blue blue blue);
-            transition: width 0.3s ease;
+            background-color: #007bff;
+            transition: width 0.3s ease-in-out;
           }
 
           &:hover,
           &.active {
-            color: color(srgb rgb(0, 123, 255) rgb(0, 123, 255) rgb(0, 123, 255));
+            color: #007bff;
 
-            &:before {
+            &::after {
               width: 100%;
             }
           }
         }
 
         &:hover {
-          animation: pulse 0.5s;
+          animation: pulse 0.4s;
         }
       }
     }
   }
+
 
   .user-actions {
     display: flex;

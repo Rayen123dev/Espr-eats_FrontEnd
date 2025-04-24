@@ -16,6 +16,6 @@ export class AppComponent {
   }
 
   isMedecinDashboard(): boolean {
-    return this.loginService.getRole() === 'Medcin'; // 🔥 Vérifie bien l’orthographe du rôle
+    return this.loginService.getRole() === 'Medecin'; // 🔥 Vérifie bien l’orthographe du rôle
   }
 }

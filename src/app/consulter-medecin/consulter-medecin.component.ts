@@ -15,23 +15,26 @@ export class ConsulterMedecinComponent implements OnInit {
   heuresDisponibles: string[] = [];
   toutesPrises = false;
   motifIndisponibilite = '';
+  showSuccess = false;
 
-  constructor(private fb: FormBuilder, private consultationService: ConsultationService) { }
+  constructor(
+    private fb: FormBuilder,
+    private consultationService: ConsultationService
+  ) {}
 
   ngOnInit(): void {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
     this.minDate = today.toISOString().split('T')[0];
 
     this.form = this.fb.group({
       typeConsultation: ['GENERALE', Validators.required],
-      message: ['', Validators.required],
+      message: ['', [Validators.required, Validators.minLength(10)]],
       dateJour: ['', Validators.required],
       heure: ['', Validators.required]
     });
 
     this.form.get('dateJour')?.valueChanges.subscribe(date => {
-      this.loadHeuresDisponibles(date);
+      if (date) this.loadHeuresDisponibles(date);
     });
   }
 
@@ -40,28 +43,22 @@ export class ConsulterMedecinComponent implements OnInit {
     this.toutesPrises = false;
     this.motifIndisponibilite = '';
 
-    const selected = new Date(date);
-    const jour = selected.getDay();
-
+    const jour = new Date(date).getDay();
     if (jour === 0 || jour === 6) {
       this.toutesPrises = true;
       this.motifIndisponibilite = '❌ Le médecin n’est pas disponible le week-end.';
       return;
     }
 
-    this.consultationService.getAllConsultations().subscribe((consultations) => {
+    this.consultationService.getAllConsultations().subscribe(consultations => {
       const prises = consultations
         .filter(c => c.dateConsultation.startsWith(date))
-        .map(c => new Date(c.dateConsultation).toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        }));
+        .map(c => new Date(c.dateConsultation).toTimeString().slice(0, 5));
 
       for (let h = 9; h <= 16; h++) {
-        const label = `${h.toString().padStart(2, '0')}:00`;
-        if (!prises.includes(label)) {
-          this.heuresDisponibles.push(label);
+        const heureStr = `${h.toString().padStart(2, '0')}:00`;
+        if (!prises.includes(heureStr)) {
+          this.heuresDisponibles.push(heureStr);
         }
       }
 
@@ -74,32 +71,38 @@ export class ConsulterMedecinComponent implements OnInit {
 
   prendreConsultation(): void {
     if (this.form.invalid) {
-      this.successMessage = 'Veuillez remplir tous les champs.';
       this.successSuccess = false;
+      this.successMessage = '⚠️ Veuillez remplir correctement tous les champs du formulaire.';
+      this.autoCloseToast();
       return;
     }
 
-    const date = this.form.value.dateJour;
-    const hour = this.form.value.heure;
-    const datetimeLocal = `${date}T${hour}:00`;
-
+    const { dateJour, heure, typeConsultation, message } = this.form.value;
     const payload = {
-      typeConsultation: this.form.value.typeConsultation,
-      message: this.form.value.message,
-      dateConsultation: datetimeLocal
+      typeConsultation,
+      message,
+      dateConsultation: `${dateJour}T${heure}:00`
     };
 
     this.consultationService.createConsultation(payload).subscribe({
       next: () => {
         this.successSuccess = true;
-        this.successMessage = 'Demande envoyée avec succès.';
+        this.successMessage = 'Votre demande a été envoyée avec succès ! Un médecin vous contactera prochainement.';
         this.form.reset({ typeConsultation: 'GENERALE' });
         this.heuresDisponibles = [];
+        this.autoCloseToast();
       },
       error: () => {
         this.successSuccess = false;
-        this.successMessage = 'Une erreur est survenue.';
+        this.successMessage = '❌ Une erreur est survenue. Veuillez réessayer plus tard.';
+        this.autoCloseToast();
       }
     });
+  }
+
+  private autoCloseToast(): void {
+    setTimeout(() => {
+      this.successMessage = '';
+    }, 5000);
   }
 }

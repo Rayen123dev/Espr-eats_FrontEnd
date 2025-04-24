@@ -3,18 +3,18 @@
     <div class="header-content">
       <h1 class="dashboard-title">Gestion des Menus</h1>
       <div class="dashboard-actions">
-        <button 
-          *ngIf="userRole === 'Staff'" 
-          class="btn btn-generate" 
+        <button
+          *ngIf="userRole === 'Staff'"
+          class="btn btn-generate"
           (click)="generateMenus()"
           [disabled]="isLoading || !canGenerateMenus()">
           <i class="icon-generate"></i>
           {{ isLoading ? 'Génération en cours...' : 'Générer les menus' }}
         </button>
-        
-        <button 
-          *ngIf="userRole === 'Staff'" 
-          class="btn btn-regenerate" 
+
+        <button
+          *ngIf="userRole === 'Staff'"
+          class="btn btn-regenerate"
           (click)="regenerateMenus()"
           [disabled]="isLoading || !canGenerateMenus()">
           <i class="icon-refresh"></i>
@@ -52,11 +52,11 @@
 
   <!-- Menus Grid -->
   <div class="menus-grid" *ngIf="filteredMenus.length > 0">
-    <div 
-      *ngFor="let menu of filteredMenus" 
+    <div
+      *ngFor="let menu of filteredMenus"
       class="menu-card"
       [ngClass]="{'menu-card-pending': !menu.isValidated}">
-      
+
       <div class="menu-card-header">
         <div class="menu-date">
           <i class="icon-calendar"></i>
@@ -79,7 +79,7 @@
 
         <div class="menu-stats">
           <div class="calories-stat">
-            <span 
+            <span
               class="calories-label"
               [ngClass]="{
                 'calories-low': menu.totalCalories < 2000,
@@ -91,7 +91,7 @@
           </div>
 
           <div class="validation-status">
-            <span 
+            <span
     [ngClass]="{
       'status-validated': menu.isValidated,
       'status-pending': !menu.isValidated && !isRejected(menu.id),
@@ -106,14 +106,14 @@
      <!-- Dans le template HTML, modifiez menu-card-footer -->
 <div class="menu-card-footer">
   <div class="action-buttons">
-    <button 
-      *ngIf="!menu.isValidated && canValidateMenus()" 
+    <button
+      *ngIf="!menu.isValidated && canValidateMenus()"
       class="btn btn-validate"
       (click)="validateMenus([menu.id])">
       Valider
     </button>
-    <button 
-      *ngIf="!menu.isValidated && !isRejected(menu.id) && canValidateMenus()" 
+    <button
+      *ngIf="!menu.isValidated && !isRejected(menu.id) && canValidateMenus()"
       class="btn btn-reject"
       (click)="rejectMenus([menu.id])">
       Rejeter
@@ -127,8 +127,8 @@
     <i class="icon-empty-menu"></i>
     <h2>Aucun menu disponible</h2>
     <p>Commencez par générer des menus personnalisés</p>
-    <button 
-      class="btn btn-generate" 
+    <button
+      class="btn btn-generate"
       (click)="generateMenus()"
       [disabled]="!canGenerateMenus()">
       Générer des menus

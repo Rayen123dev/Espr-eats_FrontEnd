@@ -129,7 +129,7 @@ export class MenuDashboardComponent implements OnInit {
         menuIds.forEach(id => this.rejectedMenuIds.add(id));
         this.cdr.detectChanges();
       },
-      
+
     });
        this.showNotification('Menu rejeté avec succès', 'success');
   }

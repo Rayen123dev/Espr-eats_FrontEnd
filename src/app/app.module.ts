@@ -33,7 +33,7 @@ import { RegimeComponent } from './components/regime/regime.component';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
-import { MatOptionModule } from '@angular/material/core';
+import { DateAdapter, MatOptionModule } from '@angular/material/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { StaffDashboardComponent } from './components/staff-dashboard/staff-dashboard.component'; // Assurez-vous d'importer MatCheckbox
 import { NgChartsModule } from 'ng2-charts';
@@ -43,6 +43,17 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthGComponent } from './auth-g/auth-g.component';
 import { HomeComponent } from './home/home.component';
 import { CountUpModule } from 'ngx-countup';
+import { MedecinModule } from './medecin/medecin.module';
+import { ConsulterMedecinComponent } from './consulter-medecin/consulter-medecin.component';
+import { MesConsultationsComponent } from './mes-consultations/mes-consultations.component';
+import { ProfilNutritionnelDetailComponent } from './profil-nutritionnel-detail/profil-nutritionnel-detail.component';
+import { ProfilNutritionnelFormComponent } from './profil-nutritionnel-form/profil-nutritionnel-form.component';
+import { ProfilNutritionnelComponent } from './profil-nutritionnel/profil-nutritionnel.component';
+import { VisioComponent } from './visio/visio.component';
+import { CalendarModule } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { AnalysePlatComponent } from './analyse-plat/analyse-plat.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -67,7 +78,15 @@ import { CountUpModule } from 'ngx-countup';
     RegimeComponent,
     StaffDashboardComponent,
     AuthGComponent,
-    HomeComponent
+    HomeComponent,
+    ProfilNutritionnelComponent,
+    ProfilNutritionnelFormComponent,
+    ProfilNutritionnelDetailComponent,
+    ConsulterMedecinComponent,
+    MesConsultationsComponent,
+    VisioComponent,
+    AnalysePlatComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -105,7 +124,10 @@ import { CountUpModule } from 'ngx-countup';
     MatIconModule,
     MatSelectModule,
     MatOptionModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MedecinModule,
+    NgChartsModule,
+    CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

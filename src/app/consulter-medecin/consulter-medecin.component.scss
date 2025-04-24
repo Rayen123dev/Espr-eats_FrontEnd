@@ -61,44 +61,58 @@
 .toast-message {
   max-width: 700px;
   margin: 20px auto;
-  padding: 14px 20px;
+  padding: 16px 22px;
   border-radius: 10px;
-  font-weight: 500;
   font-size: 15px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  font-weight: 500;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
   animation: fadeInSlide 0.4s ease-in-out;
-
-  &.success {
-    background-color: #e8fbe8;
-    border-left: 6px solid #28a745;
-    color: #146c43;
-  }
-
-  &.error {
-    background-color: #fde2e1;
-    border-left: 6px solid #dc3545;
-    color: #842029;
-  }
+  position: relative;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 
   .icon {
-    font-size: 20px;
+    font-size: 22px;
+    animation: bounce 1s infinite alternate;
   }
 
   .text {
     flex-grow: 1;
+    line-height: 1.5;
   }
 
   .close-btn {
+    position: absolute;
+    top: 8px;
+    right: 12px;
     background: none;
     border: none;
     font-size: 18px;
+    font-weight: bold;
     cursor: pointer;
     color: inherit;
-    font-weight: bold;
-    margin-left: auto;
+  }
+
+  &.success {
+    background: linear-gradient(to right, #d4edda, #c3e6cb);
+    border-left: 6px solid #28a745;
+    color: #155724;
+  }
+
+  &.error {
+    background: linear-gradient(to right, #f8d7da, #f5c6cb);
+    border-left: 6px solid #dc3545;
+    color: #721c24;
+  }
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-4px);
   }
 }
 
@@ -112,6 +126,7 @@
     transform: translateY(0);
   }
 }
+
 
 /* 🧾 Formulaire stylé */
 .profil-card {
@@ -195,3 +210,5 @@ textarea {
     }
   }
 }
+
+

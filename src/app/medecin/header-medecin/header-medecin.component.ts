@@ -12,7 +12,16 @@ export class HeaderMedecinComponent implements OnInit {
   userProfileImage: string = 'assets/default-avatar.png';
   isProfileDropdownOpen: boolean = false;
 
-  constructor(private loginService: LoginService, private router: Router) {}
+  navLinks = [
+    { label: 'Dashboard', path: '/dashboard' },
+    { label: 'Menus à valider', path: '/staffdashboard' },
+    { label: 'Consultations', path: '/medecin/consultations' },
+    { label: 'Suivi étudiants', path: '/medecin/suivi-etudiant' }
+  ];
+
+
+  constructor(public router: Router, private loginService: LoginService) {}
+
 
   ngOnInit(): void {
     const userId = this.loginService.getUserIdFromToken();

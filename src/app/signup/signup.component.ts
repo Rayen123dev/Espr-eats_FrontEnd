@@ -28,7 +28,7 @@ export class SignupComponent implements OnInit {
   showPassword = false;
   imagePreview: string | null = null;
   selectedFile: File | null = null;
-  
+
 
   constructor(
     private formBuilder: FormBuilder,
@@ -68,7 +68,7 @@ export class SignupComponent implements OnInit {
       error: (error) => {
         console.error('Registration error:', error);
         this.loading = false;
-  
+
         if (error.status === 403) {
           this.errorMessage = 'Access forbidden.';
         } else if (error.status === 401) {
@@ -76,32 +76,32 @@ export class SignupComponent implements OnInit {
         } else {
           this.errorMessage = 'Connection error. Please try again.';
         }
-  
+
         const loginCard = document.querySelector('.login-card');
         loginCard?.classList.add('shake');
         setTimeout(() => loginCard?.classList.remove('shake'), 500);
       }
     });
   }
-  
+
 
   onSubmit(): void {
     this.isSubmitted = true;
-  
+
     if (this.signupForm.invalid) {
       return;
     }
-  
+
     this.loading = true;
-  
+
     const formValues = this.signupForm.value;
-  
+
     // Step 1: Upload image if selected
     if (this.selectedFile) {
       this.loginService.uploadImage(this.selectedFile).subscribe({
         next: (uploadRes) => {
           const cloudinaryUrl = uploadRes.imageUrl;
-  
+
           // Step 2: Continue registration using the Cloudinary image URL
           const credentials = {
             nom: formValues.nom,
@@ -111,7 +111,7 @@ export class SignupComponent implements OnInit {
             role: formValues.role,
             link_Image: cloudinaryUrl
           };
-  
+
           this.submitSignup(credentials);
         },
         error: (err) => {
@@ -130,13 +130,13 @@ export class SignupComponent implements OnInit {
         role: formValues.role,
         link_Image: '/assets/default-avatar.png'
       };
-  
+
       this.submitSignup(credentials);
     }
   }
-  
-  
-  
+
+
+
   // Navigate based on role
   navigateBasedOnRole(): void {
     const role = this.loginService.getRole();
@@ -154,11 +154,11 @@ export class SignupComponent implements OnInit {
         this.router.navigate(['/home']);
     }
   }
-  
+
   clearError(): void {
     this.errorMessage = '';
   }
-  
+
   initFoodAnimation(): void {
     // Animation for food icons - unchanged
     const gsap = (window as any).gsap;
@@ -168,17 +168,17 @@ export class SignupComponent implements OnInit {
     }
 
     const foodIcons = document.querySelectorAll('.food-icon');
-    
+
     foodIcons.forEach((icon, index) => {
       const delay = index * 2;
-      
+
       gsap.set(icon, {
         x: Math.random() * 100 - 50,
         y: Math.random() * 50,
         opacity: 0,
         scale: 0.5
       });
-      
+
       gsap.to(icon, {
         duration: 3 + Math.random() * 2,
         y: '-=30',
@@ -194,7 +194,7 @@ export class SignupComponent implements OnInit {
     });
   }
 
-  roleOptions = ['User', 'Staff', 'Admin', 'Medcin'];
+  roleOptions = ['User', 'Staff', 'Admin', 'Medecin'];
 
   selectRole(role: string): void {
     this.signupForm.patchValue({ role: role });
@@ -205,7 +205,7 @@ export class SignupComponent implements OnInit {
     if (file) {
       // Store the file for later upload
       this.selectedFile = file;
-      
+
       // Create a FileReader to generate preview
       const reader = new FileReader();
       reader.onload = () => {
@@ -240,11 +240,11 @@ export class SignupComponent implements OnInit {
   }
 
   getRoleIcon(role: string): string {
-    switch(role) {
+    switch (role) {
       case 'User': return 'fas fa-user';
       case 'Staff': return 'fas fa-users';
       case 'Admin': return 'fas fa-crown';
-      case 'Medcin': return 'fas fa-briefcase-medical';
+      case 'Medecin': return 'fas fa-briefcase-medical';
       default: return 'fas fa-user';
     }
   }

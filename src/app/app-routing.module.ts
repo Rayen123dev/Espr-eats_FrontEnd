@@ -11,13 +11,22 @@ import { PlatComponent } from './components/plat/plat.component';
 import { MenuDashboardComponent } from './components/menu-dashboard/menu-dashboard.component';
 import { AuthGuard } from './auth.guard';
 import { AuthGComponent } from './auth-g/auth-g.component';
+import { HomeComponent } from './home/home.component';
+import { ProfilNutritionnelComponent } from './profil-nutritionnel/profil-nutritionnel.component';
+import { ProfilNutritionnelFormComponent } from './profil-nutritionnel-form/profil-nutritionnel-form.component';
+import { ProfilNutritionnelDetailComponent } from './profil-nutritionnel-detail/profil-nutritionnel-detail.component';
+import { ConsulterMedecinComponent } from './consulter-medecin/consulter-medecin.component';
+import { MesConsultationsComponent } from './mes-consultations/mes-consultations.component';
+import { VisioComponent } from './visio/visio.component';
+import { AnalysePlatComponent } from './analyse-plat/analyse-plat.component';
+
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
 
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
   { path: 'add-reclamation', component: AddReclamationComponent, canActivate: [AuthGuard],
-    data: { expectedRole: 'User' } },   
+    data: { expectedRole: 'User' } },
   { path: 'user-reclamations', component: UserReclamationsComponent, canActivate: [AuthGuard] },
   { path: 'gestionuser', component: GestionUsersComponent, canActivate: [AuthGuard],
     data: { expectedRole: 'Admin' } },
@@ -32,6 +41,15 @@ const routes: Routes = [
     data: { expectedRole: 'Staff' } },
   { path: 'MenuDashboardComponent', component: MenuDashboardComponent, canActivate: [AuthGuard],
     data: { expectedRoles: ['Staff', 'Admin', 'Medecin'] } },
+    { path: 'profil-nutritionnel', component: ProfilNutritionnelComponent },
+    { path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent },
+    { path: 'profil-nutritionnel/mon-profil', component: ProfilNutritionnelDetailComponent },
+    { path: 'consulter-medecin', component: ConsulterMedecinComponent },
+    { path: 'mes-consultations', component: MesConsultationsComponent },
+    { path: 'visio/:id',component: VisioComponent },
+    { path: 'analyse-plat', component: AnalysePlatComponent },
+
+
 
   { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
 ];
