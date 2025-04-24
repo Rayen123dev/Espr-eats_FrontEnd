@@ -28,11 +28,15 @@ const routes: Routes = [
   { path: 'email-verification', component: EmailVerificationComponent },
 
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
-  { path: 'add-reclamation', component: AddReclamationComponent, canActivate: [AuthGuard],
-    data: { expectedRole: 'User' } },
+  {
+    path: 'add-reclamation', component: AddReclamationComponent, canActivate: [AuthGuard],
+    data: { expectedRole: 'User' }
+  },
   { path: 'user-reclamations', component: UserReclamationsComponent, canActivate: [AuthGuard] },
-  { path: 'gestionuser', component: GestionUsersComponent, canActivate: [AuthGuard],
-    data: { expectedRole: 'Admin' } },
+  {
+    path: 'gestionuser', component: GestionUsersComponent, canActivate: [AuthGuard],
+    data: { expectedRole: 'Admin' }
+  },
   { path: 'menu', component: MenuComponent, canActivate: [AuthGuard] },
   {
     path: 'staffdashboard',
@@ -46,21 +50,56 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { expectedRoles: ['Staff', 'Medecin'] }
   },
-  { path: 'plat/:id', component: PlatComponent, canActivate: [AuthGuard],
-    data: { expectedRole: 'Staff' } },
-  { path: 'MenuDashboardComponent', component: MenuDashboardComponent, canActivate: [AuthGuard],
-    data: { expectedRoles: ['Staff', 'Admin', 'Medecin'] } },
-    { path: 'profil-nutritionnel', component: ProfilNutritionnelComponent },
-    { path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent },
-    { path: 'profil-nutritionnel/mon-profil', component: ProfilNutritionnelDetailComponent },
-    { path: 'consulter-medecin', component: ConsulterMedecinComponent },
-    { path: 'mes-consultations', component: MesConsultationsComponent },
-    { path: 'visio/:id',component: VisioComponent },
-    { path: 'analyse-plat', component: AnalysePlatComponent },
+  {
+    path: 'plat/:id', component: PlatComponent, canActivate: [AuthGuard],
+    data: { expectedRole: 'Staff' }
+  },
+  {
+    path: 'MenuDashboardComponent', component: MenuDashboardComponent, canActivate: [AuthGuard],
+    data: { expectedRoles: ['Staff', 'Admin', 'Medecin'] }
+  },
+
+  {
+    path: 'profil-nutritionnel', component: ProfilNutritionnelComponent, canActivate: [AuthGuard],
+    data: { expectedRoles: ['User'] }
+  },
+  {
+    path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent, canActivate: [AuthGuard],
+    data: { expectedRoles: ['User'] }
+  },
+  {
+    path: 'profil-nutritionnel/mon-profil', component: ProfilNutritionnelDetailComponent, canActivate: [AuthGuard],
+    data: { expectedRoles: ['User'] }
+  },
+  {
+    path: 'consulter-medecin', component: ConsulterMedecinComponent, canActivate: [AuthGuard],
+    data: { expectedRoles: ['User'] }
+  },
+  {
+    path: 'mes-consultations', component: MesConsultationsComponent, canActivate: [AuthGuard],
+    data: { expectedRoles: ['User'] }
+  },
+  {
+    path: 'visio/:id', component: VisioComponent, canActivate: [AuthGuard],
+    data: { expectedRoles: ['User'] }
+  },
+  {
+    path: 'analyse-plat', component: AnalysePlatComponent, canActivate: [AuthGuard],
+    data: { expectedRoles: ['User'] }
+  },
+
+
+  { path: 'profil-nutritionnel', component: ProfilNutritionnelComponent },
+  { path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent },
+  { path: 'profil-nutritionnel/mon-profil', component: ProfilNutritionnelDetailComponent },
+  { path: 'consulter-medecin', component: ConsulterMedecinComponent },
+  { path: 'mes-consultations', component: MesConsultationsComponent },
+  { path: 'visio/:id', component: VisioComponent },
+  { path: 'analyse-plat', component: AnalysePlatComponent },
 
 
 
-  { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
+  { path: 'auth', component: AuthGComponent }, // Route for OAuth2 success page
 
   { path: 'face-confirmation', component: FaceConfirmationComponent, canActivate: [AuthGuard] },
 

@@ -56,6 +56,8 @@ import { AnalysePlatComponent } from './analyse-plat/analyse-plat.component';
 
 import { FaceConfirmationComponent } from './face-confirmation/face-confirmation.component';
 import { WebcamModule } from 'ngx-webcam';
+
+
 @NgModule({
     declarations: [
       AppComponent,
@@ -126,8 +128,6 @@ import { WebcamModule } from 'ngx-webcam';
       MatPaginatorModule,
       MedecinModule,
       NgChartsModule,
-      CalendarModule.forRoot({ provide: DateAdapter, useFactory: adapterFactory }),
-
     ],
   providers: [AuthService],
   bootstrap: [AppComponent]
