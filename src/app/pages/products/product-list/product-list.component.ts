@@ -7,6 +7,7 @@ import { ProductFormComponent } from '../product-form/product-form.component';
 import { ToastService } from 'src/app/services/toast.service';
 import { AlertService } from 'src/app/services/alert.service';
 import { BrowserMultiFormatReader } from '@zxing/library';
+import { ForecastDialogComponent } from '../forecast-dialog/forecast-dialog.component';
 
 
 @Component({
@@ -26,7 +27,10 @@ export class ProductListComponent implements OnInit {
   errorMessage: string = '';
   alerts: { produitID: number; nomProduit: string; status: string }[] = [];
 
+  forecastedValues: { [productId: string]: any } = {};
 
+  forecastResult: any;
+  
 
   constructor(private productService: ProductService,private router: Router,public dialog: MatDialog, private toastService: ToastService,private alertService :AlertService) { }
   ngOnInit(): void {
@@ -34,16 +38,20 @@ export class ProductListComponent implements OnInit {
     this.productService.products$.subscribe((products) => {
       this.products = products;
       this.filteredProducts = [...this.products];
+     
     });
 
     // Initial fetch of products
     this.productService.getProducts().subscribe((products) => {
       this.products = products;
       this.filteredProducts = [...this.products];
+    
+     
     });
     this.productService.refreshProductList();
     this.toastService.showToast('Testing toast notification!');
     this.checkAlerts();
+    
   }
 
   checkAlerts(): void {
@@ -135,6 +143,19 @@ export class ProductListComponent implements OnInit {
     });
   }
   
+  openForecastDialog(forecastResult: any): void {
+    const dialogRef = this.dialog.open(ForecastDialogComponent, {
+      width: '400px',
+      maxWidth: '95vw',
+      data: forecastResult,  
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Forecast dialog closed');
+    });
+  }
+  
+  
   onFileChange(event: any): void {
     const file: File = event.target.files[0];
     
@@ -195,17 +216,40 @@ export class ProductListComponent implements OnInit {
     }
   }
 
- /*  search(text: string) {
-    this.http.post<{ filter: string }>('http://localhost:8080/api/ai/parse', {
-      query: text
-    }).subscribe(res => {
-      console.log('AI Filter:', res.filter);
-      this.productService.searchWithCondition(res.filter).subscribe(products => {
-        console.log('Filtered Products:', products);
-        // Optionally update view or state
-      });
-    });
-  }
-   */
-
+ /*   showForecast(product: Produit): void {
+    this.productService.getForecast(product).subscribe(
+      (forecastData) => {
+        this.forecastResult = forecastData;
+        console.log('Forecast result:', forecastData);
+        this.successMessage = `Forecast for ${product.nomProduit} retrieved successfully!`;
+      },
+      (error) => {
+        this.errorMessage = 'Error retrieving forecast data.';
+      }
+    );
+  } */
+    showForecast(product: Produit): void {
+      this.productService.getForecast(product).subscribe(
+        (forecastData) => {
+          
+          const dialogRef = this.dialog.open(ForecastDialogComponent, {
+            data: {
+              productName: product.nomProduit,
+              forecast: forecastData.forecast,
+              seuil_alerte: product.seuil_alerte
+            },
+            width: '800px', 
+            maxWidth: '90vw', 
+            panelClass: 'forecast-dialog'
+          });
+          dialogRef.afterClosed().subscribe((result) => {
+          });
+        },
+        (error) => {
+          this.errorMessage = 'Error retrieving forecast data.';
+        }
+      );
+    }
+    
 }
+

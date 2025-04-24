@@ -133,11 +133,8 @@ export class ProductService {
   }
   
   /// AI 
-  searchWithCondition(filter: string): Observable<Produit[]> {
-    const params = new HttpParams().set('filter', filter);
-    return this.http.get<Produit[]>(`${this.apiUrl}/parse`, { params });
+  getForecast(data: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/predict`, data);
   }
-  
-
 }
 

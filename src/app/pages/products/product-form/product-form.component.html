@@ -1,67 +1,67 @@
 <div class="product-form-container">
-  <h2>{{ isEditMode ? 'Edit Product' : 'Add Product' }}</h2>
+  <h2>{{ isEditMode ? 'Modifier le produit' : 'Ajouter un produit' }}</h2>
   <form [formGroup]="productForm" (ngSubmit)="saveProduct()">
-   
+
     <div class="form-group">
-      <label for="nomProduit">Product Name:</label>
+      <label for="nomProduit">Nom du produit :</label>
       <input 
         type="text" 
         id="nomProduit" 
         formControlName="nomProduit" 
         class="form-control" />
       <div *ngIf="nomProduit?.invalid && nomProduit?.touched" class="error-message">
-        Product name is required and must be at least 3 characters long.
+        Le nom du produit est requis et doit contenir au moins 3 caractères.
       </div>
     </div>
 
     <!-- Description -->
     <div class="form-group">
-      <label for="description">Description:</label>
+      <label for="description">Description :</label>
       <textarea 
         id="description" 
         formControlName="description" 
         class="form-control"></textarea>
       <div *ngIf="description?.invalid && description?.touched" class="error-message">
-        Description is required and must be at least 10 characters long.
+        La description est requise et doit contenir au moins 10 caractères.
       </div>
     </div>
 
     <!-- Quantity -->
     <div class="form-group">
-      <label for="quantite">Quantity:</label>
+      <label for="quantite">Quantité :</label>
       <input 
         type="number" 
         id="quantite" 
         formControlName="quantite" 
         class="form-control" />
       <div *ngIf="quantite?.invalid && quantite?.touched" class="error-message">
-        Quantity is required and must be at least 1.
+        La quantité est requise et doit être d’au moins 1.
       </div>
     </div>
 
     <!-- Alert Threshold -->
     <div class="form-group">
-      <label for="seuil_alerte">Alert Threshold:</label>
+      <label for="seuil_alerte">Seuil d’alerte :</label>
       <input 
         type="number" 
         id="seuil_alerte" 
         formControlName="seuil_alerte" 
         class="form-control" />
       <div *ngIf="seuil_alerte?.invalid && seuil_alerte?.touched" class="error-message">
-        Alert threshold is required and must be at least 1.
+        Le seuil d’alerte est requis et doit être d’au moins 1.
       </div>
     </div>
 
     <!-- Expiration Date -->
     <div class="form-group">
-      <label for="date_peremption">Expiration Date:</label>
+      <label for="date_peremption">Date de péremption :</label>
       <input 
         type="date" 
         id="date_peremption" 
         formControlName="date_peremption" 
         class="form-control" />
       <div *ngIf="date_peremption?.invalid && date_peremption?.touched" class="error-message">
-        Expiration date is required.
+        La date de péremption est requise.
       </div>
     </div>
 
@@ -71,7 +71,7 @@
         type="submit" 
         class="btn btn-primary" 
         [disabled]="productForm.invalid || isEditMode">
-        Add Product
+        Ajouter le produit
       </button>
 
       <button 
@@ -79,12 +79,10 @@
         class="btn btn-primary" 
         type="submit" 
         [disabled]="productForm.invalid || !isEditMode">
-        Update Product
+        Modifier le produit
       </button>
     </div>
   </form>
-
- 
 
   <!-- Success and Error Messages -->
   <p *ngIf="successMessage" class="alert alert-success">{{ successMessage }}</p>

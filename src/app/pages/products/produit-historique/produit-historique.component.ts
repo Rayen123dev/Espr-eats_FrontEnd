@@ -27,7 +27,6 @@ export class ProduitHistoriqueComponent {
 
   ngOnInit(): void {
     this.fetchHistorique(); 
-    this.fetchAIStockSummary();
     this.filteredHistoriqueList = [...this.historiqueList]; 
     
   }
@@ -44,20 +43,6 @@ export class ProduitHistoriqueComponent {
     );
   } 
   
-  fetchAIStockSummary(): void {
-    this.produitHistoriqueService.getAIStockSummary().subscribe(
-      (summary: string) => {
-        this.aiSummary = summary;
-        console.log('AI Stock Summary fetched successfully:', summary);  // Debugging log
-      },
-      (error) => {
-        console.error('Error fetching AI stock summary:', error);  // Handle any errors
-        this.aiSummary = 'Error fetching stock summary';
-      }
-    );
-  }
-  
-
   // Apply the filters for historique list
   applyFilter(): void {
     this.filteredHistoriqueList = this.historiqueList.filter(historique => {

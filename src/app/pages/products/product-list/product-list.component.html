@@ -1,19 +1,19 @@
-<!-- Sidebar Section -->
+<!-- Section de la barre latérale -->
 <div class="deznav">
   <div class="deznav-scroll">
-    <a class="add-project-sidebar btn btn-primary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addProjectSidebar">+ New Project</a>
+    <a class="add-project-sidebar btn btn-primary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addProjectSidebar">+ Nouveau Projet</a>
     <ul class="metismenu" id="menu">
       <li><a href="#">
         <i class="flaticon-layout"></i>
-        <span class="nav-text">Dashboard</span>
+        <span class="nav-text">Tableau de Bord</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-monitor"></i>
-        <span class="nav-text">Apps</span>
+        <span class="nav-text">Applications</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-bar-chart-1"></i>
-        <span class="nav-text">Charts</span>
+        <span class="nav-text">Statistiques</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-web"></i>
@@ -21,7 +21,7 @@
       </a></li>
       <li><a routerLink="/produits-dashboard" routerLinkActive="active">
         <i class="flaticon-plugin"></i>
-        <span class="nav-text">Products</span>
+        <span class="nav-text">Produits</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-admin"></i>
@@ -29,11 +29,11 @@
       </a></li>
       <li><a href="#">
         <i class="flaticon-contract"></i>
-        <span class="nav-text">Forms</span>
+        <span class="nav-text">Formulaires</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-table"></i>
-        <span class="nav-text">Table</span>
+        <span class="nav-text">Tableaux</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-newsletter"></i>
@@ -42,50 +42,52 @@
     </ul>
   </div>
 </div>
-<!-- Alert Box (Outside of Container) -->
+
+<!-- Boîte d'alerte -->
 <div class="alert-box show" *ngIf="alerts.length > 0">
   <button class="close-btn" (click)="hideAlerts()">✖</button>
   <h3>
     <i class="fas fa-exclamation-triangle alert-icon"></i>
-    Product Alerts
+    Alertes Produits
   </h3>
   <ul>
     <li *ngFor="let alert of alerts">
       <i class="fas fa-exclamation-triangle alert-icon"></i>
-      {{ alert.nomProduit }} (ID: {{ alert.produitID }}) - {{ alert.status }}
+      {{ alert.nomProduit }} (ID : {{ alert.produitID }}) - {{ alert.status }}
     </li>
   </ul>
 </div>
 
 <div class="container">
-  <!-- Product Table -->
+  <!-- Tableau des produits -->
   <div class="content-container">
-    <h2 class="title"><i class="fas fa-boxes"></i> Product List</h2>
+    <h2 class="title"><i class="fas fa-boxes"></i> Liste des Produits</h2>
+    
     
     <div class="button-container">
       <button mat-raised-button color="primary" (click)="openProductForm(null)" class="space-button">
-        <i class="fas fa-plus"></i> Add Product
+        <i class="fas fa-plus"></i> Ajouter un Produit
       </button>
       <button mat-raised-button color="accent" [routerLink]="'/produit-historique'" class="space-button">
-        <i class="fas fa-history"></i> View Product History
+        <i class="fas fa-history"></i> Voir l'Historique
       </button>
       <button (click)="fileInput.click()" class="space-button">
-        <i class="fas fa-barcode"></i> Upload Barcode
+        <i class="fas fa-barcode"></i> Importer Code-barres
       </button>
       <input #fileInput type="file" style="display: none" (change)="onFileChange($event)" />
     </div>
-        
+
     <div class="scrollable-table-container">
       <table class="center-table">
         <thead>
           <tr>
-            <th> ID</th>
-            <th>Barcode</th>
-            <th> Name</th>
-            <th> Description</th>
-            <th> Alert Threshold</th>
-            <th> Quantity</th>
-            <th> Actions</th>
+            <th>ID</th>
+            <th>Code-barres</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Seuil d'Alerte</th>
+            <th>Quantité</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -101,8 +103,16 @@
                 <i class="fas fa-trash"></i>
               </button>
               <button mat-raised-button color="primary" (click)="openProductForm(product)">
-                <i class="fas fa-edit"></i> Edit
+                <i class="fas fa-edit"></i> Modifier
               </button>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="showForecast(product)"
+                aria-label="Prévisions"
+              >
+                <i class="fas fa-chart-line"></i>
+              </button>            
             </td>
           </tr>
         </tbody>
@@ -110,7 +120,7 @@
     </div>
   </div>
 
-  <!-- Success & Error Messages -->
+  <!-- Messages de succès et d'erreur -->
   <div *ngIf="successMessage" class="alert alert-success" role="alert">
     <i class="fas fa-check-circle"></i> {{ successMessage }}
   </div>
@@ -119,27 +129,27 @@
     <i class="fas fa-times-circle"></i> {{ errorMessage }}
   </div>
 
-  <!-- Filter Section -->
+  <!-- Section de filtre -->
   <div class="filter-section">
-    <h3><i class="fas fa-filter"></i> Filter Products</h3>
+    <h3><i class="fas fa-filter"></i> Filtrer les Produits</h3>
     
-    <label for="nameFilter"><i class="fas fa-box"></i> Name:</label>
+    <label for="nameFilter"><i class="fas fa-box"></i> Nom :</label>
     <input type="text" id="nameFilter" [(ngModel)]="nameFilter" (input)="applyFilter()">
     
-    <label for="minQuantity"><i class="fas fa-sort-amount-down"></i> Min Quantity:</label>
+    <label for="minQuantity"><i class="fas fa-sort-amount-down"></i> Quantité Min :</label>
     <input type="number" id="minQuantity" [(ngModel)]="minQuantity" (input)="applyFilter()">
     
-    <label for="maxQuantity"><i class="fas fa-sort-amount-up"></i> Max Quantity:</label>
+    <label for="maxQuantity"><i class="fas fa-sort-amount-up"></i> Quantité Max :</label>
     <input type="number" id="maxQuantity" [(ngModel)]="maxQuantity" (input)="applyFilter()">
         
-    <label for="alertThreshold"><i class="fas fa-bell"></i> Alert Threshold:</label>
+    <label for="alertThreshold"><i class="fas fa-bell"></i> Seuil d'Alerte :</label>
     <input type="number" id="alertThreshold" [(ngModel)]="alertThreshold" (input)="applyFilter()">
     
-    <label for="barcodeFilter"><i class="fas fa-barcode"></i> Barcode:</label>
+    <label for="barcodeFilter"><i class="fas fa-barcode"></i> Code-barres :</label>
     <input type="text" id="barcodeFilter" [(ngModel)]="barcodeFilter" (input)="applyFilter()">
     
     <button (click)="resetFilters()">
-      <i class="fas fa-undo"></i> Reset Filters
+      <i class="fas fa-undo"></i> Réinitialiser
     </button>
   </div>
 </div>

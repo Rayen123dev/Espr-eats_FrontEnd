@@ -1,18 +1,18 @@
 <div class="deznav">
   <div class="deznav-scroll">
-    <a class="add-project-sidebar btn btn-primary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addProjectSidebar">+ New Project</a>
+    <a class="add-project-sidebar btn btn-primary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addProjectSidebar">+ Nouveau Projet</a>
     <ul class="metismenu" id="menu">
       <li><a href="#">
         <i class="flaticon-layout"></i>
-        <span class="nav-text">Dashboard</span>
+        <span class="nav-text">Tableau de Bord</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-monitor"></i>
-        <span class="nav-text">Apps</span>
+        <span class="nav-text">Applications</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-bar-chart-1"></i>
-        <span class="nav-text">Charts</span>
+        <span class="nav-text">Statistiques</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-web"></i>
@@ -20,19 +20,19 @@
       </a></li>
       <li><a routerLink="/produits-dashboard" routerLinkActive="active">
         <i class="flaticon-plugin"></i>
-        <span class="nav-text">Products</span>
+        <span class="nav-text">Produits</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-admin"></i>
-        <span class="nav-text">Widget</span>
+        <span class="nav-text">Widgets</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-contract"></i>
-        <span class="nav-text">Forms</span>
+        <span class="nav-text">Formulaires</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-table"></i>
-        <span class="nav-text">Table</span>
+        <span class="nav-text">Tableaux</span>
       </a></li>
       <li><a href="#">
         <i class="flaticon-newsletter"></i>
@@ -41,49 +41,50 @@
     </ul>
   </div>
 </div>
+
 <div class="container">
-  <!-- Product History Table (Inside Content Container) -->
+  <!-- Historique des Produits -->
   <div class="content-container">
     <div class="product-history-header">
-      <h2 class="title"><i class="fas fa-history"></i> Product History</h2>
+      <h2 class="title"><i class="fas fa-history"></i> Historique des Produits</h2>
       <div class="button-container">
-        <!-- Back to Product List Button -->
+        <!-- Retour -->
         <button mat-raised-button 
-                color="primary" 
-                [routerLink]="'/product-list'" 
-                class="action-button back-button">
-          <i class="fas fa-arrow-left"></i> Back to Product List
-        </button>
+        color="primary" 
+        [routerLink]="'/product-list'" 
+        class="action-button back-button space-button">
+  <i class="fas fa-arrow-left"></i> Retour à la Liste des Produits
+</button>
 
-        <!-- Export to PDF Button -->
-        <button mat-raised-button 
-                color="warn" 
-                (click)="exportToPDF()" 
-                class="action-button export-button">
-          <i class="fas fa-file-pdf"></i> Export to PDF
-        </button>
+<!-- Export PDF -->
+<button mat-raised-button 
+        color="warn" 
+        (click)="exportToPDF()" 
+        class="action-button export-button space-button">
+  <i class="fas fa-file-pdf"></i> Exporter en PDF
+</button>
       </div>
     </div>
 
-    <!-- Product History Table -->
+    <!-- Tableau -->
     <div class="scrollable-table-container">
       <table class="center-table">
         <thead>
           <tr>
-            <th> ID</th>
-            <th> Barcode</th>
-            <th> Product Name</th>
-            <th> Type</th>
-            <th> Quantity</th>
-            <th> Date</th>
-            <th> Expiration Date</th>
+            <th>ID</th>
+            <th>Code-barres</th>
+            <th>Nom du Produit</th>
+            <th>Type</th>
+            <th>Quantité</th>
+            <th>Date</th>
+            <th>Date de péremption</th>
           </tr>
         </thead>
         <tbody>
           <tr *ngFor="let historique of filteredHistoriqueList">
             <td>{{ historique.historiqueID }}</td>
             <td>{{ historique.produit?.barcode }}</td>
-            <td>{{ historique.produit?.nomProduit || 'No Product' }}</td>
+            <td>{{ historique.produit?.nomProduit || 'Aucun Produit' }}</td>
             <td>{{ getTransactionType(historique.type) }}</td>
             <td>{{ historique.quantite }}</td>
             <td>{{ historique.date | date: 'short' }}</td>
@@ -91,7 +92,7 @@
               <ng-container *ngIf="historique.produit?.date_peremption; else noExpiration">
                 {{ historique.produit?.date_peremption | date: 'short' }}
               </ng-container>
-              <ng-template #noExpiration>No expiration</ng-template>
+              <ng-template #noExpiration>Pas de péremption</ng-template>
             </td>
           </tr>
         </tbody>
@@ -99,37 +100,37 @@
     </div>
   </div>
 
-  <!-- Filter Section (Inside the same container but after the table) -->
+  <!-- Section de filtrage -->
   <div class="filter-section">
-    <h3><i class="fas fa-filter"></i> Filter History</h3>
+    <h3><i class="fas fa-filter"></i> Filtrer l'Historique</h3>
 
-    <!-- Type Filter -->
-    <label for="typeFilter"><i class="fas fa-exchange-alt"></i> Type:</label>
-    <input type="text" id="typeFilter" [(ngModel)]="typeFilter" (input)="applyFilter()" placeholder="Filter by type">
+    <!-- Filtre Type -->
+    <label for="typeFilter"><i class="fas fa-exchange-alt"></i> Type :</label>
+    <input type="text" id="typeFilter" [(ngModel)]="typeFilter" (input)="applyFilter()" placeholder="Filtrer par type">
     
-    <!-- Barcode Filter -->
-    <label for="barcodeFilter"><i class="fas fa-barcode"></i> Barcode:</label>
-    <input type="text" id="barcodeFilter" [(ngModel)]="barcodeFilter" (input)="applyFilter()" placeholder="Enter Barcode">
+    <!-- Filtre Code-barres -->
+    <label for="barcodeFilter"><i class="fas fa-barcode"></i> Code-barres :</label>
+    <input type="text" id="barcodeFilter" [(ngModel)]="barcodeFilter" (input)="applyFilter()" placeholder="Saisir le code-barres">
 
-    <!-- Min Quantity Filter -->
-    <label for="minQuantiteFilter"><i class="fas fa-sort-amount-down"></i> Min Quantity:</label>
-    <input type="number" id="minQuantiteFilter" [(ngModel)]="minQuantiteFilter" (input)="applyFilter()" placeholder="Min Quantity">
+    <!-- Quantité Min -->
+    <label for="minQuantiteFilter"><i class="fas fa-sort-amount-down"></i> Quantité Min :</label>
+    <input type="number" id="minQuantiteFilter" [(ngModel)]="minQuantiteFilter" (input)="applyFilter()" placeholder="Quantité minimale">
 
-    <!-- Max Quantity Filter -->
-    <label for="maxQuantiteFilter"><i class="fas fa-sort-amount-up"></i> Max Quantity:</label>
-    <input type="number" id="maxQuantiteFilter" [(ngModel)]="maxQuantiteFilter" (input)="applyFilter()" placeholder="Max Quantity">
+    <!-- Quantité Max -->
+    <label for="maxQuantiteFilter"><i class="fas fa-sort-amount-up"></i> Quantité Max :</label>
+    <input type="number" id="maxQuantiteFilter" [(ngModel)]="maxQuantiteFilter" (input)="applyFilter()" placeholder="Quantité maximale">
 
-    <!-- Start Date Filter -->
-    <label for="startDateFilter"><i class="fas fa-calendar-plus"></i> Start Date:</label>
+    <!-- Date début -->
+    <label for="startDateFilter"><i class="fas fa-calendar-plus"></i> Date de début :</label>
     <input type="date" id="startDateFilter" [(ngModel)]="startDateFilter" (change)="applyFilter()">
 
-    <!-- End Date Filter -->
-    <label for="endDateFilter"><i class="fas fa-calendar-minus"></i> End Date:</label>
+    <!-- Date fin -->
+    <label for="endDateFilter"><i class="fas fa-calendar-minus"></i> Date de fin :</label>
     <input type="date" id="endDateFilter" [(ngModel)]="endDateFilter" (change)="applyFilter()">
 
-    <!-- Reset Filters Button -->
+    <!-- Réinitialiser -->
     <button mat-raised-button color="warn" (click)="resetFilters()">
-      <i class="fas fa-undo"></i> Reset Filters
+      <i class="fas fa-undo"></i> Réinitialiser les filtres
     </button>
   </div>
 </div>

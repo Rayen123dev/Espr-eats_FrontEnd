@@ -14,9 +14,11 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
 import { ProduitDashboardComponent } from './produit-dashboard/produit-dashboard.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
+import { ForecastDialogComponent } from './forecast-dialog/forecast-dialog.component';
+import { NgChartsModule } from 'ng2-charts';
 @NgModule({
-  declarations: [ProductListComponent, ProductFormComponent, ProduitHistoriqueComponent, ToastComponent,ProduitDashboardComponent],
-  imports: [CommonModule, HttpClientModule, FormsModule,ReactiveFormsModule,MatDialogModule,RouterModule,MatIconModule,ZXingScannerModule,MatPaginatorModule,MatTableModule],
+  declarations: [ProductListComponent, ProductFormComponent, ProduitHistoriqueComponent, ToastComponent,ProduitDashboardComponent, ForecastDialogComponent],
+  imports: [CommonModule, HttpClientModule, FormsModule,ReactiveFormsModule,MatDialogModule,RouterModule,MatIconModule,ZXingScannerModule,MatPaginatorModule,MatTableModule,NgChartsModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [ProductService],
   exports: [ProductListComponent, ProductFormComponent, ProduitHistoriqueComponent, ToastComponent]
