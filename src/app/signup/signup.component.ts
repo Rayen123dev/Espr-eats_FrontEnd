@@ -25,10 +25,12 @@ export class SignupComponent implements OnInit {
   loading = false;
   isSubmitted = false;
   errorMessage = '';
+  successMessage = '';
   showPassword = false;
   imagePreview: string | null = null;
   selectedFile: File | null = null;
-
+  verificationSent = false;
+  
 
   constructor(
     private formBuilder: FormBuilder,
@@ -63,12 +65,19 @@ export class SignupComponent implements OnInit {
     this.loginService.register(credentials).subscribe({
       next: (data) => {
         console.log('Registration successful:', data);
-        this.router.navigate(['/login']); // Or wherever you want to redirect
+        this.loading = false;
+        this.verificationSent = true;
+        this.successMessage = 'Registration successful! Please check your email to verify your account.';
+        
+        // After 5 seconds, redirect to login page
+        setTimeout(() => {
+          this.router.navigate(['/login']);
+        }, 5000);
       },
       error: (error) => {
         console.error('Registration error:', error);
         this.loading = false;
-
+  
         if (error.status === 403) {
           this.errorMessage = 'Access forbidden.';
         } else if (error.status === 401) {
@@ -76,32 +85,33 @@ export class SignupComponent implements OnInit {
         } else {
           this.errorMessage = 'Connection error. Please try again.';
         }
-
+  
         const loginCard = document.querySelector('.login-card');
         loginCard?.classList.add('shake');
         setTimeout(() => loginCard?.classList.remove('shake'), 500);
       }
     });
   }
-
+  
 
   onSubmit(): void {
     this.isSubmitted = true;
-
+  
     if (this.signupForm.invalid) {
       return;
     }
-
+  
     this.loading = true;
-
+    this.clearMessages();
+  
     const formValues = this.signupForm.value;
-
+  
     // Step 1: Upload image if selected
     if (this.selectedFile) {
       this.loginService.uploadImage(this.selectedFile).subscribe({
         next: (uploadRes) => {
           const cloudinaryUrl = uploadRes.imageUrl;
-
+  
           // Step 2: Continue registration using the Cloudinary image URL
           const credentials = {
             nom: formValues.nom,
@@ -111,7 +121,7 @@ export class SignupComponent implements OnInit {
             role: formValues.role,
             link_Image: cloudinaryUrl
           };
-
+  
           this.submitSignup(credentials);
         },
         error: (err) => {
@@ -130,13 +140,11 @@ export class SignupComponent implements OnInit {
         role: formValues.role,
         link_Image: '/assets/default-avatar.png'
       };
-
+  
       this.submitSignup(credentials);
     }
   }
-
-
-
+  
   // Navigate based on role
   navigateBasedOnRole(): void {
     const role = this.loginService.getRole();
@@ -154,11 +162,20 @@ export class SignupComponent implements OnInit {
         this.router.navigate(['/home']);
     }
   }
-
+  
   clearError(): void {
     this.errorMessage = '';
   }
 
+  clearSuccess(): void {
+    this.successMessage = '';
+  }
+
+  clearMessages(): void {
+    this.errorMessage = '';
+    this.successMessage = '';
+  }
+  
   initFoodAnimation(): void {
     // Animation for food icons - unchanged
     const gsap = (window as any).gsap;
@@ -168,17 +185,17 @@ export class SignupComponent implements OnInit {
     }
 
     const foodIcons = document.querySelectorAll('.food-icon');
-
+    
     foodIcons.forEach((icon, index) => {
       const delay = index * 2;
-
+      
       gsap.set(icon, {
         x: Math.random() * 100 - 50,
         y: Math.random() * 50,
         opacity: 0,
         scale: 0.5
       });
-
+      
       gsap.to(icon, {
         duration: 3 + Math.random() * 2,
         y: '-=30',
@@ -205,7 +222,7 @@ export class SignupComponent implements OnInit {
     if (file) {
       // Store the file for later upload
       this.selectedFile = file;
-
+      
       // Create a FileReader to generate preview
       const reader = new FileReader();
       reader.onload = () => {
@@ -240,7 +257,7 @@ export class SignupComponent implements OnInit {
   }
 
   getRoleIcon(role: string): string {
-    switch (role) {
+    switch(role) {
       case 'User': return 'fas fa-user';
       case 'Staff': return 'fas fa-users';
       case 'Admin': return 'fas fa-crown';

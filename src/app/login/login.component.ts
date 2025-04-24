@@ -178,7 +178,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['gestionuser']);
         break;
       case 'User':
-        this.router.navigate(['/profile']);
+        this.router.navigate(['/face-confirmation']);
         break;
       case 'Staff':
         this.router.navigate(['/staffdashboard']);

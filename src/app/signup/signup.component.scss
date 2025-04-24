@@ -490,3 +490,117 @@
       margin-bottom: 10px;
     }
   }
+  // Add these styles to your existing signup.component.scss file
+
+// Success alert styles
+.alert-success {
+  background-color: #d4edda;
+  border-color: #c3e6cb;
+  color: #155724;
+}
+
+// Success state for the card
+.login-card.success-state {
+  border-color: #28a745;
+  box-shadow: 0 0 15px rgba(40, 167, 69, 0.3);
+}
+
+// Email verification container
+.verification-container {
+  padding: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  
+  h2 {
+    color: #28a745;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    margin-bottom: 1.5rem;
+  }
+  
+  .success-animation {
+    margin-bottom: 2rem;
+    
+    i {
+      font-size: 5rem;
+      color: #28a745;
+      animation: pulse 1.5s infinite;
+    }
+  }
+  
+  .verification-info {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    text-align: left;
+    max-width: 400px;
+    
+    i {
+      font-size: 2rem;
+      color: #007bff;
+      margin-right: 1rem;
+      margin-top: 0.5rem;
+    }
+    
+    .verification-text {
+      h3 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        color: #343a40;
+      }
+      
+      p {
+        margin-bottom: 0.5rem;
+        color: #6c757d;
+        
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+      
+      strong {
+        color: #007bff;
+      }
+    }
+  }
+  
+  .redirect-message {
+    font-style: italic;
+    color: #6c757d;
+    animation: fadeInOut 2s infinite;
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInOut {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}

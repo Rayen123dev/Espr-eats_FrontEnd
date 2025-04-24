@@ -9,6 +9,8 @@ import { Plat, CategoriePlat } from '../../../core/models/plat.model';
 import { RegimeAlimentaire, RegimeAlimentaireType } from '../../../core/models/regime.model';
 import { ChartData, ChartOptions } from 'chart.js';
 import { startOfWeek, endOfWeek, subWeeks, format, eachWeekOfInterval } from 'date-fns';
+import { PdfGeneratorService } from 'src/app/pdf-generator.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-staff-dashboard',
@@ -148,14 +150,16 @@ export class StaffDashboardComponent implements OnInit {
     private platService: PlatService,
     private regimeService: RegimeService,
     private loginService: LoginService,
-    private fb: FormBuilder
+    private pdfGenerator: PdfGeneratorService,
+    private fb: FormBuilder,
+    private route: ActivatedRoute // Add ActivatedRoute
   ) {
     // Formulaire pour ajouter un plat
     this.addPlatForm = this.fb.group({
       nom: ['', Validators.required],
       description: [''],
       categorie: ['', Validators.required],
-      calories: [0, [Validators.required, Validators.min(0)]]
+      calories: [0, [Validators.required, Validators.min(0)]],
     });
 
     // Formulaire pour ajouter un régime
@@ -170,8 +174,52 @@ export class StaffDashboardComponent implements OnInit {
     this.loadPlats();
     this.loadRegimes();
     this.loadMenus();
-    
+  
+    this.route.queryParams.subscribe(params => {
+      const name = params['name'];
+      const calories = params['calories'];
+      const imagePath = 'assets/images/' + params['imagePath'];
+  
+      if (name && calories && params['imagePath']) {
+        fetch(imagePath)
+          .then(res => res.blob())
+          .then(blob => {
+            const file = new File([blob], params['imagePath'], { type: blob.type });
+            this.selectedFile = file;
+  
+            this.addPlatForm.patchValue({
+              nom: name,
+              description: '',
+              categorie: '',
+              calories: parseInt(calories, 10),
+              image: this.selectedFile
+            });
+  
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+  
+            const fakeInput = document.createElement('input');
+            fakeInput.type = 'file';
+            fakeInput.files = dataTransfer.files;
+  
+            const event = { target: fakeInput } as unknown as Event;
+            this.onFileSelected(event);
+  
+            // Set imagePreview from FileReader
+            const reader = new FileReader();
+            reader.onload = () => {
+              this.imagePreview = reader.result as string;
+            };
+            reader.readAsDataURL(file);
+  
+            this.showAddPlatForm = true;
+          });
+      }
+    });
   }
+  
+    
+  
 
   private initializeUser(): void {
     this.userId = this.loginService.getUserIdFromToken();
@@ -636,6 +684,27 @@ openEditPlatModal(plat: Plat): void {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+ 
+  
+  generatePdfRecommendations() {
+    this.pdfGenerator.recommondation().subscribe((response: Blob) => {
+      if (response) {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'recommandations_nutritionnelles_optimise.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Error: No response received');
+      }
+    }, (error) => {
+      console.error('Error:', error);
+    });
+  }
+  
 
+ 
+  
   
 }

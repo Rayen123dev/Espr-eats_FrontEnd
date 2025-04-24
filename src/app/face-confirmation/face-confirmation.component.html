@@ -1,0 +1,78 @@
+<!-- face-confirmation.component.html -->
+<div class="face-verification-container">
+    <div class="face-verification-card" @fadeInOut>
+      <div class="card-header">
+        <h2 class="title">Face Verification</h2>
+        <p class="subtitle">Please look directly at the camera for verification</p>
+      </div>
+  
+      <div class="webcam-container" *ngIf="showWebcam" @slideInOut>
+        <div class="webcam-frame" [ngClass]="{'pulse': countdown > 0}" [@pulse]="pulseState">
+          <webcam 
+            [trigger]="triggerObservable"
+            (imageCapture)="handleImage($event)"
+            [allowCameraSwitch]="false"
+            [height]="webcamOptions.height"
+            [width]="webcamOptions.width"
+            [imageQuality]="webcamOptions.imageQuality"
+            [videoOptions]="{ facingMode: webcamOptions.facingMode }"
+            (initError)="handleInitError($event)">
+          </webcam>
+          
+          <div class="face-outline" *ngIf="!countdown">
+            <div class="face-circle"></div>
+            <div class="guidelines">
+              <div class="top-line"></div>
+              <div class="bottom-line"></div>
+              <div class="left-line"></div>
+              <div class="right-line"></div>
+            </div>
+          </div>
+          
+          <div class="countdown" *ngIf="countdown > 0" @fadeInOut>
+            <span class="countdown-number">{{countdown}}</span>
+          </div>
+        </div>
+  
+        <div class="webcam-actions">
+          <button 
+            class="capture-btn" 
+            (click)="captureImage()" 
+            [disabled]="countdown > 0">
+            <span class="capture-icon"></span>
+            <span>Verify My Face</span>
+          </button>
+        </div>
+      </div>
+  
+      <div class="preview-container" *ngIf="webcamImage && !showWebcam" @slideInOut>
+        <img [src]="webcamImage.imageAsDataUrl" class="captured-image" alt="Captured face" />
+        
+        <div class="verification-status">
+          <div class="loading-spinner" *ngIf="isVerifying"></div>
+          <div class="status-text" *ngIf="isVerifying">Verifying your face...</div>
+          
+          <div class="result-container" *ngIf="verificationResult === 'success'" @fadeInOut>
+            <div class="success-icon"></div>
+            <div class="status-text success">Verification successful!</div>
+            <div class="redirecting">Redirecting to dashboard...</div>
+          </div>
+          
+          <div class="result-container" *ngIf="verificationResult === 'failure'" @fadeInOut>
+            <div class="failure-icon"></div>
+            <div class="status-text failure">{{errorMessage}}</div>
+          </div>
+        </div>
+        
+        <button class="retry-btn" *ngIf="!isVerifying && verificationResult === 'failure'" (click)="retryCapture()">
+          Try Again
+        </button>
+      </div>
+  
+      <div class="error-container" *ngIf="errorMessage && !webcamImage" @fadeInOut>
+        <div class="error-icon"></div>
+        <div class="error-message">{{errorMessage}}</div>
+        <button class="retry-btn" (click)="retryCapture()">Retry</button>
+      </div>
+    </div>
+  </div>

@@ -11,7 +11,8 @@ export interface User {
   role: string;
   avatarUrl: string;
   link_Image: string; 
-  is_verified: boolean;
+  verified: boolean;
+  lastLogin: Date;
 }
 
 export interface CloudinaryUploadResponse {
@@ -200,11 +201,8 @@ export class LoginService {
     console.log('Registering user:', user);
     
     // Add content type header explicitly
-    return this.http.post(`${this.baseUrl}/signup`, user, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-      })
-    }).pipe(
+    return this.http.post(`${this.baseUrl}/signup`,  user, { responseType: 'text' })
+    .pipe(
       catchError(error => {
         console.error('Signup error details:', error);
         return throwError(() => error);
@@ -212,10 +210,11 @@ export class LoginService {
     );
   }
 
-  verifyEmail(token: string): Observable<any> {
-    const params = new HttpParams().set('token', token);
-    return this.http.get(`${this.baseUrl}/verify-email`, { params });
+  verifyEmail(token: string, email: string): Observable<any> {
+    const url = `${this.baseUrl}/verify-email?token=${token}&email=${email}`;
+    return this.http.get<any>(url);
   }
+  
 
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/forgot-password`, { email });
@@ -241,6 +240,20 @@ export class LoginService {
   
   searchUsers(query: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/search?query=${encodeURIComponent(query)}`);
+  }
+
+
+  url = 'http://192.168.1.19:5000'
+  vvv(imageUrl: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    
+    return this.http.post<any>(`${this.url}/recognize`, {
+      url: imageUrl
+    }, { headers });
   }
 
 

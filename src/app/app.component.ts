@@ -11,7 +11,7 @@ export class AppComponent {
   constructor(public router: Router, private loginService: LoginService) {}
 
   shouldHideHeader(): boolean {
-    const hiddenRoutes = ['/login', '/signup', '/forgot-password', '/verify-email', '/reset-password', '/home'];
+    const hiddenRoutes = ['/login', '/signup', '/forgot-password', '/verify-email', '/reset-password', '/home', '/auth', '/face-confirmation', '/email-verification', '/recaptcha', '/plat', '/regime', '/menu', '/staff-dashboard'];
     return hiddenRoutes.includes(this.router.url);
   }
 

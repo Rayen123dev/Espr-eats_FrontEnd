@@ -124,6 +124,8 @@ updatePlatWithImage(id: number, userId: number, formData: FormData): Observable<
       responseType: 'text'
     });
   }
-  
+  getSuggestions(régime: string): Observable<Plat[]> {
+    return this.http.get<Plat[]>(`${this.apiUrl}?régime=${régime}`);
+  }
   
 }
