@@ -1,0 +1,136 @@
+<div class="profil-container">
+  <!-- En-tête -->
+  <div class="header-background">
+    <div class="welcome-text">
+      <h1>Bienvenue <strong>{{ profil?.user?.nom || 'Utilisateur' }}</strong> dans votre profil nutritionnel</h1>
+      <p>Prenez soin de votre santé, un plat à la fois</p>
+
+      <div class="actions">
+        <button class="nav-btn" disabled>Consulter mon profil</button>
+        <button class="nav-btn" routerLink="/consulter-medecin">Consulter un médecin</button>
+        <button class="nav-btn" routerLink="/mes-consultations">Voir mes consultations</button>
+        <button class="nav-btn" routerLink="/analyse-plat">Analyser un plat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Message de succès -->
+  <div *ngIf="successMessage" class="toast-success" [@fadeSlide]>
+    <span class="icon">✅</span>
+    <span class="text">{{ successMessage }}</span>
+    <button class="close-btn" (click)="successMessage = ''">✖</button>
+  </div>
+
+
+  <!-- Affichage du profil -->
+<div class="profil-card" *ngIf="!editMode && profil">
+  <div class="profil-info-grid">
+    <div class="info-item"><span class="label">👤 Age :</span> {{ profil.user.age }} ans</div>
+    <div class="info-item"><span class="label">👤 Sexe :</span> {{ profil.sexe }}</div>
+    <div class="info-item"><span class="label">📏 Taille :</span> {{ profil.taille }} cm</div>
+    <div class="info-item"><span class="label">⚖️ Poids :</span> {{ profil.poidsActuel }} kg</div>
+    <div class="info-item"><span class="label">💪 Activité :</span> {{ profil.niveauActivite }}</div>
+
+    <!-- ✅ Objectifs en colonnes -->
+    <div class="info-item">
+      <span class="label">🎯 Objectif :</span><br />
+      <ng-container *ngIf="profil.objectif && profil.objectif.length > 0; else aucunObjectif">
+        <span *ngFor="let obj of profil.objectif">{{ obj }}<br /></span>
+      </ng-container>
+      <ng-template #aucunObjectif><i>Aucun</i></ng-template>
+    </div>
+
+    <div class="info-item"><span class="label">🩸 Groupe sanguin :</span> {{ getGroupeSanguinLabel(profil.groupeSanguin) }}</div>
+    <div class="info-item"><span class="label">🥗 Régime :</span> {{ profil.regimeAlimentaire }}</div>
+    <div class="info-item"><span class="label">🚬 Fumeur :</span> {{ profil.fumeur ? 'Oui' : 'Non' }}</div>
+
+    <!-- ✅ Allergies en colonnes -->
+    <div class="info-item">
+      <span class="label">🌿 Allergies :</span><br />
+      <ng-container *ngIf="profil.allergies && profil.allergies.length > 0; else aucuneAllergie">
+        <span *ngFor="let allergie of profil.allergies">{{ allergie }}<br /></span>
+      </ng-container>
+      <ng-template #aucuneAllergie><i>Aucune</i></ng-template>
+    </div>
+
+    <div class="info-item"><span class="label">⏰ Dernière mise à jour :</span> {{ profil.derniereMiseAJour | date:'short' }}</div>
+  </div>
+
+  <div class="info-box">
+    <span class="info-icon">ℹ️</span>
+    Votre IMC est estimé à <strong>{{ profil.imc }}</strong> et votre besoin calorique à <strong>{{ profil.besoinCalorique }} kcal</strong>.
+  </div>
+
+  <div class="edit-actions">
+    <button class="btn-primary" (click)="toggleEdit()">Modifier mes informations</button>
+  </div>
+</div>
+
+
+  <!-- Formulaire modification -->
+  <div class="profil-card" *ngIf="editMode && form">
+    <form [formGroup]="form" (ngSubmit)="enregistrer()" class="form-edit-grid">
+      <div class="form-group"><label>Sexe</label>
+        <select formControlName="sexe">
+          <option value="HOMME">Homme</option>
+          <option value="FEMME">Femme</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label>Taille (cm)</label><input type="number" formControlName="taille" /></div>
+      <div class="form-group"><label>Poids (kg)</label><input type="number" formControlName="poidsActuel" /></div>
+
+      <div class="form-group full-width">
+        <label>Objectifs</label>
+        <div class="checkbox-group" formArrayName="objectif">
+          <label *ngFor="let obj of objectifs">
+            <input type="checkbox" [value]="obj" [checked]="objectifFormArray.value.includes(obj)" (change)="onCheckboxChange($event, 'objectif')" />
+            {{ obj.replaceAll('_', ' ').toLowerCase() | titlecase }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group"><label>Régime alimentaire</label>
+        <select formControlName="regimeAlimentaire">
+          <option value="NORMAL">Normal</option>
+          <option value="SPORTIF">Sportif</option>
+          <option value="DIABETIQUE">Diabétique</option>
+          <option value="VEGETARIEN">Végétarien</option>
+        </select>
+      </div>
+
+      <div class="form-group"><label>Fumeur ?</label>
+        <div class="radio-inline">
+          <label><input type="radio" formControlName="fumeur" [value]="true" /> Oui</label>
+          <label><input type="radio" formControlName="fumeur" [value]="false" /> Non</label>
+        </div>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Allergies</label>
+        <div class="checkbox-group" formArrayName="allergies">
+          <label *ngFor="let allergy of allergiesList">
+            <input
+              type="checkbox"
+              [value]="allergy"
+              [checked]="allergiesFormArray.value.includes(allergy)"
+              (change)="onCheckboxChange($event, 'allergies')"
+            />
+            {{ allergy.replaceAll('_', ' ').toLowerCase() | titlecase }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group"><label>Groupe sanguin</label>
+        <select formControlName="groupeSanguin">
+          <option *ngFor="let group of groupeSanguins" [value]="group.value">{{ group.label }}</option>
+        </select>
+      </div>
+
+      <div class="edit-actions full-width">
+        <button type="submit" class="btn-primary">Enregistrer</button>
+        <button type="button" class="btn-secondary" (click)="toggleEdit()">Annuler</button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,111 @@
+<div class="form-wrapper">
+  <h1>🍽️ Créez votre Profil Nutritionnel Personnalisé</h1>
+  <p class="slogan">« Prenez soin de votre santé, un plat à la fois »</p>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" class="form-grid">
+
+    <!-- Sexe -->
+    <div class="form-group">
+      <label>Sexe</label>
+      <select formControlName="sexe">
+        <option value="">-- Choisir --</option>
+        <option value="HOMME">Homme</option>
+        <option value="FEMME">Femme</option>
+      </select>
+    </div>
+
+    <!-- Poids -->
+    <div class="form-group">
+      <label>Poids actuel (kg)</label>
+      <input type="number" formControlName="poidsActuel" />
+    </div>
+
+    <!-- Régime alimentaire -->
+    <div class="form-group">
+      <label>Régime alimentaire</label>
+      <select formControlName="regimeAlimentaire">
+        <option value="">-- Choisir --</option>
+        <option value="NORMAL">Normal</option>
+        <option value="DIABETIQUE">Diabétique</option>
+        <option value="SPORTIF">Sportif</option>
+        <option value="VEGETARIEN">Végétarien</option>
+      </select>
+    </div>
+
+    <!-- Taille -->
+    <div class="form-group">
+      <label>Taille (cm)</label>
+      <input type="number" formControlName="taille" />
+    </div>
+
+    <!-- Fumeur -->
+    <div class="form-group">
+      <label>Fumeur ?</label>
+      <div class="radio-inline">
+        <label><input type="radio" [value]="true" formControlName="fumeur" /> Oui</label>
+        <label><input type="radio" [value]="false" formControlName="fumeur" /> Non</label>
+      </div>
+    </div>
+
+    <!-- Niveau activité -->
+    <div class="form-group">
+      <label>Niveau d'activité</label>
+      <select formControlName="niveauActivite">
+        <option value="">-- Choisir --</option>
+        <option value="SEDENTAIRE">Sédentaire</option>
+        <option value="MODERE">Modéré</option>
+        <option value="INTENSE">Intense</option>
+      </select>
+    </div>
+
+    <!-- Groupe sanguin -->
+    <div class="form-group">
+      <label>Groupe sanguin</label>
+      <select formControlName="groupeSanguin">
+        <option value="">-- Choisir --</option>
+        <option *ngFor="let group of groupeSanguins" [value]="group.value">{{ group.label }}</option>
+      </select>
+    </div>
+
+    <!-- Objectifs (checkboxes) -->
+    <div class="form-group full-width">
+      <label>Objectifs</label>
+      <div class="checkbox-group" formArrayName="objectif">
+        <label *ngFor="let obj of objectifs">
+          <input
+            type="checkbox"
+            [value]="obj"
+            (change)="onCheckboxChange($event, 'objectif')"
+          />
+          {{ obj.replaceAll('_', ' ').toLowerCase() | titlecase }}
+        </label>
+      </div>
+    </div>
+
+    <!-- Allergies (checkboxes) -->
+<div class="form-group full-width">
+  <label>Allergies</label>
+  <div class="checkbox-group" formArrayName="allergies">
+    <label *ngFor="let allergy of allergiesList">
+      <input
+        type="checkbox"
+        name="allergie"
+        [value]="allergy"
+        (change)="onCheckboxChange($event, 'allergies')"
+      />
+      {{ allergy.replaceAll('_', ' ').toLowerCase() | titlecase }}
+    </label>
+  </div>
+</div>
+
+
+    <!-- Submit button -->
+    <div class="form-group full-width center-button">
+      <button type="submit" class="btn-submit">Valider mon profil</button>
+    </div>
+
+    <!-- Messages -->
+    <div *ngIf="successMessage" class="alert success">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+  </form>
+</div>

@@ -1,0 +1,65 @@
+<div class="consultation-container">
+  <div class="header-background-consultation">
+    <div class="welcome-text">
+      <h1>Prendre un rendez-vous médical 🩺</h1>
+      <p>Choisissez un type de consultation et décrivez vos symptômes</p>
+      <div class="actions">
+        <button class="nav-btn" routerLink="/profil-nutritionnel/mon-profil">Consulter mon profil</button>
+        <button class="nav-btn" disabled>Consulter un médecin</button>
+        <button class="nav-btn secondary" routerLink="/mes-consultations">Voir mes consultations</button>
+        <button class="nav-btn" routerLink="/analyse-plat">Analyser un plat</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="successMessage" [ngClass]="{ 'toast-message': true, success: successSuccess, error: !successSuccess }">
+    <span class="icon">{{ successSuccess ? '✅' : '❌' }}</span>
+    <span class="text">{{ successMessage }}</span>
+    <button class="close-btn" (click)="successMessage = ''">✖</button>
+  </div>
+
+  <div class="profil-card">
+    <form [formGroup]="form" (ngSubmit)="prendreConsultation()" class="form-edit-grid">
+      <div class="form-group">
+        <label>Type de consultation</label>
+        <select formControlName="typeConsultation">
+          <option value="GENERALE">Générale</option>
+          <option value="NUTRITIONNELLE">Nutritionnelle</option>
+          <option value="PSYCHOLOGIQUE">Psychologique</option>
+          <option value="SUIVI_MEDICAL">Suivi médical</option>
+          <option value="PREVENTION">Prévention</option>
+          <option value="ACTIVITE_PHYSIQUE">Activité physique</option>
+        </select>
+      </div>
+
+      <div class="form-group full-width">
+        <label>Message</label>
+        <textarea formControlName="message" rows="4" placeholder="Décrivez vos symptômes..."></textarea>
+      </div>
+
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" formControlName="dateJour" [min]="minDate" />
+        <div class="date-info">
+          Le médecin consulte du <strong>lundi au vendredi</strong>, entre <strong>9h et 16h</strong>.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Heure</label>
+        <select formControlName="heure" [disabled]="toutesPrises">
+          <option *ngFor="let h of heuresDisponibles" [value]="h">{{ h }}</option>
+        </select>
+        <div class="date-info" *ngIf="toutesPrises">
+          {{ motifIndisponibilite }}
+        </div>
+      </div>
+
+      <div class="edit-actions full-width">
+        <button type="submit" class="btn-primary" [disabled]="form.invalid || toutesPrises">
+          Envoyer la demande
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

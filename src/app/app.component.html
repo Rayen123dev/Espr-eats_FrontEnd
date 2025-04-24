@@ -1,0 +1,12 @@
+<!-- Admin Header -->
+<app-header *ngIf="!shouldHideHeader() && !isMedecinDashboard()"></app-header>
+
+<!-- Médecin Header -->
+<app-header-medecin *ngIf="!shouldHideHeader() && isMedecinDashboard()"></app-header-medecin>
+
+<!-- Page Content -->
+<div class="content-container">
+  <router-outlet></router-outlet>
+</div>
+
+<app-footer></app-footer>

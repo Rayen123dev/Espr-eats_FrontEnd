@@ -1,0 +1,71 @@
+<div class="verification-page">
+  <div class="verification-container">
+    <div class="verification-card" @fadeIn>
+      <!-- Loading State -->
+      <div class="verification-content" *ngIf="isLoading">
+        <div class="loading-spinner" @spin>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10" stroke-opacity="0.25"></circle>
+            <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="1"></path>
+          </svg>
+        </div>
+        <h2>Vérification en cours...</h2>
+        <p>Veuillez patienter pendant que nous vérifions votre adresse email.</p>
+      </div>
+
+      <!-- Verified State -->
+      <div class="verification-content" *ngIf="!isLoading && isVerified">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        <h2>Email vérifié avec succès !</h2>
+        <p class="verification-message">Félicitations ! Votre compte a été activé avec succès.</p>
+        
+        <div class="email-details">
+          <i class="fas fa-envelope-open-text"></i>
+          <div class="email-info">
+            <p *ngIf="email">L'adresse email <strong>{{ email }}</strong> a été vérifiée.</p>
+            <p *ngIf="!email">Votre adresse email a été vérifiée.</p>
+          </div>
+        </div>
+        
+        <p class="redirect-info">Vous serez redirigé vers la page de connexion dans <span class="countdown">{{ countdownTimer }}</span> secondes...</p>
+        
+        <div class="actions">
+          <button class="primary-button" (click)="navigateToLogin()">
+            <i class="fas fa-sign-in-alt"></i>
+            Connexion maintenant
+          </button>
+        </div>
+      </div>
+
+      <!-- Error State -->
+      <div class="verification-content" *ngIf="!isLoading && !isVerified">
+        <div class="error-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line>
+            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </div>
+        <h2>Échec de la vérification</h2>
+        <p class="error-message">{{ errorMessage }}</p>
+        
+        <div class="actions">
+          <button class="secondary-button" (click)="navigateToSignup()">
+            <i class="fas fa-user-plus"></i>
+            Créer un nouveau compte
+          </button>
+          <button class="primary-button" (click)="navigateToLogin()">
+            <i class="fas fa-home"></i>
+            Retour à l'accueil
+          </button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>

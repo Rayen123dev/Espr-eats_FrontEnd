@@ -1,0 +1,689 @@
+/* Conteneur principal */
+.dashboard-container {
+  padding: 40px 30px;
+  background: #f4f7fb;
+  font-family: 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  }
+
+  /* Titre et sous-titre */
+  .dashboard-header {
+    text-align: left;
+    margin-bottom: 2rem;
+  }
+
+  .dashboard-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  .dashboard-header p {
+    font-size: 1rem;
+    color: #7f8c8d;
+  }
+
+  /* Cartes de statistiques */
+  .stats-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .stat-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .stat-icon {
+    font-size: 1.5rem;
+  }
+
+  .stat-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.25rem;
+  }
+
+  .stat-info p {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2c3e50;
+    margin: 0;
+  }
+
+  .stat-info p span {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #7f8c8d;
+  }
+
+  /* Sections principales */
+  .main-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .section {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  .section p {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin-bottom: 1rem;
+  }
+
+  .chart-placeholder {
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px dashed #ddd;
+    border-radius: 10px;
+    color: #7f8c8d;
+  }
+
+  /* Gestion des plats et régimes */
+  .management-section {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+  }
+
+  .management-section h2 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+
+  .btn-add {
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    background-color: #6c5ce7;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 1rem;
+  }
+
+  .btn-add:hover {
+    background-color: #5a4cd1;
+    transform: translateY(-1px);
+  }
+
+  /* Formulaire d'ajout de plat */
+  .form-container {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+  }
+
+  .form-control {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    color: #444;
+    transition: all 0.2s ease;
+  }
+
+  .form-control:focus {
+    border-color: #6c5ce7;
+    outline: none;
+    box-shadow: 0 3px 6px rgba(108, 92, 231, 0.3);
+  }
+
+  .form-control[textarea] {
+    height: 100px;
+    resize: vertical;
+  }
+
+  .image-preview {
+    margin-top: 0.5rem;
+  }
+
+  .image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  .error {
+    color: #e74c3c;
+    font-size: 0.85rem;
+    margin-top: 0.25rem;
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn-submit, .btn-cancel {
+    padding: 0.8rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .btn-submit {
+    background-color: #6c5ce7;
+    color: white;
+  }
+
+  .btn-submit:hover {
+    background-color: #5a4cd1;
+    transform: translateY(-1px);
+  }
+
+  .btn-submit:disabled {
+    background-color: #a29bfe;
+    cursor: not-allowed;
+  }
+
+  .btn-cancel {
+    background-color: #e74c3c;
+    color: white;
+  }
+
+  .btn-cancel:hover {
+    background-color: #c0392b;
+    transform: translateY(-1px);
+  }
+
+  /* Tableaux */
+  .management-table {
+    width: 100%;
+    overflow-x: auto;
+    margin-bottom: 1.5rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+  }
+
+  th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+
+  td {
+    color: #666;
+  }
+
+  .plat-image {
+    max-width: 100px;
+    max-height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+  }
+
+  .btn-edit, .btn-delete, .btn-assign, .btn-unassign {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .btn-edit {
+    background-color: #2980b9;
+    color: white;
+  }
+
+  .btn-edit:hover {
+    background-color: #2471a3;
+  }
+
+  .btn-delete {
+    background-color: #e74c3c;
+    color: white;
+  }
+
+  .btn-delete:hover {
+    background-color: #c0392b;
+  }
+
+  .btn-assign {
+    background-color: #00cec9;
+    color: white;
+  }
+
+  .btn-assign:hover {
+    background-color: #00b7b3;
+  }
+
+  .btn-unassign {
+    background-color: #f39c12; /* Orange pour différencier */
+    color: white;
+    margin-top: 0.5rem;
+    width: 100%; /* S'étend sur toute la largeur de la mini-carte */
+  }
+
+  .btn-unassign:hover {
+    background-color: #e67e22;
+  }
+
+  /* Modale */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .modal-content {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    width: 400px;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-content h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+  }
+
+  .plat-list {
+    margin: 10px 0;
+  }
+
+  .plat-list label {
+    display: block;
+    margin: 5px 0;
+    color: #444;
+  }
+
+  .modal-actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* Section des régimes harmonisée */
+  .regime-container {
+    padding: 1.5rem 0;
+    background-color: transparent;
+  }
+
+  .regime-card {
+    margin-bottom: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
+  }
+
+  .regime-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .regime-card mat-card-title {
+    background-color: #6c5ce7;
+    color: white;
+    padding: 1rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .regime-card mat-card-title:hover {
+    background-color: #5a4cd1;
+  }
+
+  .regime-card mat-card-content {
+    padding: 1rem;
+    background-color: #ffffff;
+  }
+
+  /* Mini-cartes pour les plats recommandés */
+  .plat-mini-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .mini-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    width: 190px;
+    padding: 0.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .mini-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .mini-card-img {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-bottom: 0.5rem;
+  }
+
+  .mini-card-content {
+    text-align: center;
+  }
+
+  .mini-card-content h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 0.25rem 0;
+  }
+
+  .mini-card-content p {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 992px) {
+    .stats-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .main-sections {
+      grid-template-columns: 1fr;
+    }
+    .plat-mini-cards {
+      justify-content: center;
+    }
+  }
+
+  @media (max-width: 576px) {
+    .stats-cards {
+      grid-template-columns: 1fr;
+    }
+    .dashboard-header h1 {
+      font-size: 1.5rem;
+    }
+    .section h2, .management-section h2 {
+      font-size: 1.2rem;
+    }
+    .modal-content {
+      width: 90%;
+    }
+    .mini-card {
+      width: 150px;
+    }
+    .mini-card-img {
+      height: 80px;
+    }
+  }
+  /* Styles pour les graphiques */
+  .chart-container {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    .main-sections {
+      flex-direction: column;
+    }
+
+    .section {
+      width: 100%;
+    }
+
+    .chart-container {
+      height: 250px;
+    }
+  }
+  /* Styles pour la barre de navigation */
+.section-nav {
+    background: linear-gradient(135deg, #ffffff, #f5f7fa);
+
+  padding: 25px 0 ;
+  position: sticky; /* Fixe la barre en haut lors du défilement */
+  top: 0;
+  z-index: 1000; /* S'assure que la barre reste au-dessus des autres éléments */
+  width: 60%;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.section-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center; /* Centre les liens */
+  gap: 30px; /* Espacement entre les liens */
+}
+
+.section-nav li {
+  display: inline-block;
+}
+
+.section-nav a {
+  text-decoration: none;
+  color: #333; /* Couleur des liens */
+  font-size: 13.5px;
+  font-weight: 500;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: all 0.3s ease; /* Animation fluide pour les effets de survol */
+  cursor: pointer;
+}
+
+.section-nav a:hover {
+  background-color: #f0f0f0; /* Fond gris clair au survol */
+  color: #007bff; /* Couleur bleue au survol */
+}
+
+/* Style actif (optionnel, si vous voulez indiquer la section active) */
+.section-nav a.active {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .section-nav ul {
+    flex-direction: column; /* Passe en colonne sur les petits écrans */
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-nav a {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+}
+
+/* Bannière de notification */
+.notification-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 600px;
+  width: 90%;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+  animation: slideIn 0.3s ease-out;
+}
+
+.notification-banner.success {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.notification-banner.error {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.banner-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.banner-icon {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.banner-content p {
+  margin: 0;
+  font-size: 0.95rem;
+  flex-grow: 1;
+}
+
+.btn-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.btn-close:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(-50%) translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Ajuster le padding du conteneur pour éviter le chevauchement */
+.dashboard-container {
+  padding-top: 90px; /* Augmenté pour laisser de la place à la bannière */
+}
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.btn-pagination {
+  padding: 0.6rem 1.2rem;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  color: #444;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: none;
+}
+
+.btn-pagination:hover:not(:disabled) {
+  background-color: #f1f3f5;
+  transform: translateY(-1px);
+}
+
+.btn-pagination:disabled {
+  background-color: #e9ecef;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.page-info {
+  font-size: 0.95rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+.material-icons {
+  font-size: 18px;
+  vertical-align: middle;
+}
+
+/* Autres styles existants */
+.btn-add, .btn-edit, .btn-delete, .btn-assign {
+  padding: 5px 10px;
+  margin: 0 5px;
+}

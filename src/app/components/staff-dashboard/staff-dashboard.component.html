@@ -1,0 +1,294 @@
+<div class="dashboard-container">
+  <!-- Barre de navigation -->
+  <nav class="section-nav mb-4" >
+    <ul>
+      <li *ngIf="userRole === 'Admin'">
+        <a  href="#" routerLink="/gestionuser">
+          <i class="fas fa-arrow-left"></i> <!-- Icône de retour -->
+        </a>
+      </li>
+    <li><a (click)="scrollToSection('stats')">Statistiques</a></li>
+    <li><a (click)="scrollToSection('charts')">Graphiques</a></li>
+    <!-- Limiter les sections de gestion au rôle 'staff' -->
+    <li *ngIf="userRole === 'Staff'||userRole === 'Admin'"><a (click)="scrollToSection('plats')">Gestion des Plats</a></li>
+    <li *ngIf="userRole === 'Staff'"><a (click)="scrollToSection('regimes')">Gestion des Régimes</a></li>
+    <li><a (click)="scrollToSection('menus')">Gestion des Menus</a></li>
+   
+  </ul>
+  </nav>
+
+  <!-- Titre et sous-titre -->
+  <div class="dashboard-header">
+    <h1 *ngIf="userRole === 'Staff'">Tableau de Bord Staff</h1>
+    <p>Gestion et analyse des menus, plats et régimes alimentaires</p>
+  </div>
+  <!-- Bannière de notification -->
+<div *ngIf="notificationMessage" class="notification-banner" [ngClass]="{'success': notificationType === 'success', 'error': notificationType === 'error'}">
+  <div class="banner-content">
+    <span class="banner-icon">{{ notificationType === 'success' ? '✓' : '✗' }}</span>
+    <p>{{ notificationMessage }}</p>
+    <button class="btn-close" (click)="clearNotification()">×</button>
+  </div>
+</div>
+
+  <!-- Cartes de statistiques -->
+  <div class="stats-cards" id="stats">
+    <div class="stat-card">
+      <div class="stat-icon">🍽️</div>
+      <div class="stat-info">
+        <h3>Total Plats</h3>
+        <p>{{ totalPlats }} <span>{{ totalCategories }} catégories différentes</span></p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📅</div>
+      <div class="stat-info">
+        <h3>Total Menus</h3>
+        <p>{{ totalMenus }} <span>{{ totalValidatedMenus }} menus validés</span></p>
+      </div>
+    </div>
+    <div class="stat-card" *ngIf="userRole === 'Staff'">
+      <div class="stat-icon">👤</div>
+      <div class="stat-info">
+        <h3>Régimes Alimentaires</h3>
+        <p>{{ totalRegimes }} <span>{{ regimeTypes }} types de régimes disponibles</span></p>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon">📈</div>
+      <div class="stat-info">
+        <h3>Taux de Validation</h3>
+        <p>{{ validationRate }}% <span>{{ validatedMenus }} sur {{ totalMenus }} menus</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sections principales (Graphiques) -->
+  <div class="main-sections" id="charts">
+    <div class="section plats-distribution">
+      <h2>Répartition des plats par catégorie</h2>
+      <p>Distribution des différents types de plats</p>
+      <div class="chart-container">
+        <canvas baseChart
+                [data]="barChartData"
+                [options]="barChartOptions"
+                [type]="barChartType">
+        </canvas>
+      </div>
+    </div>
+    <div class="section menus-weekly">
+      <h2>Menus par semaine</h2>
+      <p>Nombre de menus validés et en attente par semaine</p>
+      <div class="chart-container">
+        <canvas baseChart
+                [data]="lineChartData"
+                [options]="lineChartOptions"
+                [type]="lineChartType">
+        </canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gestion des plats -->
+  <div class="management-section" id="plats" *ngIf="userRole === 'Staff'|| userRole === 'Admin'">
+    <h2>Gestion des Plats</h2>
+    <button class="btn-add" (click)="toggleAddPlatForm()" *ngIf="userRole === 'Staff'">Ajouter un Plat</button>
+    <button class="btn-pdf" (click)="generatePdfRecommendations()">
+        <i class="fas fa-file-pdf"></i> IA Recommandation
+      </button>
+
+    <div class="form-container" *ngIf="showAddPlatForm" >
+      <form [formGroup]="addPlatForm" (ngSubmit)="submitPlat()" >
+        <div class="form-group">
+          <label for="nom">Nom du Plat</label>
+          <input type="text" id="nom" formControlName="nom" class="form-control" placeholder="Entrez le nom du plat">
+          <div *ngIf="addPlatForm.get('nom')?.invalid && addPlatForm.get('nom')?.touched" class="error">
+            Le nom est requis.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" formControlName="description" class="form-control" placeholder="Entrez une description"></textarea>
+        </div>
+        <div class="form-group">
+          <label for="categorie">Catégorie</label>
+          <select id="categorie" formControlName="categorie" class="form-control">
+            <option value="" disabled>Sélectionnez une catégorie</option>
+            <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+          </select>
+          <div *ngIf="addPlatForm.get('categorie')?.invalid && addPlatForm.get('categorie')?.touched" class="error">
+            La catégorie est requise.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="calories">Calories (kcal)</label>
+          <input type="number" id="calories" formControlName="calories" class="form-control" placeholder="Entrez les calories">
+          <div *ngIf="addPlatForm.get('calories')?.invalid && addPlatForm.get('calories')?.touched" class="error">
+            Les calories doivent être un nombre positif.
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="image">Image du Plat</label>
+          <input type="file" id="image" (change)="onFileSelected($event)" accept="image/*" class="form-control">
+          <div *ngIf="imagePreview" class="image-preview">
+            <img [src]="imagePreview" alt="Prévisualisation de l'image">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-submit" [disabled]="addPlatForm.invalid">{{ isEditMode ? 'Modifier' : 'Ajouter' }}</button>
+          <button type="button" class="btn-cancel" (click)="toggleAddPlatForm()">Annuler</button>
+        </div>
+      </form>
+    </div>
+    
+
+    <div class="management-table">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Catégorie</th>
+            <th>Calories</th>
+            <th>Image</th>
+            <th *ngIf="userRole === 'Staff'">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let plat of  displayedPlats">
+            <td>{{ plat.id }}</td>
+            <td>{{ plat.nom }}</td>
+            <td>{{ plat.description }}</td>
+            <td>{{ plat.categorie }}</td>
+            <td>{{ plat.calories }} kcal</td>
+            <td>
+              <img *ngIf="plat.imagePath" [src]="getImageUrl(plat.imagePath)" alt="{{plat.nom}}" class="plat-image">
+            </td>
+            <td>
+              <button class="btn-edit" (click)="openEditPlatModal(plat)" *ngIf="userRole === 'Staff'">Modifier</button>
+              <button class="btn-delete" (click)="deletePlat(plat.id)" *ngIf="userRole === 'Staff'">Supprimer</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Pagination pour les plats -->
+   <!-- Pagination pour les plats (5 par page) -->
+   <div class="pagination" *ngIf=" plats.length > itemsPerPage">
+    <button class="btn-pagination" [disabled]="currentPage === 1" (click)="previousPage()">
+      <span class="material-icons"></span> Précédent
+    </button>
+    <span class="page-info">Page {{ currentPage }} sur {{ totalPages }}</span>
+    <button class="btn-pagination" [disabled]="currentPage === totalPages" (click)="nextPage()">
+      Suivant <span class="material-icons"></span>
+    </button>
+  </div>
+    </div>
+  </div>
+
+  
+ 
+<!-- Gestion des régimes -->
+<div class="management-section" id="regimes" *ngIf="userRole === 'Staff'">
+  <h2>Gestion des Régimes Alimentaires</h2>
+  <button class="btn-add" (click)="toggleAddRegimeForm()" >Ajouter un Régime</button>
+
+  <!-- Formulaire d'ajout de régime -->
+  <div class="form-container" *ngIf="showAddRegimeForm">
+    <form [formGroup]="addRegimeForm" (ngSubmit)="submitRegime()">
+      <div class="form-group">
+        <label for="type">Type de Régime</label>
+        <select id="type" formControlName="type" class="form-control">
+          <option value="" disabled>Sélectionnez un type de régime</option>
+          <option *ngFor="let type of regimeTypesList" [value]="type">{{ type }}</option>
+        </select>
+        <div *ngIf="addRegimeForm.get('type')?.invalid && addRegimeForm.get('type')?.touched" class="error">
+          Le type de régime est requis.
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn-submit" [disabled]="addRegimeForm.invalid">Ajouter</button>
+        <button type="button" class="btn-cancel" (click)="toggleAddRegimeForm()">Annuler</button>
+      </div>
+    </form>
+  </div>
+
+
+  <!-- Tableau des régimes -->
+  <div class="management-table">
+    <table>
+      <thead>
+        <tr>
+          <th>Type</th>
+          <th>Plats Recommandés</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let regime of regimes">
+          <td>{{ regime.type }}</td>
+          <td>{{ regime.platsRecommandes.length || 0 }} plats</td>
+          <td>
+            <button class="btn-edit" (click)="openEditRegimeModal(regime)">Modifier</button>
+            <button class="btn-assign" (click)="openAssignPlatsModal(regime)">Assigner Plats</button>
+            <button class="btn-delete" (click)="deleteRegime(regime.id)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Section des cartes de régimes harmonisée -->
+  <div class="regime-container">
+    <mat-card *ngFor="let regime of regimes" class="regime-card">
+      <mat-card-title (click)="toggleRegime(regime.id)" class="clickable">
+        {{ regime.type }}
+      </mat-card-title>
+      <mat-card-content *ngIf="selectedRegimeId === regime.id">
+        <p>Plats Recommandés :</p>
+        <div class="plat-mini-cards" *ngIf="regime.platsRecommandes && regime.platsRecommandes.length > 0">
+          <div class="mini-card" *ngFor="let plat of regime.platsRecommandes">
+            <img class="mini-card-img" [src]="plat.imagePath" alt="{{ plat.nom }}">
+            <div class="mini-card-content">
+              <h4>{{ plat.nom }}</h4>
+              <p>{{ plat.categorie }}</p>
+              <p>{{ plat.calories }} kcal</p>
+              <button class="btn-unassign" (click)="unassignPlatFromRegime(regime.id, plat.id)">Désassigner</button>
+            </div>
+          </div>
+        </div>
+        <p *ngIf="regime.platsRecommandes.length === 0">Aucun plat recommandé.</p>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+  <!-- Gestion des Menus -->
+  <div class="management-section" id="menus" *ngIf="userId && userRole && (userRole === 'Staff' || userRole === 'Medecin'|| userRole === 'Admin')">
+   
+    <app-menu-dashboard [userId]="userId" [userRole]="userRole"></app-menu-dashboard>
+  </div>
+
+  <!-- Modale pour assigner des plats -->
+  <div class="modal" *ngIf="showAssignPlatsModal" (click)="closeAssignPlatsModal($event)">
+    <div class="modal-content">
+      <h3>Assigner des plats au régime {{ selectedRegime?.type }}</h3>
+      <div class="plat-list">
+        <label *ngFor="let plat of plats">
+          <input type="checkbox" 
+                 [value]="plat.id" 
+                 [checked]="selectedPlatIds.includes(plat.id)" 
+                 (change)="togglePlatSelection(plat.id, $event)">
+          {{ plat.nom }} ({{ plat.categorie }})
+          <span *ngIf="plat.regimes && plat.regimes.length > 0">
+            - Assigné à : {{ getRegimeTypes(plat.regimes) }}
+          </span>
+        </label>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-submit" (click)="submitPlatAssignment()">Assigner</button>
+        <button class="btn-cancel" (click)="closeAssignPlatsModal()">Annuler</button>
+      </div>
+    </div>
+  </div>
+</div>

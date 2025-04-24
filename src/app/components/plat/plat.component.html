@@ -1,0 +1,55 @@
+<div class="plat-container">
+  <h2>Liste des Plats</h2>
+  <button mat-raised-button color="primary" [routerLink]="['/add-plat']">Ajouter un Plat</button>
+  
+  <div class="card-container">
+    <mat-card *ngFor="let plat of plats" class="plat-card">
+      <mat-card-title class="plat-card-title">
+        <!-- Case à cocher pour sélectionner le plat -->
+        <mat-checkbox [(ngModel)]="selectedPlats[plat.id]">
+        </mat-checkbox>
+        {{ plat.nom }}
+      </mat-card-title>
+      
+      <img 
+        [src]="plat.imagePath" 
+        alt="{{ plat.nom }}" 
+        class="plat-image" 
+        onerror="this.src='assets/default-plat-image.png'"
+      >
+      
+      <mat-card-content class="plat-card-content">
+        <p><strong>Catégorie:</strong> <span>{{ plat.categorie }}</span></p>
+        <p><strong>Calories:</strong> <span>{{ plat.calories }} kcal</span></p>
+        <p><strong>Description:</strong> 
+          <span>{{ plat.description | slice:0:100 }}{{ plat.description.length > 100 ? '...' : '' }}</span>
+        </p>
+      </mat-card-content>
+      
+      <mat-card-actions>
+        <button mat-raised-button color="primary" [routerLink]="['/updateplat', plat.id]">
+          <mat-icon>edit</mat-icon> Modifier
+        </button>
+        <button mat-raised-button color="warn" (click)="deletePlat(plat.id)">
+          <mat-icon>delete</mat-icon> Supprimer
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <!-- Sélection du régime et bouton d'assignation -->
+  <div class="regime-selection">
+    <mat-form-field>
+      <mat-label>Sélectionner un régime</mat-label>
+      <mat-select [(ngModel)]="selectedRegimeId">
+        <mat-option *ngFor="let regime of regimes" [value]="regime.id">
+          {{ regime.type }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-raised-button color="accent" (click)="assignPlatsToRegime()">
+      <mat-icon>check_circle</mat-icon> Assigner les plats sélectionnés
+    </button>
+  </div>
+</div>

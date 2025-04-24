@@ -1,0 +1,54 @@
+<div class="suivi-etudiants-container">
+  <h2 class="page-title">Suivi des étudiants</h2>
+
+  <div class="filters">
+    <input type="text" [(ngModel)]="searchTerm" placeholder="🔍 Rechercher par nom..." class="filter-input" />
+
+    <select [(ngModel)]="selectedSexe" class="filter-select">
+      <option *ngFor="let s of sexes" [value]="s">{{ s | titlecase }}</option>
+    </select>
+
+    <select [(ngModel)]="selectedRegime" class="filter-select">
+      <option *ngFor="let r of regimes" [value]="r">{{ r | titlecase }}</option>
+    </select>
+
+    <select [(ngModel)]="selectedClassification" class="filter-select">
+      <option *ngFor="let c of classifications" [value]="c">{{ c }}</option>
+    </select>
+  </div>
+
+  <div class="table-responsive">
+    <table class="student-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Photo</th>
+          <th>Nom</th>
+          <th>Sexe</th>
+          <th>Email</th>
+          <th>Régime</th>
+          <th>Poids</th>
+          <th>Taille</th>
+          <th>IMC</th>
+          <th>Classification</th>
+          <th>État</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let p of filteredEtudiants(); let i = index">
+          <td>{{ i + 1 }}</td>
+          <td><img [src]="p.user.link_Image || 'https://via.placeholder.com/40'" class="avatar-img" /></td>
+          <td>{{ p.user.nom }}</td>
+          <td>{{ p.sexe }}</td>
+          <td>{{ p.user.email }}</td>
+          <td>{{ p.regimeAlimentaire }}</td>
+          <td>{{ p.poidsActuel }} kg</td>
+          <td>{{ p.taille }} cm</td>
+          <td>{{ p.imc }}</td>
+          <td>{{ classifyIMC(p.imc) }}</td>
+          <td><span class="state-circle" [ngClass]="getClassificationColor(p.imc)"></span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
