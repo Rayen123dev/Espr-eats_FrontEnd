@@ -125,8 +125,8 @@ selectedConsultationIdToCancel: number | null = null;
 
   openConfirmationDialog(id: number): void {
     this.selectedConsultationIdToCancel = id;
-    this.showConfirmDialog = true;
   }
+
 
   confirmAnnulation(): void {
     if (!this.selectedConsultationIdToCancel) return;

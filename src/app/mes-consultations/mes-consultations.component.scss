@@ -186,17 +186,20 @@
   }
 
   .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px auto 20px;
+    gap: 12px;
     text-align: center;
-    margin-top: 30px;
 
     button {
-      padding: 8px 16px;
-      margin: 0 8px;
-      border: none;
-      border-radius: 6px;
+      padding: 8px 18px;
       background-color: #1a73e8;
       color: white;
-      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
       cursor: pointer;
       transition: 0.3s ease;
 
@@ -208,9 +211,12 @@
 
     span {
       font-weight: 500;
+      font-size: 15px;
     }
   }
+
 }
+
 
 .no-consult {
   text-align: center;
@@ -329,4 +335,77 @@
 }
 
 
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.confirm-modal {
+  background: white;
+  padding: 30px 36px;
+  border-radius: 14px;
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-icon {
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #dc3545;
+}
+
+.modal-text {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+
+  .btn-confirm {
+    background-color: #dc3545;
+    color: white;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #b02a37;
+    }
+  }
+
+  .btn-cancel {
+    background-color: #ccc;
+    color: black;
+    padding: 8px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #aaa;
+    }
+  }
+}
 

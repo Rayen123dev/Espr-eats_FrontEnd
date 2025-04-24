@@ -1,9 +1,10 @@
 <div class="consultation-container">
+
+  <!-- ✅ En-tête -->
   <div class="header-background-consultation">
     <div class="welcome-text">
       <h1>Bienvenue dans votre espace santé 🩺</h1>
       <p>Consultez vos consultations passées et en attente</p>
-
       <div class="actions">
         <button class="nav-btn" routerLink="/profil-nutritionnel/mon-profil">Consulter mon profil</button>
         <button class="nav-btn" routerLink="/consulter-medecin">Consulter un médecin</button>
@@ -13,52 +14,38 @@
     </div>
   </div>
 
-  <!-- 🔔 Modale de confirmation -->
-  <div class="overlay" *ngIf="showConfirmDialog">
-    <div class="modal">
-      <h3>⚠️ Confirmation</h3>
-      <p>Voulez-vous vraiment annuler ce rendez-vous ?</p>
-      <div class="modal-actions">
-        <button class="btn-confirm" (click)="confirmAnnulation()">Oui, annuler</button>
-        <button class="btn-cancel" (click)="closeConfirmDialog()">Non</button>
-      </div>
-    </div>
+  <!-- ✅ Toast -->
+  <div *ngIf="successMessage" [ngClass]="{ 'toast-message': true, success: successSuccess, error: !successSuccess }">
+    <span class="icon">{{ successSuccess ? '✅' : '❌' }}</span>
+    <span class="text">{{ successMessage }}</span>
+    <button class="close-btn" (click)="successMessage = ''">✖</button>
   </div>
 
   <div class="consultation-content">
-
-    <!-- ✅ Notification BIEN POSITIONNÉE -->
-    <div *ngIf="successMessage" [ngClass]="{ 'toast-message': true, success: successSuccess, error: !successSuccess }">
-      <span class="icon">{{ successSuccess ? '✅' : '❌' }}</span>
-      <span class="text">{{ successMessage }}</span>
-      <button class="close-btn" (click)="successMessage = ''">✖</button>
-    </div>
-
+    <!-- ✅ Filtres -->
     <div class="filter">
-      <label for="type">Filtrer par type :</label>
-      <select [(ngModel)]="selectedType" (change)="onTypeChange()" id="type">
+      <label>Filtrer par type :</label>
+      <select [(ngModel)]="selectedType" (change)="onTypeChange()">
         <option *ngFor="let type of types" [value]="type">{{ type | titlecase }}</option>
       </select>
 
-      <label for="sort">Trier par :</label>
-      <select [(ngModel)]="sortBy" (change)="onSortChange()" id="sort">
+      <label>Trier par :</label>
+      <select [(ngModel)]="sortBy" (change)="onSortChange()">
         <option value="recent">Date la plus proche</option>
         <option value="oldest">Date la plus éloignée</option>
       </select>
 
-      <label for="statut">Statut :</label>
-      <select [(ngModel)]="selectedStatut" (change)="onStatutChange()" id="statut">
-        <option *ngFor="let s of statuts" [value]="s">
-          {{ formatStatut(s) }}
-        </option>
+      <label>Statut :</label>
+      <select [(ngModel)]="selectedStatut" (change)="onStatutChange()">
+        <option *ngFor="let s of statuts" [value]="s">{{ formatStatut(s) }}</option>
       </select>
     </div>
 
+    <!-- ✅ Liste des consultations -->
     <div class="consultation-list" *ngIf="paginatedConsultations.length > 0; else noData">
       <div *ngFor="let c of paginatedConsultations" class="consultation-card">
         <div class="consultation-header">
-          <h3>📋 {{ c.typeConsultation | titlecase }} — {{ c.dateConsultation | date: 'fullDate' }} à {{
-            c.dateConsultation | date: 'shortTime' }}</h3>
+          <h3>📋 {{ c.typeConsultation | titlecase }} — {{ c.dateConsultation | date: 'fullDate' }} à {{ c.dateConsultation | date: 'shortTime' }}</h3>
         </div>
 
         <div class="consultation-body">
@@ -69,22 +56,25 @@
 
           <p><strong>Message :</strong> {{ c.message || 'Aucun message.' }}</p>
 
+          <!-- Recommandation -->
           <div *ngIf="c.statut === 'TERMINEE' && recommandations[c.id]" class="reco-card mt-3">
             <h5>Recommandation du médecin</h5>
             <p>{{ recommandations[c.id] }}</p>
           </div>
 
+          <!-- Annulation -->
           <div *ngIf="c.statut === 'EN_ATTENTE'" class="cancel-btn-wrapper">
             <button class="cancel-btn" (click)="openConfirmationDialog(c.id)">❌ Annuler le rendez-vous</button>
           </div>
         </div>
 
+        <!-- Visioconférence -->
         <a *ngIf="c.statut === 'EN_ATTENTE'" [routerLink]="['/visio', c.id]" class="join-meet-btn">
           🔗 Rejoindre la visioconférence
         </a>
       </div>
 
-      <!-- Pagination -->
+      <!-- ✅ Pagination -->
       <div class="pagination">
         <button (click)="changePage(-1)" [disabled]="currentPage === 1">◀ Précédent</button>
         <span>Page {{ currentPage }} / {{ totalPages() }}</span>
@@ -92,8 +82,23 @@
       </div>
     </div>
 
+    <!-- Aucune donnée -->
     <ng-template #noData>
       <p class="no-consult">Aucune consultation trouvée.</p>
     </ng-template>
   </div>
+
+  <!-- ✅ MODALE FLOTTANTE DE CONFIRMATION -->
+  <div class="modal-overlay" *ngIf="selectedConsultationIdToCancel !== null" (click)="closeConfirmDialog()">
+    <div class="confirm-modal" (click)="$event.stopPropagation()">
+      <div class="modal-icon">⚠️</div>
+      <h3 class="modal-title">Confirmation</h3>
+      <p class="modal-text">Êtes-vous sûr de vouloir annuler ce rendez-vous ?</p>
+      <div class="modal-actions">
+        <button class="btn-confirm" (click)="confirmAnnulation()">Oui, annuler</button>
+        <button class="btn-cancel" (click)="closeConfirmDialog()">Non</button>
+      </div>
+    </div>
+  </div>
+
 </div>

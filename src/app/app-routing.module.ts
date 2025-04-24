@@ -89,16 +89,6 @@ const routes: Routes = [
   },
 
 
-  { path: 'profil-nutritionnel', component: ProfilNutritionnelComponent },
-  { path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent },
-  { path: 'profil-nutritionnel/mon-profil', component: ProfilNutritionnelDetailComponent },
-  { path: 'consulter-medecin', component: ConsulterMedecinComponent },
-  { path: 'mes-consultations', component: MesConsultationsComponent },
-  { path: 'visio/:id', component: VisioComponent },
-  { path: 'analyse-plat', component: AnalysePlatComponent },
-
-
-
   { path: 'auth', component: AuthGComponent }, // Route for OAuth2 success page
 
   { path: 'face-confirmation', component: FaceConfirmationComponent, canActivate: [AuthGuard] },

@@ -20,7 +20,7 @@ export class ConsulterMedecinComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private consultationService: ConsultationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -50,6 +50,11 @@ export class ConsulterMedecinComponent implements OnInit {
       return;
     }
 
+    const now = new Date();
+    const todayStr = now.toISOString().split('T')[0];
+    const isToday = date === todayStr;
+    const currentHour = now.getHours();
+
     this.consultationService.getAllConsultations().subscribe(consultations => {
       const prises = consultations
         .filter(c => c.dateConsultation.startsWith(date))
@@ -57,6 +62,10 @@ export class ConsulterMedecinComponent implements OnInit {
 
       for (let h = 9; h <= 16; h++) {
         const heureStr = `${h.toString().padStart(2, '0')}:00`;
+
+        // ⚠️ Ne pas inclure une heure déjà passée si c'est aujourd'hui
+        if (isToday && h <= currentHour) continue;
+
         if (!prises.includes(heureStr)) {
           this.heuresDisponibles.push(heureStr);
         }
@@ -64,10 +73,13 @@ export class ConsulterMedecinComponent implements OnInit {
 
       if (this.heuresDisponibles.length === 0) {
         this.toutesPrises = true;
-        this.motifIndisponibilite = '⚠️ Le médecin est complet pour cette journée.';
+        this.motifIndisponibilite = isToday
+          ? '⚠️ Il n’est plus possible de réserver pour aujourd’hui.'
+          : '⚠️ Le médecin est complet pour cette journée.';
       }
     });
   }
+
 
   prendreConsultation(): void {
     if (this.form.invalid) {

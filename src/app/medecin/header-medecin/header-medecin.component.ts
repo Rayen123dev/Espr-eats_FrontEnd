@@ -20,7 +20,7 @@ export class HeaderMedecinComponent implements OnInit {
   ];
 
 
-  constructor(public router: Router, private loginService: LoginService) {}
+  constructor(public router: Router, private loginService: LoginService) { }
 
 
   ngOnInit(): void {
@@ -29,7 +29,7 @@ export class HeaderMedecinComponent implements OnInit {
       this.loginService.getUserById(userId).subscribe({
         next: (user: User) => {
           this.userName = user.nom;
-          this.userProfileImage = user.avatarUrl || this.userProfileImage;
+          this.userProfileImage = user.link_Image || this.userProfileImage;
         },
         error: (err) => {
           console.error('Erreur récupération médecin', err);
