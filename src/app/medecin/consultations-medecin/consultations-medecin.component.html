@@ -1,0 +1,93 @@
+<div class="consultation-wrapper">
+  <h2 class="title">Liste des consultations</h2>
+
+  <!-- Filtres -->
+  <div class="filters">
+    <input
+      type="text"
+      placeholder="🔍 Filtrer par étudiant"
+      [(ngModel)]="filter.nom"
+      (input)="applyFilters()" />
+
+    <select [(ngModel)]="filter.statut" (change)="applyFilters()">
+      <option value="">Tous les statuts</option>
+      <option value="EN_ATTENTE">🕒 En attente</option>
+      <option value="TERMINEE">✅ Terminée</option>
+      <option value="ANNULEE">❌ Annulée</option>
+    </select>
+
+    <select [(ngModel)]="sortDirection" (change)="applyFilters()">
+      <option value="asc">⬆️ Date croissante</option>
+      <option value="desc">⬇️ Date décroissante</option>
+    </select>
+  </div>
+
+  <!-- Tableau -->
+  <div class="table-container">
+    <table *ngIf="pagedConsultations.length > 0" class="table">
+      <thead>
+        <tr>
+          <th>👤 Étudiant</th>
+          <th>📚 Type</th>
+          <th>📅 Date</th>
+          <th>📌 Statut</th>
+          <th>🔍 Détails</th>
+          <th>🎥 Visio</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let c of pagedConsultations">
+          <td>{{ c.etudiant.nom }}</td>
+          <td>{{ c.typeConsultation }}</td>
+          <td>{{ c.dateConsultation | date: 'short' }}</td>
+          <td>
+            <span class="badge"
+                  [ngClass]="{
+                    'bg-warning': c.statut === 'EN_ATTENTE',
+                    'bg-success': c.statut === 'TERMINEE',
+                    'bg-danger': c.statut === 'ANNULEE'
+                  }">
+              {{ getStatutLabel(c.statut) }}
+            </span>
+          </td>
+          <td>
+            <a [routerLink]="['/medecin/consultation', c.id]" class="btn btn-primary btn-sm">🔍 Détails</a>
+          </td>
+          <td>
+            <a *ngIf="c.statut === 'EN_ATTENTE'"
+               [routerLink]="['/visio', c.id]"
+               class="btn btn-outline-success btn-sm"
+               title="Disponible">
+              🎥 Visioconf
+            </a>
+            <span *ngIf="c.statut !== 'EN_ATTENTE'" class="btn btn-disabled btn-sm">
+              🎥 Visioconf
+            </span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Aucun résultat -->
+  <div *ngIf="pagedConsultations.length === 0" class="text-muted mt-3">
+    Aucune consultation trouvée.
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination-controls" *ngIf="totalPages > 1">
+    <button (click)="prevPage()" [disabled]="currentPage === 1">◀️ Précédent</button>
+    <span>Page {{ currentPage }} / {{ totalPages }}</span>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant ▶️</button>
+  </div>
+
+  <p class="text-muted text-center mt-3">
+    Résultats affichés : {{ pagedConsultations.length }} / {{ filteredConsultations.length }}
+  </p>
+
+  <!-- Calendrier -->
+  <div class="calendar-container">
+    <h2 class="title">Calendrier des consultations</h2>
+    <full-calendar [options]="calendarOptions"></full-calendar>
+  </div>
+</div>

@@ -1,0 +1,99 @@
+<div class="consultation-container">
+  <div class="header-background-consultation">
+    <div class="welcome-text">
+      <h1>Bienvenue dans votre espace santé 🩺</h1>
+      <p>Consultez vos consultations passées et en attente</p>
+
+      <div class="actions">
+        <button class="nav-btn" routerLink="/profil-nutritionnel/mon-profil">Consulter mon profil</button>
+        <button class="nav-btn" routerLink="/consulter-medecin">Consulter un médecin</button>
+        <button class="nav-btn" disabled>Voir mes consultations</button>
+        <button class="nav-btn" routerLink="/analyse-plat">Analyser un plat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔔 Modale de confirmation -->
+  <div class="overlay" *ngIf="showConfirmDialog">
+    <div class="modal">
+      <h3>⚠️ Confirmation</h3>
+      <p>Voulez-vous vraiment annuler ce rendez-vous ?</p>
+      <div class="modal-actions">
+        <button class="btn-confirm" (click)="confirmAnnulation()">Oui, annuler</button>
+        <button class="btn-cancel" (click)="closeConfirmDialog()">Non</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="consultation-content">
+
+    <!-- ✅ Notification BIEN POSITIONNÉE -->
+    <div *ngIf="successMessage" [ngClass]="{ 'toast-message': true, success: successSuccess, error: !successSuccess }">
+      <span class="icon">{{ successSuccess ? '✅' : '❌' }}</span>
+      <span class="text">{{ successMessage }}</span>
+      <button class="close-btn" (click)="successMessage = ''">✖</button>
+    </div>
+
+    <div class="filter">
+      <label for="type">Filtrer par type :</label>
+      <select [(ngModel)]="selectedType" (change)="onTypeChange()" id="type">
+        <option *ngFor="let type of types" [value]="type">{{ type | titlecase }}</option>
+      </select>
+
+      <label for="sort">Trier par :</label>
+      <select [(ngModel)]="sortBy" (change)="onSortChange()" id="sort">
+        <option value="recent">Date la plus proche</option>
+        <option value="oldest">Date la plus éloignée</option>
+      </select>
+
+      <label for="statut">Statut :</label>
+      <select [(ngModel)]="selectedStatut" (change)="onStatutChange()" id="statut">
+        <option *ngFor="let s of statuts" [value]="s">
+          {{ formatStatut(s) }}
+        </option>
+      </select>
+    </div>
+
+    <div class="consultation-list" *ngIf="paginatedConsultations.length > 0; else noData">
+      <div *ngFor="let c of paginatedConsultations" class="consultation-card">
+        <div class="consultation-header">
+          <h3>📋 {{ c.typeConsultation | titlecase }} — {{ c.dateConsultation | date: 'fullDate' }} à {{
+            c.dateConsultation | date: 'shortTime' }}</h3>
+        </div>
+
+        <div class="consultation-body">
+          <div class="statut" [ngClass]="c.statut.toLowerCase()">
+            <strong>Statut :</strong> {{ formatStatut(c.statut) }}
+            <span *ngIf="c.statut === 'EN_ATTENTE'" class="note">🕐 En attente d’un médecin.</span>
+          </div>
+
+          <p><strong>Message :</strong> {{ c.message || 'Aucun message.' }}</p>
+
+          <div *ngIf="c.statut === 'TERMINEE' && recommandations[c.id]" class="reco-card mt-3">
+            <h5>Recommandation du médecin</h5>
+            <p>{{ recommandations[c.id] }}</p>
+          </div>
+
+          <div *ngIf="c.statut === 'EN_ATTENTE'" class="cancel-btn-wrapper">
+            <button class="cancel-btn" (click)="openConfirmationDialog(c.id)">❌ Annuler le rendez-vous</button>
+          </div>
+        </div>
+
+        <a *ngIf="c.statut === 'EN_ATTENTE'" [routerLink]="['/visio', c.id]" class="join-meet-btn">
+          🔗 Rejoindre la visioconférence
+        </a>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination">
+        <button (click)="changePage(-1)" [disabled]="currentPage === 1">◀ Précédent</button>
+        <span>Page {{ currentPage }} / {{ totalPages() }}</span>
+        <button (click)="changePage(1)" [disabled]="currentPage === totalPages()">Suivant ▶</button>
+      </div>
+    </div>
+
+    <ng-template #noData>
+      <p class="no-consult">Aucune consultation trouvée.</p>
+    </ng-template>
+  </div>
+</div>

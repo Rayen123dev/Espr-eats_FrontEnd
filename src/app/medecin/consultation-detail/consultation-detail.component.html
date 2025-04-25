@@ -1,0 +1,71 @@
+<div class="container consultation-detail mt-4">
+  <h2 class="page-title text-center mb-4">Détails de la consultation</h2>
+
+  <div class="info-grid">
+    <!-- Détails consultation -->
+    <div class="info-card">
+      <h3>Détails</h3>
+      <div class="info-row"><span>Étudiant</span><span>{{ consultation?.etudiant?.nom }}</span></div>
+      <div class="info-row"><span>Date</span><span>{{ consultation?.dateConsultation | date:'fullDate' }} à {{ consultation?.dateConsultation | date:'shortTime' }}</span></div>
+      <div class="info-row"><span>Type</span><span>{{ consultation?.typeConsultation }}</span></div>
+      <div class="info-row">
+        <span>Statut</span>
+        <span class="badge"
+          [ngClass]="{
+            'bg-warning text-dark': consultation?.statut === 'EN_ATTENTE',
+            'bg-success': consultation?.statut === 'TERMINEE',
+            'bg-danger': consultation?.statut === 'ANNULEE'
+          }">
+          {{ consultation?.statut }}
+        </span>
+      </div>
+      <div class="info-row" *ngIf="consultation?.message"><span>Message</span><span>{{ consultation?.message }}</span></div>
+    </div>
+
+    <!-- Profil nutritionnel -->
+    <div class="info-card" *ngIf="profilNutritionnel">
+      <h3>Profil Nutritionnel</h3>
+      <div class="info-row"><span>Poids</span><span>{{ profilNutritionnel.poidsActuel }} kg</span></div>
+      <div class="info-row"><span>Taille</span><span>{{ profilNutritionnel.taille }} cm</span></div>
+      <div class="info-row"><span>IMC</span><span>{{ profilNutritionnel.imc }}</span></div>
+      <div class="info-row"><span>Besoin calorique</span><span>{{ profilNutritionnel.besoinCalorique }} kcal</span></div>
+      <div class="info-row"><span>Objectifs</span><span>{{ profilNutritionnel.objectif?.join(', ') }}</span></div>
+      <div class="info-row"><span>Régime</span><span>{{ profilNutritionnel.regimeAlimentaire }}</span></div>
+      <div class="info-row"><span>Activité</span><span>{{ profilNutritionnel.niveauActivite }}</span></div>
+      <div class="info-row"><span>Allergies</span><span>{{ profilNutritionnel.allergies?.join(', ') || 'Aucune' }}</span></div>
+      <div class="info-row"><span>Fumeur</span><span>{{ profilNutritionnel.fumeur ? 'Oui' : 'Non' }}</span></div>
+      <div class="info-row"><span>Groupe sanguin</span><span>{{ formatBloodGroup(profilNutritionnel.groupeSanguin) }}</span></div>
+    </div>
+  </div>
+
+  <!-- Recommandation -->
+<div class="recommendation-card mt-4">
+  <h3>Recommandation du médecin</h3>
+
+  <ng-container *ngIf="consultation?.statut === 'TERMINEE'; else formOrMessage">
+    <div class="rec-readonly">{{ existingRecommandation || 'Aucune recommandation trouvée.' }}</div>
+  </ng-container>
+
+  <ng-template #formOrMessage>
+    <!-- Si la consultation est annulée, afficher un message -->
+    <div *ngIf="consultation?.statut === 'ANNULEE'" class="text-muted">
+      Cette consultation a été annulée. Aucune recommandation n’est possible.
+    </div>
+
+    <!-- Sinon, afficher le formulaire -->
+    <form *ngIf="consultation?.statut === 'EN_ATTENTE'" [formGroup]="form" (ngSubmit)="submit()">
+      <textarea class="form-control mb-3" formControlName="recommandation"
+                placeholder="Écrivez votre recommandation..." rows="4">
+      </textarea>
+      <button type="submit" class="btn btn-primary w-100">Valider</button>
+    </form>
+  </ng-template>
+
+  <div *ngIf="showSuccessMessage" class="alert alert-success mt-3 success-message text-center">
+    <i class="bi bi-check-circle-fill me-2 animated-icon"></i>
+    Recommandation enregistrée avec succès !
+  </div>
+
+</div>
+
+</div>

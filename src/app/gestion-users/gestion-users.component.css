@@ -3,11 +3,11 @@
     position: relative;
     width: 100%;
   }
-  
+
   .card-body .table-responsive input {
     padding-left: 30px; /* Leave space for the icon */
   }
-  
+
   .card-body .table-responsive i {
     position: absolute;
     top: 50%;
@@ -16,5 +16,4 @@
     font-size: 18px;
     color: #888;
   }
-  
   

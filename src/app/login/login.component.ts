@@ -59,7 +59,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('authToken', token);
       }
     });
-    
+
     if (userId) {
       this.loginService.getUserById(userId).subscribe({
         next: (user) => {
@@ -75,7 +75,7 @@ export class LoginComponent implements OnInit {
     }
 
     this.someObject = this.someObject || {};
-    
+
     // Initialize animations
     this.initFoodAnimation();
   }
@@ -95,24 +95,24 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     this.isSubmitted = true;
     this.clearError();
-    
+
     if (this.loginForm.invalid) {
       return;
     }
-    
+
     this.loading = true;
-    
+
     const credentials = {
       email: this.formControls['email'].value,
       mdp: this.formControls['password'].value,
       captchaToken: this.captchaToken
     };
-    
+
     this.loginService.login(credentials).subscribe({
       next: (data) => {
         // The user ID might not be immediately available
         const userId = this.loginService.getUserIdFromToken();
-        
+
         if (userId) {
           // Ensure user data is fetchable before navigating
           this.loginService.getUserById(userId).subscribe({
@@ -125,7 +125,7 @@ export class LoginComponent implements OnInit {
               this.loading = false;
               console.error('Failed to fetch user', error);
               this.errorMessage = 'Failed to load user data. Please try again.';
-              
+
               // Create shaking animation for form
               this.shakeLoginCard();
             }
@@ -134,7 +134,7 @@ export class LoginComponent implements OnInit {
           this.loading = false;
           console.error('No user ID found');
           this.errorMessage = 'Authentication error: Unable to retrieve user ID';
-          
+
           // Create shaking animation for form
           this.shakeLoginCard();
         }
@@ -142,26 +142,26 @@ export class LoginComponent implements OnInit {
       error: (error) => {
         this.loading = false;
         console.error('Login failed', error);
-        
+
         // Display appropriate error message based on error status
         if (error.status === 401) {
           this.errorMessage = 'Invalid email or password';
         } else if (error.status === 403) {
           this.errorMessage = 'Account is locked or inactive';
-        } 
+        }
         else if (error.status === 429) {
           this.errorMessage = error.error; // <-- Message comme "Compte bloqué temporairement..."
         }
         else {
           this.errorMessage = 'Connection error. Please try again later.';
         }
-        
+
         // Create shaking animation for form
         this.shakeLoginCard();
       }
     });
   }
-  
+
   // Helper method to add shake animation to login card
   private shakeLoginCard(): void {
     const loginCard = document.querySelector('.login-card');
@@ -170,7 +170,7 @@ export class LoginComponent implements OnInit {
       loginCard?.classList.remove('shake');
     }, 500);
   }
-  
+
   // Helper method to redirect based on role
   private redirectBasedOnRole(role: string): void {
     switch (role) {
@@ -184,7 +184,7 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/staffdashboard']);
         break;
       case 'Medecin':
-        this.router.navigate(['/staffdashboard']);
+        this.router.navigate(['/dashboard']);
         break;
       default:
         this.router.navigate(['/home']);
@@ -206,18 +206,18 @@ export class LoginComponent implements OnInit {
 
     // Animation for food icons
     const foodIcons = document.querySelectorAll('.food-icon');
-    
+
     foodIcons.forEach((icon, index) => {
       // Set initial positions
       const delay = index * 2;
-      
+
       gsap.set(icon, {
         x: Math.random() * 100 - 50,
         y: Math.random() * 50,
         opacity: 0,
         scale: 0.5
       });
-      
+
       // Create floating animation
       gsap.to(icon, {
         duration: 3 + Math.random() * 2,

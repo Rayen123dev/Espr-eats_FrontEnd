@@ -1,0 +1,92 @@
+<div class="analyse-plat-container">
+  <div class="header-background">
+    <div class="welcome-text">
+      <h1>Analyse de plat</h1>
+      <p>Obtenez un aperçu nutritionnel intelligent de vos repas</p>
+
+      <div class="actions">
+        <button class="nav-btn" routerLink="/profil-nutritionnel/mon-profil">Consulter mon profil</button>
+        <button class="nav-btn" routerLink="/consulter-medecin">Consulter un médecin</button>
+        <button class="nav-btn" routerLink="/mes-consultations">Voir mes consultations</button>
+        <button class="nav-btn" disabled>Analyser un plat</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="analyse-card">
+    <div class="image-upload-modern"
+     [ngClass]="{ 'selected': selectedImage }"
+     (click)="fileInput.click()"
+     (drop)="onDrop($event)"
+     (dragover)="onDragOver($event)">
+
+  <input type="file" #fileInput (change)="onFileSelected($event)" hidden />
+  <div class="upload-zone">
+    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+    <p class="upload-text">
+      Cliquez ou glissez-déposez une image ici
+    </p>
+    <span class="upload-hint">Formats pris en charge : JPG, PNG</span>
+  </div>
+</div>
+
+<div class="image-preview" *ngIf="imagePreview">
+  <img [src]="imagePreview" alt="Prévisualisation du plat" />
+</div>
+
+
+    <button class="btn-primary" [disabled]="!imageToUpload || loading" (click)="analyserImage()">
+      {{ loading ? 'Analyse en cours...' : 'Analyser le plat' }}
+    </button>
+
+   <!-- Résultat analyse -->
+<div class="result-section" *ngIf="ingredientsDetectes.length > 0">
+  <div class="result-block">
+    <h3>Plat détecté :</h3>
+    <p class="result-highlight">{{ ingredientsDetectes[0] }}</p>
+  </div>
+
+  <div class="result-block" *ngIf="ingredientsComplets.length > 0">
+    <h3>Ingrédients :</h3>
+    <ul class="result-list">
+      <li *ngFor="let ing of ingredientsComplets">{{ ing }}</li>
+    </ul>
+  </div>
+
+  <div class="result-block" *ngIf="nutritionInfos.length > 0">
+    <h3>Valeurs nutritionnelles</h3>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Ingrédient</th>
+          <th *ngFor="let key of nutritionInfos[0] | keyvalue" [hidden]="key.key === 'names'">{{ key.key }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of nutritionInfos">
+          <td>{{ item.names }}</td>
+          <td *ngFor="let key of item | keyvalue" [hidden]="key.key === 'names'">
+            {{ formatNumber(key.value) | number:'1.0-4' }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="result-block" *ngIf="recommandation">
+    <h3>Recommandation</h3>
+    <div [ngClass]="{ 'recommandation-bonne': estBonPourRegime, 'recommandation-mauvaise': !estBonPourRegime }">
+      {{ recommandation }}
+    </div>
+  </div>
+
+  <p *ngIf="message" class="status-msg">{{ message }}</p>
+
+  <div *ngIf="conseilAllergie" class="conseil-box">
+    <h4>Conseil de précaution</h4>
+    <ul class="conseils-list">
+      <li *ngFor="let ligne of conseilAllergie.split('\n')">{{ ligne }}</li>
+    </ul>
+  </div>
+</div>
+

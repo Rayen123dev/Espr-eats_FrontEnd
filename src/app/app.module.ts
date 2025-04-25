@@ -43,9 +43,22 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { AuthGComponent } from './auth-g/auth-g.component';
 import { HomeComponent } from './home/home.component';
 import { CountUpModule } from 'ngx-countup';
+import { MedecinModule } from './medecin/medecin.module';
+import { ConsulterMedecinComponent } from './consulter-medecin/consulter-medecin.component';
+import { MesConsultationsComponent } from './mes-consultations/mes-consultations.component';
+import { ProfilNutritionnelDetailComponent } from './profil-nutritionnel-detail/profil-nutritionnel-detail.component';
+import { ProfilNutritionnelFormComponent } from './profil-nutritionnel-form/profil-nutritionnel-form.component';
+import { ProfilNutritionnelComponent } from './profil-nutritionnel/profil-nutritionnel.component';
+import { VisioComponent } from './visio/visio.component';
+import { CalendarModule } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { AnalysePlatComponent } from './analyse-plat/analyse-plat.component';
+
 import { FaceConfirmationComponent } from './face-confirmation/face-confirmation.component';
 import { WebcamModule } from 'ngx-webcam';
 import { ProductsModule } from './pages/products/products.module';
+
+
 @NgModule({
     declarations: [
       AppComponent,
@@ -67,7 +80,18 @@ import { ProductsModule } from './pages/products/products.module';
       StaffDashboardComponent,
       AuthGComponent,
       HomeComponent,
-      FaceConfirmationComponent
+      FaceConfirmationComponent,
+      MenuDashboardComponent,
+      PlatComponent,
+      RegimeComponent,
+      StaffDashboardComponent,
+      ProfilNutritionnelComponent,
+      ProfilNutritionnelFormComponent,
+      ProfilNutritionnelDetailComponent,
+      ConsulterMedecinComponent,
+      MesConsultationsComponent,
+      VisioComponent,
+      AnalysePlatComponent,
     ],
     imports: [
       BrowserModule,
@@ -95,7 +119,19 @@ import { ProductsModule } from './pages/products/products.module';
       AuthRoutingModule,
       WebcamModule,
       ProductsModule
-    ],  
+    ],
+      WebcamModule,
+      BrowserModule,
+      NgChartsModule,
+      CommonModule,
+      MatCardModule,
+      MatIconModule,
+      MatSelectModule,
+      MatOptionModule,
+      MatPaginatorModule,
+      MedecinModule,
+      NgChartsModule,
+    ],
   providers: [AuthService],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,106 @@
+.nutrition-hero {
+  background: url('/assets/profnutriti.jpg') center/cover no-repeat;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', sans-serif;
+  position: relative;
+
+  .overlay {
+    background: rgba(255, 255, 255, 0.85); // ✅ Overlay clair
+    backdrop-filter: blur(5px);
+    width: 100%;
+    height: 100%;
+    padding: 60px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content {
+    color: #1a202c;
+    max-width: 750px;
+    text-align: center;
+    animation: fadeInUp 0.8s ease;
+
+    h1 {
+      font-size: 44px;
+      font-weight: 800;
+      margin-bottom: 15px;
+
+      .highlight {
+        color: #ffc107;
+      }
+
+      .emoji {
+        font-size: 38px;
+        margin-right: 10px;
+      }
+    }
+
+    .slogan {
+      font-size: 20px;
+      font-style: italic;
+      color: #444;
+      margin-bottom: 12px;
+    }
+
+    .intro {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 30px;
+
+      .brain {
+        font-size: 18px;
+        margin-left: 6px;
+      }
+    }
+
+    .btn-primary {
+      background-color: #ffce00;
+      color: #1a202c;
+      padding: 14px 28px;
+      border: none;
+      border-radius: 40px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 8px 20px rgba(255, 206, 0, 0.35);
+
+      &:hover {
+        background-color: #fbbf24;
+        transform: translateY(-2px);
+      }
+
+      .sparkle {
+        margin-right: 6px;
+      }
+    }
+  }
+}
+
+// Animation smooth
+@keyframes fadeInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .nutrition-hero .content h1 {
+    font-size: 30px;
+  }
+
+  .nutrition-hero .btn-primary {
+    padding: 12px 22px;
+    font-size: 15px;
+  }
+}
