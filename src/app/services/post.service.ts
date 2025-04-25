@@ -8,7 +8,7 @@ import { Post } from '../core/models/post';
   providedIn: 'root',
 })
 export class PostService {
-  private baseUrl = 'http://localhost:8089/forum/post'; // Backend URL
+  private baseUrl = 'http://localhost:8081/post'; // Backend URL
 
   private postsUpdated = new Subject<void>();
 
@@ -18,7 +18,7 @@ export class PostService {
     return this.http.get<any[]>(`${this.baseUrl}/get-all-posts`);
   }
 
-  addPost(postData: any, file?: File): Observable<Post> {
+  addPost(postData: any, file?: File, token?: string): Observable<Post> {
     const formData = new FormData();
     formData.append('post', JSON.stringify(postData));
     
@@ -26,7 +26,12 @@ export class PostService {
       formData.append('file', file, file.name);
     }
   
-    return this.http.post<Post>(`${this.baseUrl}/add-post`, formData).pipe(
+    // Set the authorization header if token is provided
+    const headers = new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+  
+    return this.http.post<Post>(`${this.baseUrl}/add-post`, formData, { headers }).pipe(
       catchError(error => {
         console.error('Full error:', error);
         
@@ -40,7 +45,8 @@ export class PostService {
         return throwError(() => new Error(errorMessage));
       })
     );
-  }  
+  }
+
   updatePost(postId: number, postData: any, file?: File): Observable<Post> {
     const formData = new FormData();
     

@@ -37,14 +37,20 @@ updateReaction(reactionId: number, newEmojiType: string): Observable<any> {
   );
 }*/
 
-private apiUrl = 'http://localhost:8089/forum/reaction';
+private apiUrl = 'http://localhost:8081/reaction';
 
 constructor(private http: HttpClient) {}
 
 // Returns Observable with basic reaction info or removal status
 toggleReaction(postId: number, userId: number, emojiType: string): Observable<any> {
-  return this.http.post(`${this.apiUrl}/toggle?postId=${postId}&userId=${userId}&emojiType=${emojiType}`, {});
+  return this.http.post(`${this.apiUrl}/toggle?postId=${postId}&userId=${userId}&emojiType=${emojiType}`, {}).pipe(
+    catchError(error => {
+      console.error('Error toggling reaction:', error);
+      return throwError(() => new Error('Failed to toggle reaction'));
+    })
+  );
 }
+
 
 // Returns Observable with array of reaction objects
 getPostReactions(postId: number): Observable<any[]> {
@@ -53,4 +59,8 @@ getPostReactions(postId: number): Observable<any[]> {
 
 }
 
+
+function throwError(arg0: () => Error): any {
+  throw new Error('Function not implemented.');
+}
 

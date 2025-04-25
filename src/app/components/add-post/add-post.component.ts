@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PostService } from '../../services/post.service';
+import { LoginService } from 'src/app/login.service';
 
 interface ProfanityResult {
   isProfanity: boolean;
@@ -15,7 +16,7 @@ interface ProfanityResult {
   styleUrls: ['./add-post.component.css']
 })
 // add-post.component.ts
-export class AddPostComponent {
+export class AddPostComponent implements OnInit {
   postForm: FormGroup;
   selectedFile?: File;
   isLoading = false;
@@ -25,11 +26,34 @@ export class AddPostComponent {
   @Input() parentPostId?: number | null = null;
   @Output() replyComplete = new EventEmitter<void>();
   profanityResult?: ProfanityResult;
+  user: any;
 
-  constructor(private fb: FormBuilder, private postService: PostService) {
+  constructor(private fb: FormBuilder, private postService: PostService , private loginService: LoginService) {
+  
     this.postForm = this.fb.group({
       content: ['', [Validators.required, Validators.maxLength(500)]]
     });
+  }
+  ngOnInit(): void {
+    const userId = this.loginService.getUserIdFromToken();
+    
+    if (!userId) {
+      this.handleError('Unable to retrieve user ID');
+      return;
+    }
+
+    this.fetchUserProfile(userId);
+    console.log('User ID:', userId);
+    const U1= this.loginService.getUserById(userId) || this.user;
+    
+
+    throw new Error('Method not implemented.');
+  }
+  handleError(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
+  fetchUserProfile(userId: number) {
+    throw new Error('Method not implemented.');
   }
 
   onFileSelected(event: any): void {
@@ -136,11 +160,15 @@ export class AddPostComponent {
       // Proceed with post submission
       const newPost = {
         content: this.postForm.value.content,
-        authorId: 1, // Or get from auth service
+        authorId: this.loginService.getUserIdFromToken(), // Retrieve userId from loginService
         parentId: this.isReplyMode ? this.parentPostId : undefined
+
+        
+
+
       };
   
-      this.postService.addPost(newPost, this.selectedFile).subscribe({
+      this.postService.addPost(newPost, this.selectedFile , ).subscribe({
         next: (response) => {
           console.log(this.isReplyMode ? 'Reply added successfully' : 'Post added successfully', response);
           this.postForm.reset();

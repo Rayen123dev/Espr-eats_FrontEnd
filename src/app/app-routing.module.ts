@@ -31,6 +31,10 @@ import { PaymentConfirmationComponent } from './payment-confirmation/payment-con
 import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-confirme.component';
 import { AbonnementDetailsComponent } from './abonnement-details/abonnement-details.component';
 import { AbonnementReportComponent } from './abonnement-report/abonnement-report.component';
+import { PostListComponent } from './components/post-list/post-list.component';
+import { PostDetailsComponent } from './components/post-details/post-details.component';
+import { PostManagementComponent } from './admin/components/post-management/post-management.component';
+import { AddPostComponent } from './components/add-post/add-post.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -132,6 +136,15 @@ const routes: Routes = [
   { path: 'abonnement-confirme', component: AbonnementConfirmeComponent },
   { path: 'abonnement-details', component: AbonnementDetailsComponent },
   { path: 'abonnement-report', component: AbonnementReportComponent },
+
+
+  { path: 'posts', component: PostListComponent, canActivate: [AuthGuard]  },
+  { path: 'posts/post-details/:postID', component: PostDetailsComponent, canActivate: [AuthGuard]  },
+  { path: 'posts/add-post', component: AddPostComponent, canActivate: [AuthGuard]  },
+  { path: 'admin', component: PostManagementComponent, canActivate: [AuthGuard] ,
+    data: { expectedRoles: ['Admin'] } },
+
+
 ];
 
 @NgModule({

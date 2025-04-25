@@ -18,7 +18,7 @@ describeImageFile(file: File) {
   const formData = new FormData();
   formData.append('file', file);
 
-  return this.http.post<any>('http://localhost:8089/describe', formData);
+  return this.http.post<any>('http://localhost:8081/describe', formData);
 }
   
   

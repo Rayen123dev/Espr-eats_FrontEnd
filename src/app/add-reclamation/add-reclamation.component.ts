@@ -58,6 +58,8 @@ export class AddReclamationComponent implements OnInit {
         (response) => {
           // Handle successful creation
           console.log('Reclamation created successfully', response);
+
+          console.log('Reclamation data:', reclamationData);
           
           // Optional: Show success message
           alert('Complaint submitted successfully!');

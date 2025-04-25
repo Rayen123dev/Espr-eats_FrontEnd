@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class SearchService {
-  private apiUrl = 'http://localhost:8089/forum/post/search';
+  private apiUrl = 'http://localhost:8081/post/search';
 
   constructor(private http: HttpClient) { }
 

@@ -15,7 +15,7 @@ export class PostManagementComponent implements OnInit {
   // Reuse existing properties from PostListComponent
   posts: any[] = [];
   currentPage: number = 0;
-  pageSize: number = 20;
+  pageSize: number = 10;
   totalPosts: number = 0;
   totalPages: number = 0;
   allPosts: any[] = [];
@@ -103,7 +103,7 @@ export class PostManagementComponent implements OnInit {
 
   deletePost(postId: number): void {
     if (confirm('Are you sure you want to delete this post?')) {
-      this.http.delete(`http://localhost:8089/forum/admin/posts/${postId}`)
+      this.http.delete(`http://localhost:8081/admin/posts/${postId}`)
         .subscribe({
           next: () => {
             this.posts = this.posts.filter(post => post.postID !== postId);

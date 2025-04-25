@@ -219,7 +219,7 @@ export class PostListComponent implements OnInit, OnDestroy {
     return ${this.postService.getBaseUrl()}/forum-uploads/${mediaPath};
   }*/
   getMediaUrl(mediaPath: string): string {
-    return `http://localhost:8089/forum/forum-uploads/${mediaPath}`;
+    return `http://localhost:8081/forum-uploads/${mediaPath}`;
   }
 
   isImage(url: string): boolean {
@@ -439,7 +439,7 @@ checkPostEngagements() {
 }*/
 
 checkPostEngagements() {
-  this.http.get('http://localhost:8089/forum/engagement/check', { responseType: 'text' }).subscribe({
+  this.http.get('http://localhost:8081/engagement/check', { responseType: 'text' }).subscribe({
     next: (response) => console.log("Engagement check triggered successfully:", response),
     error: (err: any) => console.error("Error checking engagement:", err)
   });
@@ -546,7 +546,7 @@ describeImage(post: any): void {
   }
 
 
-  const fullImageUrl = `http://localhost:8089/forum/forum-uploads/${post.mediaURL}`;
+  const fullImageUrl = `http://localhost:8081/forum-uploads/${post.mediaURL}`;
 
 
 this.http.post<any>('http://localhost:5000/generate-description', {
