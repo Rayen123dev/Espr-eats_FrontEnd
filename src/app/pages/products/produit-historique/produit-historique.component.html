@@ -1,0 +1,136 @@
+<div class="deznav">
+  <div class="deznav-scroll">
+    <a class="add-project-sidebar btn btn-primary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addProjectSidebar">+ Nouveau Projet</a>
+    <ul class="metismenu" id="menu">
+      <li><a href="#">
+        <i class="flaticon-layout"></i>
+        <span class="nav-text">Tableau de Bord</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-monitor"></i>
+        <span class="nav-text">Applications</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-bar-chart-1"></i>
+        <span class="nav-text">Statistiques</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-web"></i>
+        <span class="nav-text">Bootstrap</span>
+      </a></li>
+      <li><a routerLink="/produits-dashboard" routerLinkActive="active">
+        <i class="flaticon-plugin"></i>
+        <span class="nav-text">Produits</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-admin"></i>
+        <span class="nav-text">Widgets</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-contract"></i>
+        <span class="nav-text">Formulaires</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-table"></i>
+        <span class="nav-text">Tableaux</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-newsletter"></i>
+        <span class="nav-text">Pages</span>
+      </a></li>
+    </ul>
+  </div>
+</div>
+
+<div class="container">
+  <!-- Historique des Produits -->
+  <div class="content-container">
+    <div class="product-history-header">
+      <h2 class="title"><i class="fas fa-history"></i> Historique des Produits</h2>
+      <div class="button-container">
+        <!-- Retour -->
+        <button mat-raised-button 
+        color="primary" 
+        [routerLink]="'/product-list'" 
+        class="action-button back-button space-button">
+  <i class="fas fa-arrow-left"></i> Retour à la Liste des Produits
+</button>
+
+<!-- Export PDF -->
+<button mat-raised-button 
+        color="warn" 
+        (click)="exportToPDF()" 
+        class="action-button export-button space-button">
+  <i class="fas fa-file-pdf"></i> Exporter en PDF
+</button>
+      </div>
+    </div>
+
+    <!-- Tableau -->
+    <div class="scrollable-table-container">
+      <table class="center-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Code-barres</th>
+            <th>Nom du Produit</th>
+            <th>Type</th>
+            <th>Quantité</th>
+            <th>Date</th>
+            <th>Date de péremption</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let historique of filteredHistoriqueList">
+            <td>{{ historique.historiqueID }}</td>
+            <td>{{ historique.produit?.barcode }}</td>
+            <td>{{ historique.produit?.nomProduit || 'Aucun Produit' }}</td>
+            <td>{{ getTransactionType(historique.type) }}</td>
+            <td>{{ historique.quantite }}</td>
+            <td>{{ historique.date | date: 'short' }}</td>
+            <td>
+              <ng-container *ngIf="historique.produit?.date_peremption; else noExpiration">
+                {{ historique.produit?.date_peremption | date: 'short' }}
+              </ng-container>
+              <ng-template #noExpiration>Pas de péremption</ng-template>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Section de filtrage -->
+  <div class="filter-section">
+    <h3><i class="fas fa-filter"></i> Filtrer l'Historique</h3>
+
+    <!-- Filtre Type -->
+    <label for="typeFilter"><i class="fas fa-exchange-alt"></i> Type :</label>
+    <input type="text" id="typeFilter" [(ngModel)]="typeFilter" (input)="applyFilter()" placeholder="Filtrer par type">
+    
+    <!-- Filtre Code-barres -->
+    <label for="barcodeFilter"><i class="fas fa-barcode"></i> Code-barres :</label>
+    <input type="text" id="barcodeFilter" [(ngModel)]="barcodeFilter" (input)="applyFilter()" placeholder="Saisir le code-barres">
+
+    <!-- Quantité Min -->
+    <label for="minQuantiteFilter"><i class="fas fa-sort-amount-down"></i> Quantité Min :</label>
+    <input type="number" id="minQuantiteFilter" [(ngModel)]="minQuantiteFilter" (input)="applyFilter()" placeholder="Quantité minimale">
+
+    <!-- Quantité Max -->
+    <label for="maxQuantiteFilter"><i class="fas fa-sort-amount-up"></i> Quantité Max :</label>
+    <input type="number" id="maxQuantiteFilter" [(ngModel)]="maxQuantiteFilter" (input)="applyFilter()" placeholder="Quantité maximale">
+
+    <!-- Date début -->
+    <label for="startDateFilter"><i class="fas fa-calendar-plus"></i> Date de début :</label>
+    <input type="date" id="startDateFilter" [(ngModel)]="startDateFilter" (change)="applyFilter()">
+
+    <!-- Date fin -->
+    <label for="endDateFilter"><i class="fas fa-calendar-minus"></i> Date de fin :</label>
+    <input type="date" id="endDateFilter" [(ngModel)]="endDateFilter" (change)="applyFilter()">
+
+    <!-- Réinitialiser -->
+    <button mat-raised-button color="warn" (click)="resetFilters()">
+      <i class="fas fa-undo"></i> Réinitialiser les filtres
+    </button>
+  </div>
+</div>

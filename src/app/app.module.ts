@@ -45,6 +45,7 @@ import { HomeComponent } from './home/home.component';
 import { CountUpModule } from 'ngx-countup';
 import { FaceConfirmationComponent } from './face-confirmation/face-confirmation.component';
 import { WebcamModule } from 'ngx-webcam';
+import { ProductsModule } from './pages/products/products.module';
 @NgModule({
     declarations: [
       AppComponent,
@@ -92,7 +93,8 @@ import { WebcamModule } from 'ngx-webcam';
       RecaptchaFormsModule,
       CountUpModule,
       AuthRoutingModule,
-      WebcamModule
+      WebcamModule,
+      ProductsModule
     ],  
   providers: [AuthService],
   bootstrap: [AppComponent]

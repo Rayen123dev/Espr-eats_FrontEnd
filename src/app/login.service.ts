@@ -51,13 +51,20 @@ export class LoginService {
   
 
   login(user: { email: string; mdp: string }): Observable<any> {
+    localStorage.removeItem('token');
+    
     return this.http.post<{ token: string }>(`${this.baseUrl}/login`, user).pipe(
       tap(response => {
-        if (response.token) {
+        if (response && response.token) {
           localStorage.setItem('token', response.token);
           console.log('Token', response.token);
           console.log('Role', this.getRole());
         }
+      }),
+      catchError(error => {
+        console.error('Login error:', error);
+        localStorage.removeItem('token');
+        return throwError(() => error);
       })
     );
   }

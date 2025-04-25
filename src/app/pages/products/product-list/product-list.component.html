@@ -1,0 +1,155 @@
+<!-- Section de la barre latérale -->
+<div class="deznav">
+  <div class="deznav-scroll">
+    <a class="add-project-sidebar btn btn-primary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addProjectSidebar">+ Nouveau Projet</a>
+    <ul class="metismenu" id="menu">
+      <li><a href="#">
+        <i class="flaticon-layout"></i>
+        <span class="nav-text">Tableau de Bord</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-monitor"></i>
+        <span class="nav-text">Applications</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-bar-chart-1"></i>
+        <span class="nav-text">Statistiques</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-web"></i>
+        <span class="nav-text">Bootstrap</span>
+      </a></li>
+      <li><a routerLink="/produits-dashboard" routerLinkActive="active">
+        <i class="flaticon-plugin"></i>
+        <span class="nav-text">Produits</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-admin"></i>
+        <span class="nav-text">Widget</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-contract"></i>
+        <span class="nav-text">Formulaires</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-table"></i>
+        <span class="nav-text">Tableaux</span>
+      </a></li>
+      <li><a href="#">
+        <i class="flaticon-newsletter"></i>
+        <span class="nav-text">Pages</span>
+      </a></li>
+    </ul>
+  </div>
+</div>
+
+<!-- Boîte d'alerte -->
+<div class="alert-box show" *ngIf="alerts.length > 0">
+  <button class="close-btn" (click)="hideAlerts()">✖</button>
+  <h3>
+    <i class="fas fa-exclamation-triangle alert-icon"></i>
+    Alertes Produits
+  </h3>
+  <ul>
+    <li *ngFor="let alert of alerts">
+      <i class="fas fa-exclamation-triangle alert-icon"></i>
+      {{ alert.nomProduit }} (ID : {{ alert.produitID }}) - {{ alert.status }}
+    </li>
+  </ul>
+</div>
+
+<div class="container">
+  <!-- Tableau des produits -->
+  <div class="content-container">
+    <h2 class="title"><i class="fas fa-boxes"></i> Liste des Produits</h2>
+    
+    
+    <div class="button-container">
+      <button mat-raised-button color="primary" (click)="openProductForm(null)" class="space-button">
+        <i class="fas fa-plus"></i> Ajouter un Produit
+      </button>
+      <button mat-raised-button color="accent" [routerLink]="'/produit-historique'" class="space-button">
+        <i class="fas fa-history"></i> Voir l'Historique
+      </button>
+      <button (click)="fileInput.click()" class="space-button">
+        <i class="fas fa-barcode"></i> Importer Code-barres
+      </button>
+      <input #fileInput type="file" style="display: none" (change)="onFileChange($event)" />
+    </div>
+
+    <div class="scrollable-table-container">
+      <table class="center-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Code-barres</th>
+            <th>Nom</th>
+            <th>Description</th>
+            <th>Seuil d'Alerte</th>
+            <th>Quantité</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let product of filteredProducts">
+            <td>{{ product.produitID }}</td>
+            <td>{{ product.barcode }}</td>
+            <td>{{ product.nomProduit }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.seuil_alerte }}</td>
+            <td>{{ product.quantite }}</td>
+            <td>
+              <button *ngIf="product.produitID !== undefined" (click)="deleteProduct(product.produitID)" style="margin-right: 10px;">
+                <i class="fas fa-trash"></i>
+              </button>
+              <button mat-raised-button color="primary" (click)="openProductForm(product)">
+                <i class="fas fa-edit"></i> Modifier
+              </button>
+              <button
+                mat-icon-button
+                color="primary"
+                (click)="showForecast(product)"
+                aria-label="Prévisions"
+              >
+                <i class="fas fa-chart-line"></i>
+              </button>            
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Messages de succès et d'erreur -->
+  <div *ngIf="successMessage" class="alert alert-success" role="alert">
+    <i class="fas fa-check-circle"></i> {{ successMessage }}
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
+    <i class="fas fa-times-circle"></i> {{ errorMessage }}
+  </div>
+
+  <!-- Section de filtre -->
+  <div class="filter-section">
+    <h3><i class="fas fa-filter"></i> Filtrer les Produits</h3>
+    
+    <label for="nameFilter"><i class="fas fa-box"></i> Nom :</label>
+    <input type="text" id="nameFilter" [(ngModel)]="nameFilter" (input)="applyFilter()">
+    
+    <label for="minQuantity"><i class="fas fa-sort-amount-down"></i> Quantité Min :</label>
+    <input type="number" id="minQuantity" [(ngModel)]="minQuantity" (input)="applyFilter()">
+    
+    <label for="maxQuantity"><i class="fas fa-sort-amount-up"></i> Quantité Max :</label>
+    <input type="number" id="maxQuantity" [(ngModel)]="maxQuantity" (input)="applyFilter()">
+        
+    <label for="alertThreshold"><i class="fas fa-bell"></i> Seuil d'Alerte :</label>
+    <input type="number" id="alertThreshold" [(ngModel)]="alertThreshold" (input)="applyFilter()">
+    
+    <label for="barcodeFilter"><i class="fas fa-barcode"></i> Code-barres :</label>
+    <input type="text" id="barcodeFilter" [(ngModel)]="barcodeFilter" (input)="applyFilter()">
+    
+    <button (click)="resetFilters()">
+      <i class="fas fa-undo"></i> Réinitialiser
+    </button>
+  </div>
+</div>

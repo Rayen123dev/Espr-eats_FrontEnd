@@ -13,6 +13,10 @@ import { AuthGuard } from './auth.guard';
 import { AuthGComponent } from './auth-g/auth-g.component';
 import { FaceConfirmationComponent } from './face-confirmation/face-confirmation.component';
 import { EmailVerificationComponent } from './email-verification/email-verification.component';
+import { ProduitDashboardComponent } from './pages/products/produit-dashboard/produit-dashboard.component';
+import { ProductFormComponent } from './pages/products/product-form/product-form.component';
+import { ProductListComponent } from './pages/products/product-list/product-list.component';
+import { ProduitHistoriqueComponent } from './pages/products/produit-historique/produit-historique.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -41,6 +45,13 @@ const routes: Routes = [
     data: { expectedRole: 'Staff' } },
   { path: 'MenuDashboardComponent', component: MenuDashboardComponent, canActivate: [AuthGuard],
     data: { expectedRoles: ['Staff', 'Admin', 'Medecin'] } },
+
+    { path: 'produits-dashboard', component: ProduitDashboardComponent, canActivate: [AuthGuard] , data: { expectedRole: 'Admin' }  },
+    { path: 'products', redirectTo: '/produits-dashboard', pathMatch: 'full' },
+    { path: 'add-product', component: ProductFormComponent, canActivate: [AuthGuard] },
+    { path: 'produit-historique', component: ProduitHistoriqueComponent, canActivate: [AuthGuard] },
+    { path: 'product-list', component: ProductListComponent, canActivate: [AuthGuard] },
+    { path: 'products/edit/:id', component: ProductFormComponent, canActivate: [AuthGuard] },
 
   { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
 
