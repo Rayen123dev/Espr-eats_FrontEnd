@@ -153,7 +153,7 @@ export class PaymentConfirmationComponent implements OnInit {
                     id: this.currentUserId!,
                     nom: 'Utilisateur Inconnu',
                     email: 'N/A',
-                  } as User);
+                  } as unknown as User);
                 })
               )
               .subscribe((user: User) => {

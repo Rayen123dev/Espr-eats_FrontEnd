@@ -13,6 +13,7 @@ export interface User {
   link_Image: string;
   verified: boolean;
   lastLogin: Date;
+  abonnement: boolean;
 }
 
 export interface CloudinaryUploadResponse {

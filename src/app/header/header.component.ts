@@ -7,11 +7,13 @@ import { LoginService,User } from '../login.service';
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit {
+[x: string]: any;
   userName: string = 'User';
   userProfileImage: string = 'assets/default-avatar.png';
   isProfileDropdownOpen: boolean = false;
   userRole: string | null = null;
   user: any = null; // Initialize user to null
+  hasAbonnement: boolean = false;
 
   constructor(
     private loginService: LoginService,
@@ -32,6 +34,7 @@ export class HeaderComponent implements OnInit {
           this.userName = user.nom;
           this.userProfileImage = user.link_Image || this.userProfileImage;
           this.userRole = this.loginService.getRole();
+          this.hasAbonnement = !!user.abonnement;
         },
         error: (error) => {
           console.error('Error fetching user profile', error);

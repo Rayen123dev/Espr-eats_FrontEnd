@@ -23,7 +23,8 @@ export class ProfileComponent implements OnInit {
     avatarUrl: '',
     link_Image: '',
     verified: false,
-    lastLogin: new Date()
+    lastLogin: new Date(),
+    abonnement: false
   };
 
   currentTime: string = '';

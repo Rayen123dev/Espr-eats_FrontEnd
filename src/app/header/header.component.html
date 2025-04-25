@@ -18,6 +18,15 @@
         <li class="nav-item">
           <a routerLink="/reports" routerLinkActive="active" *ngIf="userRole === 'User'">Reports</a>
         </li>
+        <li class="nav-item">
+          <!-- Conditionally set the routerLink based on userRole and hasAbonnement -->
+          <a 
+            [routerLink]="userRole === 'Admin' ? '/abonnement-report' : (hasAbonnement ? '/abonnement-details' : '/abonnement')" 
+            routerLinkActive="active"
+          >
+            {{ userRole === 'Admin' ? 'Abonnements Report' : 'Abonnement' }}
+          </a>
+        </li>
       </ul>
     </nav>
 
@@ -48,6 +57,7 @@
             <li (click)="logout()">
               <i class="icon-logout"></i> Logout
             </li>
+            
           </ul>
         </div>
       </div>
