@@ -1,0 +1,35 @@
+/* layout.component.scss */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+  }
+  
+  .main-content {
+    flex: 1;
+    margin-left: 280px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    min-height: 100vh;
+    background-color: #f5f7fa;
+  }
+  
+  .content-body {
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+  }
+  
+  // For screens smaller than 992px, adjust margin for collapsed sidebar
+  @media (max-width: 991px) {
+    .main-content {
+      margin-left: 70px;
+    }
+  }
+  
+  // For very small screens, make sidebar collapse completely
+  @media (max-width: 767px) {
+    .main-content {
+      margin-left: 0;
+    }
+  }

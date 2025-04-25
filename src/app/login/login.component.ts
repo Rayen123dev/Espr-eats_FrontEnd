@@ -175,7 +175,7 @@ export class LoginComponent implements OnInit {
   private redirectBasedOnRole(role: string): void {
     switch (role) {
       case 'Admin':
-        this.router.navigate(['gestionuser']);
+        this.router.navigate(['/admin-layout/gestionuser']);
         break;
       case 'User':
         this.router.navigate(['/face-confirmation']);

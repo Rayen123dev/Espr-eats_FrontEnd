@@ -35,6 +35,7 @@ import { PostListComponent } from './components/post-list/post-list.component';
 import { PostDetailsComponent } from './components/post-details/post-details.component';
 import { PostManagementComponent } from './admin/components/post-management/post-management.component';
 import { AddPostComponent } from './components/add-post/add-post.component';
+import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -144,9 +145,18 @@ const routes: Routes = [
   { path: 'admin', component: PostManagementComponent, canActivate: [AuthGuard] ,
     data: { expectedRoles: ['Admin'] } },
 
-
+    {
+      path: 'admin-layout',
+      component: AdminLayoutComponent,
+      children: [
+        { path: 'gestionuser', component: GestionUsersComponent },
+        { path: 'staffdashboard', component: StaffDashboardComponent },
+        { path: 'produits-dashboard', component: ProduitDashboardComponent },
+        { path: 'admin', component: PostManagementComponent },
+        { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+      ]
+    }  
 ];
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

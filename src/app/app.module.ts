@@ -70,6 +70,8 @@ import { PostDetailsComponent } from './components/post-details/post-details.com
 import { ReplyFormComponent } from './components/reply-form/reply-form.component';
 import { TruncatePipe } from './shared/truncate.pipe';
 import { AdminModule } from './admin/admin.module';
+import { SidebarComponent } from './sidebar/sidebar.component';
+import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 
 @NgModule({
     declarations: [
@@ -128,7 +130,9 @@ import { AdminModule } from './admin/admin.module';
       FooterComponent,
       PostDetailsComponent,
       ReplyFormComponent,
-      TruncatePipe
+      TruncatePipe,
+      SidebarComponent,
+      AdminLayoutComponent
     ],
     imports: [
       BrowserModule,
