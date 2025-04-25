@@ -1,0 +1,599 @@
+/* Import Google Fonts (Switch to Inter to match the image's clean sans-serif look) */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* Root Variables (Updated to match the image's color palette) */
+:root {
+  --primary: #3b82f6; /* Blue for buttons */
+  --primary-light: #60a5fa;
+  --secondary: #f59e0b; /* Yellow for Most Popular badge border */
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --dark: #1f2937;
+  --light: #ffffff;
+  --background: #f0f4fd; /* Updated to match the image */
+}
+
+/* Base Styles */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f4fd; /* Uses #f0f4fd */
+  color: #1f2937;
+}
+
+/* Subscription Container */
+.subscription-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 24px;
+  background-color: #f0f4fd; /* Uses #f0f4fd */
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.greeting-message {
+  font-size: 16px;
+  font-weight: 400;
+  color: #4b5563;
+  text-align: center;
+  margin-bottom: 40px;
+  line-height: 1.5;
+  max-width: 600px;
+}
+
+.description {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+  line-height: 1.5;
+}
+
+.subscription-info {
+  font-size: 14px;
+  color: #6b7280;
+  margin: 0 0 24px 0;
+  line-height: 1.5;
+}
+
+/* Pricing Small Title */
+.pricing-smalltitle {
+  font-size: 16px;
+  font-weight: 500;
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.pricing-smalltitle::before,
+.pricing-smalltitle::after {
+  content: none;
+}
+
+/* Add to the end of abonnement.component.css */
+
+/* Black Friday Component */
+.black-friday-component {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: fit-content;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+.black-friday-component .coupon {
+  border-radius: 12px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--primary);
+  background-color: #000000;
+}
+
+.black-friday-component .coupon:hover .content h3 > span {
+  animation: jump 0.15s ease-out 1 normal both;
+}
+
+/* Staggered animation for letters */
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(1) { animation-delay: 0.03s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(2) { animation-delay: 0.06s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(3) { animation-delay: 0.09s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(4) { animation-delay: 0.12s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(5) { animation-delay: 0.15s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(6) { animation-delay: 0.18s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(7) { animation-delay: 0.21s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(8) { animation-delay: 0.24s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(9) { animation-delay: 0.27s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(10) { animation-delay: 0.3s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(11) { animation-delay: 0.33s; }
+.black-friday-component .coupon:hover .content h3 > span:nth-of-type(12) { animation-delay: 0.36s; }
+
+.black-friday-component .coupon .box {
+  width: 130px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  padding: 1rem;
+  background-color: var(--primary-light);
+}
+
+.black-friday-component .coupon .box span {
+  display: block;
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.black-friday-component .coupon .diver {
+  width: 0;
+  height: 160px;
+  border: 3px dashed transparent;
+  border-right-color: #ffffff;
+}
+
+.black-friday-component .coupon .content {
+  padding: 1rem;
+  flex: 1;
+  color: #ffffff;
+  width: 330px;
+}
+
+.black-friday-component .coupon .content h3 {
+  font-weight: 600;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.black-friday-component .coupon .content h3 span.end {
+  width: 30px;
+}
+
+.black-friday-component .coupon .content p {
+  font-weight: 400;
+  color: #d1d5db;
+  font-size: 1rem;
+  line-height: 1.25rem;
+}
+
+.black-friday-component .coupon .content p a {
+  font-style: italic;
+  color: var(--primary);
+  text-transform: capitalize;
+  font-weight: bold;
+  text-decoration: underline;
+  text-underline-offset: 0.05rem;
+}
+
+.black-friday-component .timer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 0.5rem;
+  width: fit-content;
+}
+
+.black-friday-component .timer .colon {
+  width: 8px;
+  color: var(--light);
+  font-size: 2rem;
+  line-height: 40px;
+}
+
+.black-friday-component .timer .item {
+  text-align: center;
+  width: 55px;
+}
+
+.black-friday-component .timer .item .days,
+.black-friday-component .timer .item .hours,
+.black-friday-component .timer .item .minutes,
+.black-friday-component .timer .item .seconds {
+  text-align: center;
+  width: 55px;
+  height: 40px;
+  border-radius: 4px;
+}
+
+.black-friday-component .timer .item .day,
+.black-friday-component .timer .item .hour,
+.black-friday-component .timer .item .min,
+.black-friday-component .timer .item .sec {
+  text-align: center;
+  height: 40px;
+}
+
+.black-friday-component .timer .item .day span,
+.black-friday-component .timer .item .hour span,
+.black-friday-component .timer .item .min span,
+.black-friday-component .timer .item .sec span {
+  height: 40px;
+  color: #1e40af;
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 40px;
+}
+
+.black-friday-component .timer .item p {
+  text-align: center;
+  color: #1e40af;
+  font-size: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Animations */
+@keyframes jump {
+  0% { transform: translateY(0); scale: 1; }
+  50% { transform: translateY(-10px); scale: 1.1; }
+  100% { transform: translateY(0); scale: 1; }
+}
+
+/* Responsive Design for Black Friday */
+@media (max-width: 600px) {
+  .black-friday-component .coupon {
+    flex-direction: column;
+    scale: 0.8;
+  }
+
+  .black-friday-component .coupon .diver {
+    width: 100%;
+    height: 0;
+    border: 3px dashed transparent;
+    border-bottom-color: var(--primary);
+  }
+
+  .black-friday-component .coupon .content {
+    width: 100%;
+    text-align: center;
+  }
+
+  .black-friday-component .coupon .content h3 {
+    justify-content: center;
+  }
+}
+
+/* Pricing Title */
+.pricing-title {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* A modern sans-serif font stack */
+  font-size: 3rem;
+  font-weight: 700; 
+  background: linear-gradient(to right, #1e40af, #3b82f6); 
+  -webkit-background-clip: text;
+  background-clip: text; /* Standard property for text gradient */
+  color: transparent; /* Make text transparent to show the gradient */
+  display: inline-block; /* Ensure the gradient applies correctly */
+  line-height: 1.2;
+}
+
+.pricing-title::before,
+.pricing-title::after {
+  content: none;
+}
+
+/* Toast Container */
+.custom-toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  min-width: 300px;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background-color: #fee2e2;
+  color: #991b1b;
+  border: 1px solid #f87171;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  animation: slideIn 0.5s ease-in-out;
+}
+
+.toast-header {
+  display: none;
+}
+
+.toast-icon {
+  display: none;
+}
+
+.toast-title {
+  display: none;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  font-size: 20px;
+  color: #991b1b;
+  cursor: pointer;
+}
+
+.toast-body {
+  padding: 0;
+  font-size: 14px;
+}
+
+/* Plans Container */
+.plans-container {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  flex-wrap: nowrap;
+}
+
+/* Plan Card */
+.plan-card {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  padding: 28px;
+  border-radius: 16px;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  position: relative;
+  transition: transform 0.3s ease;
+  overflow: visible;
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.plan-card.most-popular {
+  border: 2px solid #e5e7eb;
+}
+
+/* Most Popular Badge */
+.most-popular-badge {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background-color: #1f2937;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 16px 6px 12px;
+  border: 2px solid #f59e0b;
+  border-radius: 8px 8px 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transform: rotate(10deg);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.crown-icon {
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 16px;
+  color: #f59e0b;
+}
+
+/* Discount Badge */
+.discount-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background-color: #a3e635;
+  color: #1f2937;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Plan Card Title */
+.plan-card h3 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 8px 0;
+}
+
+.plan-card h3::before {
+  content: none;
+}
+
+/* Description */
+.description {
+  font-size: 15px;
+  color: #6b7280;
+  margin: 0 0 16px 0;
+}
+
+/* Price Section */
+.price {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 16px 0;
+}
+
+.original-price {
+  font-size: 18px;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: line-through;
+  margin-bottom: 4px;
+}
+
+.price-line {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.current-price {
+  font-size: 30px;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.monthly-cost {
+  font-size: 15px;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+.billing-note {
+  font-size: 13px;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* User Count */
+.user-count {
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+  margin: 8px 0;
+}
+
+/* Renewal Option */
+.renewal-option {
+  margin: 16px 0;
+  text-align: center;
+  
+}
+
+.toggle-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 36px;
+  height: 18px;
+  background: #d1d5db;
+  border-radius: 18px;
+  transition: background 0.3s;
+}
+
+.toggle-slider::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: #3b82f6;
+}
+
+.toggle-switch input:checked + .toggle-slider::before {
+  transform: translateX(18px);
+}
+
+.toggle-label {
+  font-size: 16px;
+  color: #6b7280;
+}
+
+.toggle-label.on {
+  color: #3b82f6;
+}
+
+/* Subscribe Button */
+.subscribe-button {
+  width: 100%;
+  padding: 14px;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  font-size: 17px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.subscribe-button:hover {
+  background-color: #60a5fa;
+}
+
+.subscribe-button .text {
+  display: inline;
+}
+
+.subscribe-button .icon {
+  display: none;
+}
+
+/* User Limit */
+.user-limit {
+  font-size: 13px;
+  color: #6b7280;
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 1400px) {
+  .plans-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .plan-card {
+    width: 100%;
+    max-width: 350px;
+  }
+}
+
+@media (max-width: 600px) {
+  .pricing-title {
+    font-size: 24px;
+  }
+}
+
+/* Animations */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Remove unused styles */
+.modal,
+.modal-content,
+.modal-header,
+.modal-body,
+.modal-footer,
+.features,
+.error-message,
+.success-message,
+.loading-spinner {
+  display: none;
+}

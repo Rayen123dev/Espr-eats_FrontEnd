@@ -26,6 +26,11 @@ import { ProduitDashboardComponent } from './pages/products/produit-dashboard/pr
 import { ProductFormComponent } from './pages/products/product-form/product-form.component';
 import { ProductListComponent } from './pages/products/product-list/product-list.component';
 import { ProduitHistoriqueComponent } from './pages/products/produit-historique/produit-historique.component';
+import { AbonnementComponent } from './abonnement/abonnement.component';
+import { PaymentConfirmationComponent } from './payment-confirmation/payment-confirmation.component';
+import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-confirme.component';
+import { AbonnementDetailsComponent } from './abonnement-details/abonnement-details.component';
+import { AbonnementReportComponent } from './abonnement-report/abonnement-report.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -114,8 +119,20 @@ const routes: Routes = [
 
   { path: 'face-confirmation', component: FaceConfirmationComponent, canActivate: [AuthGuard] },
 
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'add-reclamation', component: AddReclamationComponent },
+  { path: 'user-reclamations', component: UserReclamationsComponent },
+  { path: 'gestionuser', component: GestionUsersComponent },
+  { path: 'abonnement', component: AbonnementComponent },
+  {
+    path: 'abonnement/payment-confirmation',
+    component: PaymentConfirmationComponent,
+  },
+  { path: 'abonnement-confirme', component: AbonnementConfirmeComponent },
+  { path: 'abonnement-details', component: AbonnementDetailsComponent },
+  { path: 'abonnement-report', component: AbonnementReportComponent },
 ];
-
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],

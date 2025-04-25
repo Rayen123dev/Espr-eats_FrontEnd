@@ -1,0 +1,368 @@
+<div class="billing-container">
+  <!-- Custom Toast Notification -->
+  <div *ngIf="showToast" class="notification" [ngClass]="toastTitle === 'Success' ? 'success' : 'warning'">
+    <span class="notification-icon"></span>
+    <span>{{ toastMessage }}</span>
+    <button class="close-btn" (click)="closeToast()">×</button>
+  </div>
+
+  <!-- Notification for Blocked Subscriptions -->
+  <div *ngIf="showBlockedNotification" class="notification warning">
+    <span class="notification-icon"></span>
+    <span>Attention: Il y a {{ report?.blockedSubscriptions }} abonnement(s) bloqué(s) actuellement!</span>
+    <button class="close-btn" (click)="closeBlockedNotification()">×</button>
+  </div>
+
+  <!-- Header -->
+  <h1 class="page-title">Tableau de Bord des Abonnements</h1>
+
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+    <button *ngIf="!isLoading" (click)="retryFetchReport()" class="download-btn">
+      Réessayer
+    </button>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="loading-spinner">
+    Chargement du tableau de bord...
+  </div>
+
+  <!-- Dashboard Content -->
+  <div *ngIf="!isLoading && report" class="dashboard-content">
+    <!-- Discount Form Section -->
+    <div class="section discount-section">
+      <div class="card">
+        <div class="card-header">
+          <h2>Gérer les Remises</h2>
+          <button
+            class="button"
+            (click)="toggleDiscountForm()"
+          >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 24">
+        <path d="m18 0 8 12 10-8-4 20H4L0 4l10 8 8-12z"></path>
+      </svg>
+            {{ showDiscountForm ? 'Annuler' : 'Ajouter une Remise' }}
+          </button>
+        </div>
+        <div class="card-body" *ngIf="showDiscountForm">
+          <form [formGroup]="discountForm" (ngSubmit)="submitDiscountForm()">
+            <div class="row">
+              <!-- Percentage -->
+              <div class="col-md-6 mb-3">
+                <label for="percentage" class="form-label">Pourcentage (%)</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="percentage"
+                  formControlName="percentage"
+                  placeholder="Ex: 20"
+                  min="0"
+                  max="100"
+                />
+                <div
+                  *ngIf="
+                    discountForm.get('percentage')?.invalid &&
+                    discountForm.get('percentage')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Le pourcentage doit être entre 0 et 100.
+                </div>
+              </div>
+              <!-- Subscription Type -->
+              <div class="col-md-6 mb-3">
+                <label for="type" class="form-label">Type d'Abonnement</label>
+                <div class="relative">
+                  <select
+                    class="form-control"
+                    id="type"
+                    formControlName="type"
+                  >
+                    <option value="" disabled>Sélectionner un type</option>
+                    <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+                  </select>
+                  <span class="pointer-events-none">
+                    <i class="fas fa-chevron-down"></i>
+                  </span>
+                </div>
+                <div
+                  *ngIf="
+                    discountForm.get('type')?.invalid &&
+                    discountForm.get('type')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Veuillez sélectionner un type d'abonnement.
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <!-- Start Date -->
+              <div class="col-md-6 mb-3">
+                <label for="startDate" class="form-label">Date de Début</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="startDate"
+                  formControlName="startDate"
+                />
+                <div
+                  *ngIf="
+                    discountForm.get('startDate')?.invalid &&
+                    discountForm.get('startDate')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Veuillez sélectionner une date de début.
+                </div>
+              </div>
+              <!-- End Date -->
+              <div class="col-md-6 mb-3">
+                <label for="endDate" class="form-label">Date de Fin</label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="endDate"
+                  formControlName="endDate"
+                />
+                <div
+                  *ngIf="
+                    discountForm.get('endDate')?.invalid &&
+                    discountForm.get('endDate')?.touched
+                  "
+                  class="text-danger"
+                >
+                  Veuillez sélectionner une date de fin.
+                </div>
+                <div
+                  *ngIf="
+                    discountForm.hasError('dateRange') &&
+                    discountForm.get('endDate')?.touched
+                  "
+                  class="text-danger"
+                >
+                  La date de fin ne peut pas être antérieure à la date de début.
+                </div>
+              </div>
+            </div>
+            <!-- Is Active -->
+            <div class="mb-3">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  id="isActive"
+                  formControlName="isActive"
+                />
+                <label class="form-check-label" for="isActive">Remise Active</label>
+              </div>
+            </div>
+            <!-- Submit Button -->
+            <button
+              type="submit"
+              class="download-btn"
+              [disabled]="discountForm.invalid"
+            >
+              Créer la Remise
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- General Statistics Cards -->
+    <div class="section stats-section">
+      <h2>Statistiques Générales</h2>
+      <div class="stats-cards">
+        <div class="plan-details card">
+          <div class="plan-info">
+            <div class="plan-name">Abonnements Actifs</div>
+            <div class="plan-cost">{{ report.activeSubscriptions }}</div>
+          </div>
+        </div>
+        <div class="plan-details card">
+          <div class="plan-info">
+            <div class="plan-name">Abonnements en Attente</div>
+            <div class="plan-cost">{{ report.pendingSubscriptions }}</div>
+          </div>
+        </div>
+        <div class="plan-details card">
+          <div class="plan-info">
+            <div class="plan-name">Abonnements Bloqués</div>
+            <div class="plan-cost">{{ report.blockedSubscriptions }}</div>
+          </div>
+        </div>
+        <div class="plan-details card">
+          <div class="plan-info">
+            <div class="plan-name">Abonnements Expirés</div>
+            <div class="plan-cost">{{ report.expiredSubscriptions }}</div>
+          </div>
+        </div>
+        <div class="plan-details card">
+          <div class="plan-info">
+            <div class="plan-name">Revenu Total</div>
+            <div class="plan-cost">{{ (report?.totalRevenue ?? 0).toFixed(2) }} Dt</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+      <div class="section chart-section">
+        <h2>Croissance Mensuelle</h2>
+        <div class="chart-container">
+          <canvas
+            baseChart
+            [datasets]="lineChartData.datasets"
+            [labels]="lineChartData.labels"
+            [options]="lineChartOptions"
+            [legend]="lineChartLegend"
+            [type]="lineChartType"
+          ></canvas>
+        </div>
+      </div>
+      <div class="section chart-section">
+        <h2>Répartition des Statuts</h2>
+        <div class="chart-container">
+          <canvas
+            baseChart
+            [datasets]="pieChartData.datasets"
+            [labels]="pieChartData.labels"
+            [options]="pieChartOptions"
+            [legend]="pieChartLegend"
+            [type]="pieChartType"
+          ></canvas>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="section table-section">
+      <h2>Abonnements par Type et Statut</h2>
+      <!-- Filters -->
+      <div class="payment-method filters">
+        <div class="card-info">Filtres</div>
+        <div class="plan-actions">
+          <div class="relative">
+            <select [(ngModel)]="selectedType" (change)="onFilterChange()">
+              <option value="">Tous les Types</option>
+              <option *ngFor="let type of types" [value]="type">{{ type }}</option>
+            </select>
+            <span class="pointer-events-none">
+              <i class="fas fa-chevron-down"></i>
+            </span>
+          </div>
+          <div class="relative">
+            <select [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+              <option value="">Tous les Statuts</option>
+              <option *ngFor="let status of statuses" [value]="status">{{ status }}</option>
+            </select>
+            <span class="pointer-events-none">
+              <i class="fas fa-chevron-down"></i>
+            </span>
+          </div>
+          <button (click)="clearFilters()" class="download-btn reset-btn">
+            Réinitialiser
+          </button>
+        </div>
+      </div>
+
+      <!-- Toggle Success/Error Messages -->
+      <div *ngIf="toggleSuccessMessage" class="success-message">
+        {{ toggleSuccessMessage }}
+      </div>
+      <div *ngIf="toggleErrorMessage" class="error-message">
+        {{ toggleErrorMessage }}
+      </div>
+
+      <!-- Table Error Message -->
+      <div *ngIf="tableErrorMessage" class="error-message">
+        {{ tableErrorMessage }}
+      </div>
+
+      <!-- Table Loading Spinner -->
+      <div *ngIf="isLoadingTable" class="loading-spinner">
+        Chargement des abonnements...
+      </div>
+
+      <!-- Table and Pagination -->
+      <div *ngIf="!isLoadingTable" class="billing-history">
+        <!-- Table -->
+        <div *ngIf="abonnements.length > 0; ">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Statut</th>
+                <th>Coût (Dt)</th>
+                <th>Date Début</th>
+                <th>Date Fin</th>
+                <th>Bloqué</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let abonnement of abonnements">
+                <td>{{ abonnement.idAbonnement }}</td>
+                <td>{{ abonnement.typeAbonnement }}</td>
+                <td>{{ abonnement.abonnementStatus }}</td>
+                <td>{{ abonnement.cout.toFixed(2) }}</td>
+                <td>{{ abonnement.dateDebut | date: 'shortDate' }}</td>
+                <td>{{ abonnement.dateFin | date: 'shortDate' }}</td>
+                <td>
+                  <label class="toggle-switch">
+                    <input
+                      type="checkbox"
+                      [checked]="abonnement.abonnementStatus === 'SUSPENDED'"
+                      (change)="toggleBlockedStatus(abonnement.idAbonnement)"
+                      [attr.data-status]="abonnement.abonnementStatus"
+                    />
+                    <span class="slider"></span>
+                  </label>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Custom Pagination (Always shown if there was data or filters are applied) -->
+        <div *ngIf="totalItems > 0 || selectedType || selectedStatus" class="custom-pagination">
+          <button
+            class="pagination-btn prev-btn"
+            [disabled]="currentPage === 1"
+            (click)="changePage(currentPage - 1)"
+          >
+            << Précédent
+          </button>
+          <div class="page-numbers">
+            <button
+              *ngFor="let page of getPageNumbers()"
+              class="page-btn"
+              [class.active]="page === currentPage"
+              (click)="changePage(page)"
+            >
+              {{ page }}
+            </button>
+          </div>
+          <button
+            class="pagination-btn next-btn"
+            [disabled]="currentPage === totalPages"
+            (click)="changePage(currentPage + 1)"
+          >
+            Suivant >>
+          </button>
+        </div>
+      </div>
+
+      <!-- No Data Message (Initial State) -->
+      <div *ngIf="!isLoadingTable && totalItems === 0 && !selectedType && !selectedStatus && !tableErrorMessage" class="no-transactions">
+        <div class="no-data-icon"></div>
+        <p>Aucun abonnement trouvé</p>
+        <span>Veuillez sélectionner un type ou un statut.</span>
+      </div>
+    </div>
+  </div>
+</div>
