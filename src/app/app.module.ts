@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -64,6 +65,14 @@ import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-co
 import { AbonnementDetailsComponent } from './abonnement-details/abonnement-details.component';
 import { AbonnementReportComponent } from './abonnement-report/abonnement-report.component';
 import { NgChartsModule } from 'ng2-charts';
+import { PostListComponent } from './components/post-list/post-list.component';
+import { AddPostComponent } from './components/add-post/add-post.component';
+import { PostDetailsComponent } from './components/post-details/post-details.component';
+import { RouterModule } from '@angular/router';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { ReplyFormComponent } from './components/reply-form/reply-form.component';
+import { TruncatePipe } from './shared/truncate.pipe';
 
 @NgModule({
     declarations: [
@@ -170,5 +179,26 @@ import { NgChartsModule } from 'ng2-charts';
     ],
   providers: [AuthService],
   bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    PostListComponent,
+    AddPostComponent,
+    HeaderComponent,
+    FooterComponent,
+    PostDetailsComponent,
+    ReplyFormComponent,
+    TruncatePipe
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    AppRoutingModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    RouterModule.forRoot([]),
+  ],
+  providers: [],
+  bootstrap: [AppComponent],
+  exports: [RouterModule]
 })
 export class AppModule { }

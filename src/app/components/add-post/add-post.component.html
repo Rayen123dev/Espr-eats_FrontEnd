@@ -1,0 +1,96 @@
+<app-header></app-header>
+<!-- add-post.component.html -->
+<div class="form-container">
+  <form [formGroup]="postForm" (ngSubmit)="onSubmit()" class="post-form">
+    <h2 class="form-title">Create New Post</h2>
+    
+    <!-- Error Message -->
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      <i class="fas fa-exclamation-circle"></i> {{ errorMessage }}
+    </div>
+    
+    <!-- Content Field -->
+    <div class="form-group">
+      <label class="form-label">
+        <i class="fas fa-edit"></i> What's on your mind?
+      </label>
+      <textarea 
+        formControlName="content" 
+        class="form-textarea"
+        placeholder="Share your thoughts..."
+        rows="4"
+      ></textarea>
+      <div *ngIf="postForm.get('content')?.invalid && postForm.get('content')?.touched" 
+           class="error-message">
+        <i class="fas fa-exclamation-circle"></i> 
+        <span *ngIf="postForm.get('content')?.errors?.['required']">
+          Post content is required
+        </span>
+        <span *ngIf="postForm.get('content')?.errors?.['maxlength']">
+          Maximum 500 characters allowed
+        </span>
+      </div>
+    </div>
+    
+    <!-- File Upload -->
+    <div class="form-group">
+      <label class="form-label">
+        <i class="fas fa-image"></i> Add Media (optional)
+      </label>
+      <input 
+        type="file" 
+        (change)="onFileSelected($event)"
+        class="form-control"
+        accept="image/*, video/mp4"
+      >
+      <small class="form-text text-muted">
+        Supported formats: JPEG, PNG, GIF, MP4. Max size: 5MB.
+      </small>
+    </div>
+    
+    <!-- Profanity Warning -->
+    <div *ngIf="profanityResult?.isProfanity" class="profanity-warning">
+      <div class="profanity-header">
+        <i class="warning-icon">⚠️</i>
+        <h3>Content Warning</h3>
+      </div>
+      
+      <div class="profanity-details">
+        <div class="profanity-score">
+          <span>Profanity Score:</span>
+          <span class="score {{ getSeverityClass(profanityResult?.score || 0) }}">
+            {{ (profanityResult?.score || 0) * 100 }}%
+          </span>
+        </div>
+        
+        <div *ngIf="profanityResult && getFlaggedWords(profanityResult)?.length" class="flagged-words">
+          <span>Flagged Words:</span>
+          <div class="word-bubbles">
+            <span class="word-bubble" *ngFor="let word of getFlaggedWords(profanityResult)">
+              {{ word }}
+            </span>
+          </div>
+        </div>
+        
+        <p class="suggestion">Please revise your content before posting.</p>
+      </div>
+    </div>
+    
+    <form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+    
+    <!-- Submit Button -->
+    <div class="form-actions">
+      <button 
+        type="submit" 
+        class="submit-btn"
+        [disabled]="postForm.invalid || isLoading"
+      >
+        <span *ngIf="!isLoading">
+          <i class="fas fa-paper-plane"></i> {{ isReplyMode ? 'Reply' : 'Post' }}
+        </span>
+        <span *ngIf="isLoading">
+          <i class="fas fa-spinner fa-spin"></i> Posting...
+        </span>
+      </button>
+  
+</div>
