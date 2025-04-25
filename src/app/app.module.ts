@@ -118,8 +118,7 @@ import { ProductsModule } from './pages/products/products.module';
       CountUpModule,
       AuthRoutingModule,
       WebcamModule,
-      ProductsModule
-    ],
+      ProductsModule,
       WebcamModule,
       BrowserModule,
       NgChartsModule,

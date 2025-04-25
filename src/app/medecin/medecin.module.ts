@@ -36,16 +36,18 @@ registerLocaleData(localeFr);
     FormsModule,
     ReactiveFormsModule,
     NgChartsModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }),
+    CalendarModule,
     BrowserAnimationsModule,
     FullCalendarModule,
-
   ],
   exports: [
     HeaderMedecinComponent
+  ],  // <-- This comma was missing
+  providers: [
+    {
+      provide: DateAdapter,
+      useFactory: adapterFactory
+    }
   ]
 })
-export class MedecinModule {}
+export class MedecinModule { }
