@@ -102,6 +102,7 @@ const routes: Routes = [
     data: { expectedRoles: ['User'] }
   },
 
+  { path: 'verify-email', component: EmailVerificationComponent },
 
   { path: 'profil-nutritionnel', component: ProfilNutritionnelComponent },
   { path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent },
