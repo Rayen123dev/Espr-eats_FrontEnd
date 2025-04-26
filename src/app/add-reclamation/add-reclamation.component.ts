@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReclamationService } from '../reclamation.service';
-import { LoginService } from '../login.service'; // Import LoginService
+import { LoginService } from '../login.service'; 
+import { MatSnackBar } from '@angular/material/snack-bar'; 
+
 
 @Component({
   selector: 'app-add-reclamation',
@@ -16,13 +18,13 @@ export class AddReclamationComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private reclamationService: ReclamationService,
-    private loginService: LoginService, // Inject LoginService
-    private router: Router
+    private loginService: LoginService, 
+    private router: Router,
+    private snackBar: MatSnackBar
+
   ) {
-    // Get the current user ID from the token
     this.currentUserId = this.loginService.getUserIdFromToken();
 
-    // Initialize the form with validators
     this.reclamationForm = this.fb.group({
       subject: ['', [
         Validators.required, 
@@ -63,9 +65,12 @@ export class AddReclamationComponent implements OnInit {
           
           // Optional: Show success message
           alert('Complaint submitted successfully!');
+          this.snackBar.open('Complaint submitted successfully!', 'Close', {
+            duration: 3000,
+          });
           
           // Navigate back to reclamation list or dashboard
-          this.router.navigate(['/reclamations']);
+          this.router.navigate(['/user-reclamations']);
         },
         (error) => {
           // Handle error

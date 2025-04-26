@@ -1,48 +1,6 @@
-<div class="deznav">
-  <div class="deznav-scroll">
-    <a class="add-project-sidebar btn btn-primary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addProjectSidebar">+ Nouveau Projet</a>
-    <ul class="metismenu" id="menu">
-      <li><a href="#">
-        <i class="flaticon-layout"></i>
-        <span class="nav-text">Tableau de Bord</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-monitor"></i>
-        <span class="nav-text">Applications</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-bar-chart-1"></i>
-        <span class="nav-text">Statistiques</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-web"></i>
-        <span class="nav-text">Bootstrap</span>
-      </a></li>
-      <li><a routerLink="/produits-dashboard" routerLinkActive="active">
-        <i class="flaticon-plugin"></i>
-        <span class="nav-text">Produits</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-admin"></i>
-        <span class="nav-text">Widgets</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-contract"></i>
-        <span class="nav-text">Formulaires</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-table"></i>
-        <span class="nav-text">Tableaux</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-newsletter"></i>
-        <span class="nav-text">Pages</span>
-      </a></li>
-    </ul>
-  </div>
-</div>
 
-<div class="container">
+<div class="row">
+  <div class="col-9">
   <!-- Historique des Produits -->
   <div class="content-container">
     <div class="product-history-header">
@@ -51,7 +9,7 @@
         <!-- Retour -->
         <button mat-raised-button 
         color="primary" 
-        [routerLink]="'/product-list'" 
+        [routerLink]="'/admin-layout/product-list'" 
         class="action-button back-button space-button">
   <i class="fas fa-arrow-left"></i> Retour à la Liste des Produits
 </button>
@@ -99,9 +57,9 @@
       </table>
     </div>
   </div>
-
+</div>
   <!-- Section de filtrage -->
-  <div class="filter-section">
+  <div class="filter-section col-3">
     <h3><i class="fas fa-filter"></i> Filtrer l'Historique</h3>
 
     <!-- Filtre Type -->

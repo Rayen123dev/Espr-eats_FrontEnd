@@ -72,6 +72,7 @@ import { TruncatePipe } from './shared/truncate.pipe';
 import { AdminModule } from './admin/admin.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
     declarations: [
@@ -192,6 +193,7 @@ import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
       HttpClientModule,
       RouterModule.forRoot([]),
       AdminModule,
+      MatSnackBarModule
     ],
   providers: [AuthService],
   bootstrap: [AppComponent],

@@ -96,6 +96,6 @@ getDaysUntilExpiry(product: Produit): number {
 }
   
   goToProductList(): void {
-    this.router.navigate(['/product-list']);
+    this.router.navigate(['/admin-layout/product-list']);
   }
 }

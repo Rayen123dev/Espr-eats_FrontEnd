@@ -5,6 +5,7 @@ import { trigger, transition, style, animate } from '@angular/animations';
 import { LoginService } from '../login.service';
 import { AuthService } from '../auth-service.service';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

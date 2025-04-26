@@ -27,7 +27,8 @@
     </div>
     <div class="login-right">
       <div class="login-form-container">
-        
+        <br>
+        <br>
         <h2>Log In</h2>
         <p class="form-subtitle">Welcome back! Please enter your details</p>
         
@@ -95,22 +96,13 @@
         </form>
         
         <div class="login-divider">
-          <span>OR</span>
+          <span>Don't have an account?</span>
         </div>
         
-        <button class="google-button" routerLink="/signup">
-          <i class="fab fa-google"></i>
-          Sign Up With Google
-        </button>
-
-        <button (click)="loginWithGoogle()" class="google-login-button">
-          <img src="path_to_google_icon" alt="Google Login" />
-          Login with Google
-        </button>
-        
         <div class="signup-link">
-          <span>Don't have an account?</span>
-          <a href="javascript:void(0)" routerLink="/signup">Sign up</a>
+          <button class="google-button" routerLink="/signup">
+            Sign Up 
+          </button>
         </div>
       </div>
     </div>

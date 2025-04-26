@@ -1,47 +1,4 @@
-<!-- Section de la barre latérale -->
-<div class="deznav">
-  <div class="deznav-scroll">
-    <a class="add-project-sidebar btn btn-primary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#addProjectSidebar">+ Nouveau Projet</a>
-    <ul class="metismenu" id="menu">
-      <li><a href="#">
-        <i class="flaticon-layout"></i>
-        <span class="nav-text">Tableau de Bord</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-monitor"></i>
-        <span class="nav-text">Applications</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-bar-chart-1"></i>
-        <span class="nav-text">Statistiques</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-web"></i>
-        <span class="nav-text">Bootstrap</span>
-      </a></li>
-      <li><a routerLink="/produits-dashboard" routerLinkActive="active">
-        <i class="flaticon-plugin"></i>
-        <span class="nav-text">Produits</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-admin"></i>
-        <span class="nav-text">Widget</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-contract"></i>
-        <span class="nav-text">Formulaires</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-table"></i>
-        <span class="nav-text">Tableaux</span>
-      </a></li>
-      <li><a href="#">
-        <i class="flaticon-newsletter"></i>
-        <span class="nav-text">Pages</span>
-      </a></li>
-    </ul>
-  </div>
-</div>
+
 
 <!-- Boîte d'alerte -->
 <div class="alert-box show" *ngIf="alerts.length > 0">
@@ -58,7 +15,8 @@
   </ul>
 </div>
 
-<div class="container">
+<div class="row">
+  <div class="col-9">
   <!-- Tableau des produits -->
   <div class="content-container">
     <h2 class="title"><i class="fas fa-boxes"></i> Liste des Produits</h2>
@@ -68,7 +26,7 @@
       <button mat-raised-button color="primary" (click)="openProductForm(null)" class="space-button">
         <i class="fas fa-plus"></i> Ajouter un Produit
       </button>
-      <button mat-raised-button color="accent" [routerLink]="'/produit-historique'" class="space-button">
+      <button mat-raised-button color="accent" [routerLink]="'/admin-layout/produit-historique'" class="space-button">
         <i class="fas fa-history"></i> Voir l'Historique
       </button>
       <button (click)="fileInput.click()" class="space-button">
@@ -128,9 +86,8 @@
   <div *ngIf="errorMessage" class="alert alert-danger" role="alert">
     <i class="fas fa-times-circle"></i> {{ errorMessage }}
   </div>
-
-  <!-- Section de filtre -->
-  <div class="filter-section">
+</div>
+  <div class="filter-section col-3">
     <h3><i class="fas fa-filter"></i> Filtrer les Produits</h3>
     
     <label for="nameFilter"><i class="fas fa-box"></i> Nom :</label>

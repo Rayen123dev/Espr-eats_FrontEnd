@@ -116,8 +116,8 @@ const routes: Routes = [
     { path: 'produits-dashboard', component: ProduitDashboardComponent, canActivate: [AuthGuard] , data: { expectedRole: 'Admin' }  },
     { path: 'products', redirectTo: '/produits-dashboard', pathMatch: 'full' },
     { path: 'add-product', component: ProductFormComponent, canActivate: [AuthGuard] },
-    { path: 'produit-historique', component: ProduitHistoriqueComponent, canActivate: [AuthGuard] },
-    { path: 'product-list', component: ProductListComponent, canActivate: [AuthGuard] },
+    //{ path: 'produit-historique', component: ProduitHistoriqueComponent, canActivate: [AuthGuard] },
+    //{ path: 'product-list', component: ProductListComponent, canActivate: [AuthGuard] },
     { path: 'products/edit/:id', component: ProductFormComponent, canActivate: [AuthGuard] },
 
   { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
@@ -145,6 +145,7 @@ const routes: Routes = [
   { path: 'admin', component: PostManagementComponent, canActivate: [AuthGuard] ,
     data: { expectedRoles: ['Admin'] } },
 
+
     {
       path: 'admin-layout',
       component: AdminLayoutComponent,
@@ -153,7 +154,11 @@ const routes: Routes = [
         { path: 'staffdashboard', component: StaffDashboardComponent },
         { path: 'produits-dashboard', component: ProduitDashboardComponent },
         { path: 'admin', component: PostManagementComponent },
-        { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
+        { path: 'product-list', component: ProductListComponent},
+        { path: 'abonnement-report', component: AbonnementReportComponent },
+        { path: 'produit-historique', component: ProduitHistoriqueComponent},
+
+        { path: '', redirectTo: 'gestionuser', pathMatch: 'full' }
       ]
     }  
 ];
