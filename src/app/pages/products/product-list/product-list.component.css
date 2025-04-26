@@ -918,3 +918,22 @@ body {
     transform: translateX(0);
   }
 }
+
+/* Ajouter dans product-list.component.css */
+.custom-dialog-container .mat-dialog-container {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.mat-dialog-content {
+  max-height: 65vh;
+}
+
+/* Pour assurer que les boutons et le contenu principal ne se chevauchent pas */
+.button-container {
+  margin-bottom: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

@@ -153,7 +153,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
       MatSelectModule,
       MatOptionModule,
       MatCheckboxModule,
-      MatPaginatorModule,
       RecaptchaModule,
       RecaptchaFormsModule,
       CountUpModule,
@@ -168,7 +167,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
       MatIconModule,
       MatSelectModule,
       MatOptionModule,
-      MatPaginatorModule,
       MedecinModule,
       BrowserModule,
       BrowserModule,
@@ -193,7 +191,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
       HttpClientModule,
       RouterModule.forRoot([]),
       AdminModule,
-      MatSnackBarModule
+      MatSnackBarModule,
+      MatPaginatorModule
     ],
   providers: [AuthService],
   bootstrap: [AppComponent],

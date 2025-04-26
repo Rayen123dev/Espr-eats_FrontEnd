@@ -16,9 +16,11 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { ForecastDialogComponent } from './forecast-dialog/forecast-dialog.component';
 import { NgChartsModule } from 'ng2-charts';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [ ProductFormComponent, ProduitHistoriqueComponent, ToastComponent,ProduitDashboardComponent, ForecastDialogComponent, ProductListComponent],
-  imports: [CommonModule, HttpClientModule, FormsModule,ReactiveFormsModule,MatDialogModule,RouterModule,MatIconModule,ZXingScannerModule,MatPaginatorModule,MatTableModule,NgChartsModule],
+  imports: [CommonModule, HttpClientModule, FormsModule,ReactiveFormsModule,MatDialogModule,RouterModule,MatIconModule,ZXingScannerModule,MatPaginatorModule,MatTableModule,NgChartsModule,BrowserAnimationsModule,
+    MatDialogModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [ProductService],
   exports: [ ProductFormComponent, ProduitHistoriqueComponent, ToastComponent, ProductListComponent]

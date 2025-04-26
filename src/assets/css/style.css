@@ -43360,3 +43360,313 @@ html[dir="rtl"] [direction="rtl"][data-sidebar-style="compact"]:not([data-layout
     height: 250px !important;
   }
 }
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding: 10px 0;
+}
+
+.pagination-controls select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  margin-right: 15px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+}
+
+.pagination-controls button {
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.pagination-controls button:hover:not([disabled]) {
+  background-color: #e9ecef;
+  color: #000;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-controls span {
+  margin: 0 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* For responsive design */
+@media (max-width: 576px) {
+  .pagination-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .pagination-controls select,
+  .pagination-controls button,
+  .pagination-controls span {
+    margin: 5px;
+  }
+}
+.card-body .table-responsive .input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+.card-body .table-responsive input {
+  padding-left: 30px; /* Leave space for the icon */
+}
+
+.card-body .table-responsive i {
+  position: absolute;
+  top: 50%;
+  left: 10px; /* Position the icon */
+  transform: translateY(-50%); /* Center the icon vertically */
+  font-size: 18px;
+  color: #888;
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 20px;
+  padding: 10px 0;
+}
+
+.pagination-controls select {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #fff;
+  margin-right: 15px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+}
+
+.pagination-controls button {
+  padding: 8px 16px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease;
+}
+
+.pagination-controls button:hover:not([disabled]) {
+  background-color: #e9ecef;
+  color: #000;
+}
+
+.pagination-controls button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-controls span {
+  margin: 0 15px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* For responsive design */
+@media (max-width: 576px) {
+  .pagination-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .pagination-controls select,
+  .pagination-controls button,
+  .pagination-controls span {
+    margin: 5px;
+  }
+}
+/* Chart Styling */
+.ct-chart {
+  height: 300px;
+  position: relative;
+}
+
+.ct-chart .ct-series-a .ct-line,
+.ct-chart .ct-series-a .ct-point {
+  stroke: #3444d5;
+  stroke-width: 2px;
+}
+
+.ct-chart .ct-series-b .ct-line,
+.ct-chart .ct-series-b .ct-point {
+  stroke: #FFB930;
+  stroke-width: 2px;
+}
+
+.ct-chart .ct-series-c .ct-line,
+.ct-chart .ct-series-c .ct-point {
+  stroke: #20F174;
+  stroke-width: 2px;
+}
+
+/* Pie/Donut Chart Styling */
+.ct-chart .ct-series-a .ct-slice-donut {
+  stroke: #3444d5;
+}
+
+.ct-chart .ct-series-b .ct-slice-donut {
+  stroke: #FFB930;
+}
+
+.ct-chart .ct-series-c .ct-slice-donut {
+  stroke: #20F174;
+}
+
+.ct-chart .ct-series-d .ct-slice-donut {
+  stroke: #3ECDFF;
+}
+
+/* Bar Chart Styling */
+.ct-bar-custom {
+  stroke-width: 20px !important;
+}
+
+.ct-chart .ct-label {
+  color: #555;
+  font-size: 12px;
+  fill: #555;
+}
+
+/* Chart Tooltip */
+.ct-tooltip {
+  position: absolute;
+  display: inline-block;
+  min-width: 80px;
+  padding: 8px 10px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  text-align: center;
+  pointer-events: none;
+  z-index: 100;
+  transition: opacity 0.2s;
+}
+
+/* Search Input Styling */
+.input-with-icon {
+  position: relative;
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-with-icon input {
+  width: 100%;
+  padding: 10px 15px 10px 40px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.input-with-icon input:focus {
+  border-color: #3444d5;
+  box-shadow: 0 0 0 2px rgba(52, 68, 213, 0.2);
+  outline: none;
+}
+
+.input-with-icon i {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777;
+  font-size: 16px;
+}
+
+/* Filter Buttons */
+.filter-actions {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+}
+
+.filter-btn {
+  padding: 6px 12px;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  background-color: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #555;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-btn:hover {
+  background-color: #e9ecef;
+}
+
+.filter-btn.active {
+  background-color: #3444d5;
+  border-color: #3444d5;
+  color: white;
+}
+
+/* Card Styling Enhancement */
+.card {
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 25px;
+  border: none;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: transparent;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 20px 25px;
+}
+
+.card-body {
+  padding: 25px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .ct-chart {
+    height: 250px;
+  }
+  
+  .filter-actions {
+    justify-content: center;
+  }
+  
+  .filter-btn {
+    margin-right: 5px;
+    margin-bottom: 5px;
+    padding: 5px 10px;
+  }
+  
+  .input-with-icon {
+    max-width: 100%;
+  }
+}
