@@ -9,7 +9,7 @@ export class PdfGeneratorService {
 
 
   constructor(private http: HttpClient) { }  
- apiUrl="http://192.168.1.31:5000"
+ apiUrl="http://192.168.1.40:5000"
 
   
     recommondation(): Observable<Blob> {

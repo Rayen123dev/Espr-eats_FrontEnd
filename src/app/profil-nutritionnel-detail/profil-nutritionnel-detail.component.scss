@@ -42,9 +42,9 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
         &:hover {
-          background-color: #1a73e8;
+          background-color: #c8102e;
           color: #fff;
-          border-color: #1a73e8;
+          border-color: #c8102e;
         }
 
         &:disabled {
@@ -80,14 +80,14 @@
   background-color: #f8f9fa;
   padding: 14px 18px;
   border-radius: 8px;
-  border-left: 4px solid #1a73e8;
+  border-left: 4px solid #c8102e;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
   word-wrap: break-word;
 }
 
 .label {
   font-weight: 600;
-  color: #1a73e8;
+  color: #c8102e;
 }
 
 /* ℹ️ Box d'information IMC */
@@ -112,7 +112,7 @@
   gap: 15px;
 
   .btn-primary {
-    background-color: #1a73e8;
+    background-color: #c8102e;
     color: white;
     padding: 10px 25px;
     border: none;
@@ -121,7 +121,7 @@
     cursor: pointer;
 
     &:hover {
-      background-color: #0f5dc2;
+      background-color: #a50d27;
     }
   }
 
@@ -171,7 +171,7 @@ input, select, textarea {
 
   &:focus {
     outline: none;
-    border-color: #1a73e8;
+    border-color: #c8102e;
   }
 }
 
@@ -195,7 +195,7 @@ input, select, textarea {
     transition: background 0.2s;
 
     &:hover {
-      background-color: #e2e6ea;
+      background-color: #ffe5e5;
     }
   }
 
