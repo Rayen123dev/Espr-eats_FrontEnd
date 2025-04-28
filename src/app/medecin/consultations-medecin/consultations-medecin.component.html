@@ -76,9 +76,9 @@
 
   <!-- Pagination -->
   <div class="pagination-controls" *ngIf="totalPages > 1">
-    <button (click)="prevPage()" [disabled]="currentPage === 1">◀️ Précédent</button>
+    <button (click)="prevPage()" [disabled]="currentPage === 1">Précédent</button>
     <span>Page {{ currentPage }} / {{ totalPages }}</span>
-    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant ▶️</button>
+    <button (click)="nextPage()" [disabled]="currentPage === totalPages">Suivant</button>
   </div>
 
   <p class="text-muted text-center mt-3">

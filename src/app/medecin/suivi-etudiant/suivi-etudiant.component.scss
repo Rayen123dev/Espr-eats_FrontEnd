@@ -1,92 +1,137 @@
+// 🎨 Variables globales
+$primary-color: #c8102e;
+$secondary-color: #ffffff;
+$background-color: #f5f7fa;
+$text-color: #2c3e50;
+$border-color: #e0e0e0;
+$muted-color: #95a5a6;
+$gradient-red: linear-gradient(90deg, #ff0000, #500202);
+
+// 🌐 Reset
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  background: $background-color;
+  color: $text-color;
+}
+
+// 🧩 Container principal
 .suivi-etudiants-container {
-  font-family: 'Segoe UI', sans-serif;
-  padding: 30px;
-  background-color: #f9fbfd;
+  background: $secondary-color;
+  padding: 2rem;
+  border-radius: 20px;
+  max-width: 1300px;
+  margin: 3rem auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+}
 
-  .page-title {
-    text-align: left; /* était center */
-  font-size: 30px;
-  margin-bottom: 30px;
-  color: #154360;
+// 📝 Titre
+.page-title {
+  text-align: center;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: $primary-color;
+  margin-bottom: 2rem;
+}
+
+// 🔍 Filtres
+.filters {
   display: flex;
-  justify-content: flex-start; /* était center */
-  gap: 10px;
-  align-items: center;
-  }
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
 
-  .filters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-bottom: 20px;
+  .filter-input,
+  .filter-select {
+    padding: 0.8rem 1.2rem;
+    border: 1px solid $border-color;
+    border-radius: 12px;
+    background: $secondary-color;
+    min-width: 220px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
 
-    .filter-input,
-    .filter-select {
-      padding: 10px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      min-width: 200px;
+    &:focus {
+      border-color: $primary-color;
+      box-shadow: 0 0 0 4px rgba($primary-color, 0.2);
+      outline: none;
     }
   }
+}
 
-  .table-responsive {
-    overflow-x: auto;
-  }
+// 📋 Tableau
+.table-responsive {
+  overflow-x: auto;
 
   .student-table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    background: $secondary-color;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
 
     th, td {
-      padding: 12px 14px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-      font-size: 14px;
+      padding: 1rem;
+      text-align: center;
+      border-bottom: 1px solid $border-color;
+      font-size: 1rem;
     }
 
     th {
-      background-color: #f2f4f7;
-      font-weight: 600;
-      color: #333;
+      background: $primary-color;
+      color: #fff;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
     }
 
-    td img.avatar-img {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      object-fit: cover;
-    }
+    tbody tr {
+      transition: background-color 0.3s ease;
 
-    tr:hover {
-      background-color: #f6faff;
-    }
-
-    .state-circle {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      display: inline-block;
-
-      &.circle-thin {
-        background-color: #5bc0de;
-      }
-
-      &.circle-normal {
-        background-color: #28a745;
-      }
-
-      &.circle-warning {
-        background-color: #ffc107;
-      }
-
-      &.circle-danger {
-        background-color: #dc3545;
+      &:hover {
+        background: #f8f9fa;
       }
     }
+  }
+}
+
+// 🖼️ Avatar photo étudiant
+.avatar-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+// 🟢🔵🔴 Badges d'état
+.state-circle {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: $muted-color;
+
+  &.normal {
+    background: #28a745;
+  }
+
+  &.overweight {
+    background: #ffc107;
+  }
+
+  &.obese {
+    background: #dc3545;
+  }
+
+  &.underweight {
+    background: #17a2b8;
   }
 }

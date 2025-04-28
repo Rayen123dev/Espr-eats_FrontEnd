@@ -76,9 +76,9 @@
 
       <!-- ✅ Pagination -->
       <div class="pagination">
-        <button (click)="changePage(-1)" [disabled]="currentPage === 1">◀ Précédent</button>
+        <button (click)="changePage(-1)" [disabled]="currentPage === 1">Précédent</button>
         <span>Page {{ currentPage }} / {{ totalPages() }}</span>
-        <button (click)="changePage(1)" [disabled]="currentPage === totalPages()">Suivant ▶</button>
+        <button (click)="changePage(1)" [disabled]="currentPage === totalPages()">Suivant</button>
       </div>
     </div>
 

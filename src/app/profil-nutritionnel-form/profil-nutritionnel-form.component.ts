@@ -122,7 +122,7 @@ export class ProfilNutritionnelFormComponent implements OnInit {
     const formValue = this.form.value;
     this.profilService.createProfil(formValue).subscribe({
       next: () => {
-        this.successMessage = '🎉 Votre profil a été créé avec succès !';
+        this.successMessage = 'Votre profil a été créé avec succès !';
         setTimeout(() => this.router.navigate(['/profil-nutritionnel/mon-profil']), 2000);
       },
       error: () => {

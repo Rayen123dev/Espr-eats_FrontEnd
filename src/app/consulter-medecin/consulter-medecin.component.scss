@@ -42,9 +42,9 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
         &:hover {
-          background-color: #1a73e8;
+          background-color: #c8102e;
           color: #fff;
-          border-color: #1a73e8;
+          border-color: #c8102e;
         }
 
         &:disabled {
@@ -127,7 +127,6 @@
   }
 }
 
-
 /* 🧾 Formulaire stylé */
 .profil-card {
   background: white;
@@ -168,7 +167,7 @@ input, select, textarea {
 
   &:focus {
     outline: none;
-    border-color: #1a73e8;
+    border-color: #c8102e;
   }
 }
 
@@ -190,7 +189,7 @@ textarea {
   margin-top: 20px;
 
   .btn-primary {
-    background-color: #1a73e8;
+    background-color: #c8102e;
     color: white;
     padding: 10px 26px;
     border: none;
@@ -201,7 +200,7 @@ textarea {
     transition: 0.3s;
 
     &:hover {
-      background-color: #0f5dc2;
+      background-color: #a50d27;
     }
 
     &:disabled {
@@ -210,5 +209,3 @@ textarea {
     }
   }
 }
-
-
