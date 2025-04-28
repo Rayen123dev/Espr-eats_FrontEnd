@@ -7,6 +7,7 @@ import { Post } from '../core/models/post';
 @Injectable({
   providedIn: 'root',
 })
+/*
 export class PostService {
   private baseUrl = 'http://localhost:8089/forum/post'; // Backend URL
 
@@ -127,5 +128,119 @@ export class PostService {
   
   
 
+}
+*/
+
+@Injectable({
+  providedIn: 'root',
+})
+export class PostService {
+  private baseUrl = 'http://localhost:8081/post'; // Backend URL
+
+  private postsUpdated = new Subject<void>();
+
+  constructor(private http: HttpClient) {}
+
+  private createAuthHeaders(token?: string): HttpHeaders {
+    return new HttpHeaders({
+      'Authorization': token ? `Bearer ${token}` : ''
+    });
+  }
+
+  getAllPosts(token?: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/get-all-posts`, { headers: this.createAuthHeaders(token) });
+  }
+
+  addPost(postData: any, file?: File, token?: string): Observable<Post> {
+    const formData = new FormData();
+    formData.append('post', JSON.stringify(postData));
+    if (file) {
+      formData.append('file', file, file.name);
+    }
+
+    return this.http.post<Post>(`${this.baseUrl}/add-post`, formData, { headers: this.createAuthHeaders(token) }).pipe(
+      catchError(error => {
+        console.error('Full error:', error);
+        let errorMessage = 'Failed to add post';
+        if (error.error?.error) {
+          errorMessage = error.error.error;
+        } else if (error.statusText) {
+          errorMessage += ` (${error.statusText})`;
+        }
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  updatePost(postId: number, postData: any, file?: File, token?: string): Observable<Post> {
+    const formData = new FormData();
+    formData.append('post', JSON.stringify({
+      content: postData.content,
+      mediaUrl: postData.mediaUrl
+    }));
+    if (file) {
+      formData.append('file', file, file.name);
+    }
+
+    return this.http.put<Post>(`${this.baseUrl}/update/${postId}`, formData, { headers: this.createAuthHeaders(token) }).pipe(
+      catchError(error => {
+        console.error('Update error:', error);
+        let errorMessage = 'Failed to update post';
+        if (error.error?.error) {
+          errorMessage = error.error.error;
+        } else if (error.statusText) {
+          errorMessage += ` (${error.statusText})`;
+        }
+        return throwError(() => new Error(errorMessage));
+      })
+    );
+  }
+
+  deletePost(postId: number, currentUserId: number, token?: string): Observable<any> {
+    if (isNaN(postId)) {
+      return throwError(() => new Error('Invalid post ID'));
+    }
+
+    if (currentUserId === 1) {
+      return this.http.delete(`${this.baseUrl}/delete/${postId}/${currentUserId}`, {
+        headers: this.createAuthHeaders(token),
+        responseType: 'text'
+      });
+    } else {
+      return throwError(() => new Error('You are not authorized to delete this post'));
+    }
+  }
+
+  getAllPostsByUserId(userId: number, token?: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/get-all-posts-by-user/${userId}`, { headers: this.createAuthHeaders(token) });
+  }
+
+  getPostDetails(postId: number, token?: string): Observable<Post> {
+    return this.http.get<Post>(`${this.baseUrl}/display-post/${postId}`, { headers: this.createAuthHeaders(token) });
+  }
+
+  getReplies(postId: number, token?: string): Observable<Post[]> {
+    return this.http.get<Post[]>(`${this.baseUrl}/get-replies/${postId}`, { headers: this.createAuthHeaders(token) });
+  }
+
+  getPosts(page: number = 0, size: number = 10, token?: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/get-posts?page=${page}&size=${size}`, { headers: this.createAuthHeaders(token) });
+  }
+
+  getPostsByUser(userId: number, page: number = 0, size: number = 10, token?: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}?authorId=${userId}&page=${page}&size=${size}`, { headers: this.createAuthHeaders(token) });
+  }
+
+  notifyPostsUpdated() {
+    this.postsUpdated.next();
+  }
+
+  getPostsUpdatedListener(): Observable<void> {
+    return this.postsUpdated.asObservable();
+  }
+
+  getBaseUrl(): string {
+    return this.baseUrl;
+  }
 }
 
