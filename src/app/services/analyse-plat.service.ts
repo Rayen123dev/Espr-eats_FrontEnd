@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 })
 export class AnalysePlatService {
   private apiUrl = 'http://localhost:8081/api/image-analysis'; // Spring Boot
-  private flaskUrl = 'http://localhost:5000'; // Flask
+  private flaskUrl = 'http://172.20.10.12:5002'; // Flask
 
   constructor(private http: HttpClient) {}
 
@@ -23,7 +23,7 @@ export class AnalysePlatService {
   }
 
   getConseilsAllergie(plat: string, allergenes: string[]) {
-    return this.http.post<{ conseil: string }>('http://localhost:5000/api/conseils-allergie', {
+    return this.http.post<{ conseil: string }>('http://172.20.10.12:5002/api/conseils-allergie', {
       plat,
       allergenes
     });

@@ -1,8 +1,8 @@
 // Advanced SCSS for a Modern and Creative Complaints Dashboard
 // Variables for an enhanced design system
-$primary-color: #6a5acd; // Vibrant purple to match your form
+$primary-color: #cd5a5a; // Vibrant purple to match your form
 $secondary-color: #f3f7ff; // Light blue-ish background
-$accent-color: #00c39a; // Mint green accent
+$accent-color: #c30000; // Mint green accent
 $danger-color: #ff5252; // Bright red for delete actions
 $neutral-color: #566a80; // Blue-gray for text
 $background-color: #f7f9fc; // Light blue-gray background
@@ -14,7 +14,7 @@ $shadow-color: rgba(106, 90, 205, 0.15);
 
 // Status-specific colors
 $status-pending: #ffc107; // Amber
-$status-in-progress: #3d7cf4; // Blue
+$status-in-progress: #3dd2f4; // Blue
 $status-resolved: #00c39a; // Green (same as accent)
 $status-closed: #6c757d; // Gray
 
