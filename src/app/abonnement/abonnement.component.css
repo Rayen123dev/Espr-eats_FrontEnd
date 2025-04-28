@@ -1,23 +1,13 @@
-/* Import Google Fonts (Switch to Inter to match the image's clean sans-serif look) */
+/* Import Google Fonts (Inter for clean sans-serif look) */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-
-/* Root Variables (Updated to match the image's color palette) */
-:root {
-  --primary: #3b82f6; /* Blue for buttons */
-  --primary-light: #60a5fa;
-  --secondary: #f59e0b; /* Yellow for Most Popular badge border */
-  --danger: #ef4444;
-  --warning: #f59e0b;
-  --dark: #1f2937;
-  --light: #ffffff;
-  --background: #f0f4fd; /* Updated to match the image */
-}
 
 /* Base Styles */
 body {
   font-family: 'Inter', sans-serif;
-  background-color: #f0f4fd; /* Uses #f0f4fd */
-  color: #1f2937;
+  background: linear-gradient(135deg, #fec5c5 0%, #c0bebe 100%); /* Subtle gradient background */
+  color: #1A202C; /* Deep navy */
+  margin: 0;
+  background-color: #E2E8F0;
 }
 
 /* Subscription Container */
@@ -27,40 +17,38 @@ body {
   align-items: center;
   min-height: 100vh;
   padding: 40px 24px;
-  background-color: #f0f4fd; /* Uses #f0f4fd */
   max-width: 1500px;
   margin: 0 auto;
 }
 
+/* Greeting Message */
 .greeting-message {
   font-size: 16px;
   font-weight: 400;
-  color: #4b5563;
+  color: #4A5568; /* Softer gray */
   text-align: center;
   margin-bottom: 40px;
   line-height: 1.5;
   max-width: 600px;
 }
 
-.description {
+/* Description and Subscription Info */
+.description, .subscription-info {
   font-size: 14px;
-  color: #6b7280;
+  color: #718096; /* Muted gray */
   margin: 0 0 12px 0;
   line-height: 1.5;
 }
 
 .subscription-info {
-  font-size: 14px;
-  color: #6b7280;
-  margin: 0 0 24px 0;
-  line-height: 1.5;
+  margin-bottom: 24px;
 }
 
 /* Pricing Small Title */
 .pricing-smalltitle {
   font-size: 16px;
   font-weight: 500;
-  color: #6b7280;
+  color: #2C7A7B; /* Muted teal */
   text-align: center;
   margin-bottom: 16px;
   text-transform: uppercase;
@@ -71,8 +59,6 @@ body {
 .pricing-smalltitle::after {
   content: none;
 }
-
-/* Add to the end of abonnement.component.css */
 
 /* Black Friday Component */
 .black-friday-component {
@@ -91,8 +77,14 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid var(--primary);
-  background-color: #000000;
+  border: 2px solid #0b0b0b; /* Vibrant red */
+  background: linear-gradient(135deg, #1A202C 0%, #2D3748 100%); /* Navy to charcoal */
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
+  transition: box-shadow 0.3s ease;
+}
+
+.black-friday-component .coupon:hover {
+  box-shadow: 0 6px 16px rgba(229, 9, 20, 0.5);
 }
 
 .black-friday-component .coupon:hover .content h3 > span {
@@ -119,9 +111,9 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: #ffffff;
+  color: #FFFFFF; /* White */
   padding: 1rem;
-  background-color: var(--primary-light);
+  
 }
 
 .black-friday-component .coupon .box span {
@@ -133,14 +125,13 @@ body {
 .black-friday-component .coupon .diver {
   width: 0;
   height: 160px;
-  border: 3px dashed transparent;
-  border-right-color: #ffffff;
+  border: 3px dashed #FFFFFF; /* White */
 }
 
 .black-friday-component .coupon .content {
   padding: 1rem;
   flex: 1;
-  color: #ffffff;
+  color: #FFFFFF; /* White */
   width: 330px;
 }
 
@@ -158,14 +149,14 @@ body {
 
 .black-friday-component .coupon .content p {
   font-weight: 400;
-  color: #d1d5db;
+  color: #E2E8F0; /* Light gray */
   font-size: 1rem;
   line-height: 1.25rem;
 }
 
 .black-friday-component .coupon .content p a {
   font-style: italic;
-  color: var(--primary);
+  color: #FFD700; /* Soft gold */
   text-transform: capitalize;
   font-weight: bold;
   text-decoration: underline;
@@ -178,11 +169,14 @@ body {
   justify-content: center;
   gap: 0.5rem;
   width: fit-content;
+  background: rgba(229, 9, 20, 0.1); /* Transparent red */
+  padding: 8px 16px;
+  border-radius: 8px;
 }
 
 .black-friday-component .timer .colon {
   width: 8px;
-  color: var(--light);
+  color: #FFFFFF; /* White */
   font-size: 2rem;
   line-height: 40px;
 }
@@ -200,6 +194,7 @@ body {
   width: 55px;
   height: 40px;
   border-radius: 4px;
+  background: #FFFFFF; /* White */
 }
 
 .black-friday-component .timer .item .day,
@@ -215,7 +210,7 @@ body {
 .black-friday-component .timer .item .min span,
 .black-friday-component .timer .item .sec span {
   height: 40px;
-  color: #1e40af;
+  color: #E50914; /* Vibrant red */
   font-size: 2rem;
   font-weight: 500;
   line-height: 40px;
@@ -223,7 +218,7 @@ body {
 
 .black-friday-component .timer .item p {
   text-align: center;
-  color: #1e40af;
+  color: #2C7A7B; /* Muted teal */
   font-size: 1rem;
   margin-top: 0.5rem;
 }
@@ -246,7 +241,7 @@ body {
     width: 100%;
     height: 0;
     border: 3px dashed transparent;
-    border-bottom-color: var(--primary);
+    border-bottom-color: #E50914; /* Vibrant red */
   }
 
   .black-friday-component .coupon .content {
@@ -261,14 +256,14 @@ body {
 
 /* Pricing Title */
 .pricing-title {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; /* A modern sans-serif font stack */
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 3rem;
-  font-weight: 700; 
-  background: linear-gradient(to right, #1e40af, #3b82f6); 
+  font-weight: 700;
+  background: linear-gradient(to right, #E50914, #F40612); /* Red gradient */
   -webkit-background-clip: text;
-  background-clip: text; /* Standard property for text gradient */
-  color: transparent; /* Make text transparent to show the gradient */
-  display: inline-block; /* Ensure the gradient applies correctly */
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
   line-height: 1.2;
 }
 
@@ -285,9 +280,9 @@ body {
   min-width: 300px;
   padding: 12px 16px;
   border-radius: 8px;
-  background-color: #fee2e2;
-  color: #991b1b;
-  border: 1px solid #f87171;
+  background: linear-gradient(135deg, #FEE2E2 0%, #FED7D7 100%); /* Soft red gradient */
+  color: #1A202C; /* Deep navy */
+  border: 1px solid #EF4444; /* Error red */
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   z-index: 1050;
   display: flex;
@@ -296,14 +291,8 @@ body {
   animation: slideIn 0.5s ease-in-out;
 }
 
-.toast-header {
-  display: none;
-}
-
-.toast-icon {
-  display: none;
-}
-
+.toast-header,
+.toast-icon,
 .toast-title {
   display: none;
 }
@@ -312,7 +301,7 @@ body {
   background: none;
   border: none;
   font-size: 20px;
-  color: #991b1b;
+  color: #1A202C; /* Deep navy */
   cursor: pointer;
 }
 
@@ -337,21 +326,21 @@ body {
   width: 320px;
   padding: 28px;
   border-radius: 16px;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: rgba(255, 255, 255, 0.95); /* Slightly transparent white */
+  border: 1px solid rgba(229, 9, 20, 0.2); /* Faint red */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   position: relative;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
   overflow: visible;
 }
 
 .plan-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 20px rgba(229, 9, 20, 0.15);
 }
 
 .plan-card.most-popular {
-  border: 2px solid #e5e7eb;
+  border: 2px solid #E50914; /* Vibrant red */
 }
 
 /* Most Popular Badge */
@@ -359,12 +348,12 @@ body {
   position: absolute;
   top: -10px;
   right: -10px;
-  background-color: #1f2937;
-  color: #ffffff;
+  background: linear-gradient(45deg, #FFD700, #FFEC8B); /* Gold gradient */
+  color: #1A202C; /* Deep navy */
   font-size: 14px;
   font-weight: 600;
   padding: 6px 16px 6px 12px;
-  border: 2px solid #f59e0b;
+  border: 2px solid #FFD700; /* Soft gold */
   border-radius: 8px 8px 8px 0;
   display: flex;
   align-items: center;
@@ -380,7 +369,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   font-size: 16px;
-  color: #f59e0b;
+  color: #FFD700; /* Soft gold */
 }
 
 /* Discount Badge */
@@ -388,8 +377,8 @@ body {
   position: absolute;
   top: 10px;
   left: 10px;
-  background-color: #a3e635;
-  color: #1f2937;
+  background: linear-gradient(45deg, #38B2AC, #2C7A7B); /* Teal gradient */
+  color: #FFFFFF; /* White */
   font-size: 14px;
   font-weight: 600;
   padding: 4px 12px;
@@ -401,7 +390,7 @@ body {
 .plan-card h3 {
   font-size: 30px;
   font-weight: 700;
-  color: #1f2937;
+  color: #1A202C; /* Deep navy */
   margin: 0 0 8px 0;
 }
 
@@ -412,7 +401,7 @@ body {
 /* Description */
 .description {
   font-size: 15px;
-  color: #6b7280;
+  color: #718096; /* Muted gray */
   margin: 0 0 16px 0;
 }
 
@@ -427,7 +416,7 @@ body {
 .original-price {
   font-size: 18px;
   font-weight: 500;
-  color: #6b7280;
+  color: #718096; /* Muted gray */
   text-decoration: line-through;
   margin-bottom: 4px;
 }
@@ -441,25 +430,25 @@ body {
 .current-price {
   font-size: 30px;
   font-weight: 700;
-  color: #1f2937;
+  color: #1A202C; /* Deep navy */
 }
 
 .monthly-cost {
   font-size: 15px;
   font-weight: 500;
-  color: #1f2937;
+  color: #1A202C; /* Deep navy */
 }
 
 .billing-note {
   font-size: 13px;
-  color: #6b7280;
+  color: #718096; /* Muted gray */
   margin-top: 4px;
 }
 
 /* User Count */
 .user-count {
   font-size: 13px;
-  color: #6b7280;
+  color: #718096; /* Muted gray */
   text-align: center;
   margin: 8px 0;
 }
@@ -468,7 +457,6 @@ body {
 .renewal-option {
   margin: 16px 0;
   text-align: center;
-  
 }
 
 .toggle-switch {
@@ -488,7 +476,7 @@ body {
   position: relative;
   width: 36px;
   height: 18px;
-  background: #d1d5db;
+  background: #E2E8F0; /* Light gray */
   border-radius: 18px;
   transition: background 0.3s;
 }
@@ -500,13 +488,13 @@ body {
   left: 2px;
   width: 14px;
   height: 14px;
-  background: white;
+  background: #FFFFFF; /* White */
   border-radius: 50%;
   transition: transform 0.3s;
 }
 
 .toggle-switch input:checked + .toggle-slider {
-  background: #3b82f6;
+  background: linear-gradient(45deg, #E50914, #F40612); /* Red gradient */
 }
 
 .toggle-switch input:checked + .toggle-slider::before {
@@ -515,25 +503,25 @@ body {
 
 .toggle-label {
   font-size: 16px;
-  color: #6b7280;
+  color: #718096; /* Muted gray */
 }
 
 .toggle-label.on {
-  color: #3b82f6;
+  color: #E50914; /* Vibrant red */
 }
 
 /* Subscribe Button */
 .subscribe-button {
   width: 100%;
   padding: 14px;
-  background-color: #3b82f6;
-  color: white;
+  background: linear-gradient(45deg, #960a11, #F40612); /* Red gradient */
+  color: #FFFFFF; /* White */
   border: none;
   border-radius: 50px;
   font-size: 17px;
   font-weight: 500;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -541,7 +529,8 @@ body {
 }
 
 .subscribe-button:hover {
-  background-color: #60a5fa;
+  box-shadow: 0 4px 12px rgba(229, 9, 20, 0.4);
+  transform: translateY(-2px);
 }
 
 .subscribe-button .text {
@@ -555,7 +544,7 @@ body {
 /* User Limit */
 .user-limit {
   font-size: 13px;
-  color: #6b7280;
+  color: #718096; /* Muted gray */
   text-align: center;
   margin-top: 8px;
 }
@@ -594,6 +583,13 @@ body {
 .features,
 .error-message,
 .success-message,
-.loading-spinner {
+.loading-spinner,
+.toast-header,
+.toast-icon,
+.toast-title,
+.subscribe-button .icon,
+.plan-card h3::before,
+.pricing-title::before,
+.pricing-title::after {
   display: none;
 }

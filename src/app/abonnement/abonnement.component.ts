@@ -257,7 +257,7 @@ export class AbonnementComponent implements OnInit {
   // Black Friday timer logic
   startBlackFridayTimer(): void {
     // Set target date to a future date (e.g., end of Black Friday sale)
-    const targetDate = new Date('2025-04-17T23:59:59').getTime();
+    const targetDate = new Date('2025-04-31T23:59:59').getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
