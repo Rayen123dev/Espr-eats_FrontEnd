@@ -51,12 +51,12 @@ body {
   align-items: center;
   position: relative;
   padding-left: 15px;
-  border-left: 5px solid #3498db; /* Match sidebar primary color */
+  border-left: 5px solid #ff0000; /* Match sidebar primary color */
 }
 
 .title i {
   margin-right: 12px;
-  color: #3498db; /* Match sidebar blue */
+  color: #ff0000; /* Match sidebar blue */
 }
 
 /* Button Container */
@@ -70,7 +70,7 @@ body {
 }
 
 .space-button {
-  background: #3498db; /* Match sidebar blue */
+  background: #ff0000; /* Match sidebar blue */
   color: white;
   font-weight: 600;
   border: none;
@@ -108,9 +108,9 @@ body {
 }
 
 .space-button:hover {
-  background: #2980b9; /* Match sidebar hover */
+  background: #ff0000; /* Match sidebar hover */
   transform: translateY(-3px);
-  box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
+  box-shadow: 0 8px 15px rgba(219, 52, 52, 0.4);
 }
 
 .space-button:active {
@@ -120,7 +120,7 @@ body {
 
 /* Angular Material Button Override */
 .mat-raised-button.space-button {
-  background-color: #3498db; /* Match sidebar blue */
+  background-color: #ff0000; /* Match sidebar blue */
   color: white;
   font-weight: 600;
   border: none;
@@ -136,7 +136,7 @@ body {
 }
 
 .mat-raised-button.space-button:hover {
-  background-color: #2980b9;
+  background-color: #b92929;
   transform: translateY(-3px);
   box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
 }
@@ -151,7 +151,7 @@ body {
   margin-top: 20px;
   box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.02);
   scrollbar-width: thin;
-  scrollbar-color: #3498db #f0f4f8;
+  scrollbar-color: #ff0000 #f0f4f8;
 }
 
 .scrollable-table-container::-webkit-scrollbar {
@@ -163,7 +163,7 @@ body {
 }
 
 .scrollable-table-container::-webkit-scrollbar-thumb {
-  background: rgba(52, 152, 219, 0.6);
+  background: rgba(219, 52, 52, 0.6);
   border-radius: 10px;
 }
 
@@ -178,7 +178,7 @@ body {
 }
 
 .center-table th {
-  background: linear-gradient(90deg, #3498db, #2980b9); /* Match sidebar active gradient */
+  background: linear-gradient(90deg, #ff0000, #e78787); /* Match sidebar active gradient */
   color: white;
   padding: 16px;
   text-align: left;
@@ -257,7 +257,7 @@ body {
 
 /* Edit button style */
 .center-table button.edit-btn {
-  background-color: #3498db; /* Match sidebar blue */
+  background-color: #ff0000; /* Match sidebar blue */
   color: white;
   box-shadow: 0 2px 4px rgba(52, 152, 219, 0.15);
 }
@@ -276,7 +276,7 @@ body {
 }
 
 .center-table button.delete-btn:hover {
-  background-color: #42a5f5;
+  background-color: #f54242;
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(100, 181, 246, 0.3);
 }
@@ -302,7 +302,7 @@ body {
   font-family: "Poppins", sans-serif;
   font-size: 15px;
   font-weight: 500;
-  border-left: 5px solid #3498db; /* Match sidebar blue */
+  border-left: 5px solid #ff0000; /* Match sidebar blue */
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 0;
   transform: translateY(-20px);
@@ -345,7 +345,7 @@ body {
 
 /* Alert Icon */
 .alert-icon {
-  color: #3498db; /* Match sidebar blue */
+  color: #ff0000; /* Match sidebar blue */
   margin-right: 8px;
   font-size: 16px;
 }
@@ -372,7 +372,7 @@ body {
 }
 
 .close-btn:hover {
-  color: #3498db; /* Match sidebar blue */
+  color: #ff0000; /* Match sidebar blue */
   transform: scale(1.1);
   background-color: rgba(52, 152, 219, 0.1);
 }
@@ -402,7 +402,7 @@ body {
   font-weight: 700;
   margin-bottom: 24px;
   color: #2c3e50; /* Match sidebar dark color */
-  border-left: 5px solid #3498db; /* Match sidebar blue */
+  border-left: 5px solid #ff0000; /* Match sidebar blue */
   padding-left: 15px;
   display: flex;
   align-items: center;
@@ -410,7 +410,7 @@ body {
 
 .filter-section h3 i {
   margin-right: 10px;
-  color: #3498db; /* Match sidebar blue */
+  color: #ff0000; /* Match sidebar blue */
 }
 
 .filter-section label {
@@ -425,7 +425,7 @@ body {
 
 .filter-section label i {
   margin-right: 8px;
-  color: #3498db; /* Match sidebar blue */
+  color: #ff0000; /* Match sidebar blue */
   width: 18px;
 }
 
@@ -442,7 +442,7 @@ body {
 
 .filter-section input:focus {
   outline: none;
-  border-color: #3498db; /* Match sidebar blue */
+  border-color: #ff0000; /* Match sidebar blue */
   box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
   background-color: white;
 }
@@ -450,7 +450,7 @@ body {
 /* Filter button with shine effect */
 .filter-section button {
   width: 100%;
-  background-color: #3498db; /* Match sidebar blue */
+  background-color: #ff0000; /* Match sidebar blue */
   color: white;
   padding: 14px;
   font-size: 16px;
@@ -488,7 +488,7 @@ body {
 }
 
 .filter-section button:hover {
-  background-color: #2980b9; /* Match sidebar hover */
+  background-color: #b92929; /* Match sidebar hover */
   transform: translateY(-3px);
   box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
 }
@@ -756,7 +756,7 @@ body {
   border-radius: 12px;
   text-align: center;
   font-weight: 600;
-  background: #3498db;
+  background: #ff0000;
   color: #fff;
   border: none;
   transition: all 0.3s;
@@ -820,7 +820,7 @@ body {
 }
 
 .metismenu li a.active {
-  background: linear-gradient(90deg, #3498db, #2980b9);
+  background: linear-gradient(90deg, #ff0000, #df8989);
   color: #fff;
   box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
 }
@@ -838,7 +838,7 @@ body {
 }
 
 .metismenu li a:hover i {
-  color: #3498db;
+  color: #ff0000;
   transform: scale(1.1);
 }
 
@@ -860,7 +860,7 @@ body {
   height: 0;
   top: 50%;
   left: 5px;
-  background: #3498db;
+  background: #ff0000;
   border-radius: 5px;
   transform: translateY(-50%);
   transition: height 0.3s ease;

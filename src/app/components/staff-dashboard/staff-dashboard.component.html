@@ -118,7 +118,7 @@
     
     <div class="button-container">
       <button class="btn-add" (click)="toggleAddPlatForm()" *ngIf="userRole === 'Staff'">Ajouter un Plat</button>
-      <button class="btn-pdf" (click)="generatePdfRecommendations()" aria-label="Générer un PDF des recommandations IA">
+      <button class="btn-pdf" (click)="generatePdfRecommendations()" aria-label="Générer un PDF des recommandations IA" *ngIf="userRole === 'Staff'">
         <i class="fas fa-file-pdf"></i> Recommandations IA
       </button>
     </div>
