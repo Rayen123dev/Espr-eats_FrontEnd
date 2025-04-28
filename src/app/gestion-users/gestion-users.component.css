@@ -1,19 +1,1 @@
 @import url("../../assets/css/style.css");
-.card-body .table-responsive .input-with-icon {
-    position: relative;
-    width: 100%;
-  }
-
-  .card-body .table-responsive input {
-    padding-left: 30px; /* Leave space for the icon */
-  }
-
-  .card-body .table-responsive i {
-    position: absolute;
-    top: 50%;
-    left: 10px; /* Position the icon */
-    transform: translateY(-50%); /* Center the icon vertically */
-    font-size: 18px;
-    color: #888;
-  }
-  

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { Produit } from 'src/app/models/Produit.model';
 import { ProductService } from 'src/app/services/product.service';
 import { Router } from '@angular/router';
@@ -32,7 +32,7 @@ export class ProductListComponent implements OnInit {
   forecastResult: any;
   
 
-  constructor(private productService: ProductService,private router: Router,public dialog: MatDialog, private toastService: ToastService) { }
+  constructor(private productService: ProductService,private router: Router,public dialog: MatDialog, private toastService: ToastService,   private viewContainerRef: ViewContainerRef) { }
   ngOnInit(): void {
     // Subscribe to product list updates
     this.productService.products$.subscribe((products) => {
@@ -133,13 +133,19 @@ export class ProductListComponent implements OnInit {
   openProductForm(product: Produit | null): void {
     const isEditMode = product && product.produitID !== undefined;  
     const dialogRef = this.dialog.open(ProductFormComponent, {
-      width: '400px',
+      width: '500px',
       maxWidth: '95vw',
-      data: { product: product, isEditMode: isEditMode }, 
+      data: { product: product, isEditMode: isEditMode },
+      position: { top: '100px' },  // Positionne le dialogue en haut plutôt qu'au milieu
+      disableClose: false,         // Permet la fermeture en cliquant à l'extérieur
+      autoFocus: true,
+      panelClass: 'product-form-dialog'
     });
   
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      if (result) {  // Si un résultat est retourné, le produit a été sauvegardé
+        this.productService.refreshProductList();
+      }
     });
   }
   

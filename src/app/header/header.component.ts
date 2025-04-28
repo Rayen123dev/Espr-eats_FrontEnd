@@ -62,6 +62,11 @@ export class HeaderComponent implements OnInit {
     this.isProfileDropdownOpen = false;
   }
 
+  navigateToDashboard(): void {
+    this.router.navigate(['/admin-layout/gestionuser']);
+    this.isProfileDropdownOpen = false;
+  }
+
   logout(): void {
     this.loginService.logout();
     this.router.navigate(['/login']);
