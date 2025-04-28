@@ -1,4 +1,4 @@
-<div>
+<div class="menu-page">
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="hero-image">
-      <img src="../../../assets/images/Fable.jpg" alt="Featured dish" class="featured-dish">
+      <img src="assets/images/Fable.jpg" alt="Featured dish" class="featured-dish">
     </div>
   </section>
 
@@ -28,7 +28,7 @@
     <div class="category-selector">
       <button 
         class="category-btn" 
-        [class.active]="selectedCategory === ''"
+        [ngClass]="{'active': selectedCategory === ''}"
         (click)="filterByCategory('')"
       >
         All
@@ -36,7 +36,7 @@
       <button 
         *ngFor="let category of categories" 
         class="category-btn"
-        [class.active]="selectedCategory === category"
+        [ngClass]="{'active': selectedCategory === category}"
         (click)="filterByCategory(category)"
       >
         {{ category }}
@@ -45,106 +45,97 @@
   </section>
 
   <!-- Menu Section -->
-  <section class="menu-section" *ngIf="paginatedMenus.length > 0; else noMenus">
-    <h2 class="section-title">Top List</h2>
-    <p class="section-subtitle">Our mainstay menu</p>
+  <div *ngIf="paginatedMenus.length > 0; else noMenus">
+    <div class="row" >
+      <div class="col-12 mb-4" *ngFor="let menu of paginatedMenus">
+        <div class="card menu-card">
+          <div class="card-header">
+            <h5 class="card-title">
+              {{ menu.date | date:'mediumDate' }}
+            </h5>
+            <span class="badge">{{ menu.regime }}</span>
+          </div>
+          <div class="card-body">
+            <div class="menu-layout">
+              <div class="menu-section">
+                <h6 class="section-title">Entrée</h6>
+                <div class="plats-horizontal">
+                  <div class="plat-card" *ngFor="let plat of getPlatsByType(menu, 'entree')">
+                    <div class="card">
+                      <img class="card-img-top" [src]="plat.imagePath" alt="{{ plat.nom }}">
+                      <div class="card-body">
+                        
+                        <h6 class="card-title">{{ plat.nom }}</h6>
+                        <p class="card-text">{{ plat.description }} </p>
+                      </div>
+                      
+                    </div>
+                    
+                  </div>
+                  
+                </div>
+                
+              </div>
 
-    <div class="menu-cards">
-      <div class="menu-card" *ngFor="let menu of paginatedMenus">
-        <div class="menu-card-header">
-          <h3>{{ menu.date | date:'mediumDate' }}</h3>
-          <span class="menu-badge">{{ menu.regime }}</span>
-        </div>
-        
-        <!-- Entrée Section -->
-        <div class="dishes-section">
-          <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'entree')">
-            <div class="dish-image">
-              <img [src]="plat.imagePath" alt="{{ plat.nom }}">
-            </div>
-            <div class="dish-content">
-              <div class="rating">
-                <span class="star-icon">★</span>
-                <span>Espreat's</span>
+              <div class="menu-section">
+                <h6 class="section-title">Plat Principal</h6>
+                <div class="plats-horizontal">
+                  <div class="plat-card" *ngFor="let plat of getPlatsByType(menu, 'plat_principal')">
+                    <div class="card">
+                      <img class="card-img-top" [src]="plat.imagePath" alt="{{ plat.nom }}">
+                      <div class="card-body">
+                        <h6 class="card-title">{{ plat.nom }}</h6>
+                        <p class="card-text">{{ plat.description }} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <h4 class="dish-title">{{ plat.nom }}</h4>
-              <p class="dish-desc">{{ plat.description }}</p>
+
+              <div class="menu-section">
+                <h6 class="section-title">Dessert</h6>
+                <div class="plats-horizontal">
+                  <div class="plat-card" *ngFor="let plat of getPlatsByType(menu, 'dessert')">
+                    <div class="card">
+                      <img class="card-img-top" [src]="plat.imagePath" alt="{{ plat.nom }}">
+                      <div class="card-body">
+                        <h6 class="card-title">{{ plat.nom }}</h6>
+                        <p class="card-text">{{ plat.description }} </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-        
-        <!-- Plat Principal Section -->
-        <div class="dishes-section">
-          <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'plat_principal')">
-            <div class="dish-image">
-              <img [src]="plat.imagePath" alt="{{ plat.nom }}">
-            </div>
-            <div class="dish-content">
-              <div class="rating">
-                <span class="star-icon">★</span>
-                <span>Espreat's</span>
-              </div>
-              <h4 class="dish-title">{{ plat.nom }}</h4>
-              <p class="dish-desc">{{ plat.description }}</p>
-            </div>
+          <div class="card-footer">
+            <small class="text-muted">Total Calories: {{ menu.totalCalories }} kcal</small>
           </div>
         </div>
-        
-        <!-- Dessert Section -->
-        <div class="dishes-section">
-          <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'dessert')">
-            <div class="dish-image">
-              <img [src]="plat.imagePath" alt="{{ plat.nom }}">
-            </div>
-            <div class="dish-content">
-              <div class="rating">
-                <span class="star-icon">★</span>
-                <span>Espreat's</span>
-              </div>
-              <h4 class="dish-title">{{ plat.nom }}</h4>
-              <p class="dish-desc">{{ plat.description }}</p>
-            </div>
-          </div>
-        </div>
-        
-        <div class="menu-card-footer">
-          <p>Total Calories: {{ menu.totalCalories }} kcal</p>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Food Highlight Section -->
-    <div class="food-highlight">
-      <div class="highlight-image">
-        <img src="../../../assets/images/Foooo.jpg" alt="Food highlight">
-      </div>
-      <div class="highlight-content">
-        <h2>Best Ingredients For Your Health</h2>
-        <p>We carefully select all ingredients to ensure quality and freshness. Our chefs prepare each dish with attention to detail and passion for cooking.</p>
       </div>
     </div>
 
     <!-- Pagination -->
-    <div class="pagination-controls">
+    <div class="pagination">
       <button 
-        class="pagination-btn" 
+        class="btn-paginate" 
         [disabled]="currentPage === 1" 
         (click)="previousPage()"
       >
-        <span class="pagination-icon">←</span> Previous
+        Précédent
       </button>
-      <span class="pagination-info">
-        Page {{ currentPage }} of {{ totalPages }}
+      <span class="page-info">
+        Page {{ currentPage }} sur {{ totalPages }}
       </span>
       <button 
-        class="pagination-btn" 
+        class="btn-paginate" 
         [disabled]="currentPage === totalPages" 
         (click)="nextPage()"
       >
-        Next <span class="pagination-icon">→</span>
+        Suivant
       </button>
     </div>
-  </section>
+  </div>
 
   <!-- Service Section -->
   <section class="services-section">
