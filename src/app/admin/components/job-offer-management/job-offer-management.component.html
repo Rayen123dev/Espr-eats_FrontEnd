@@ -1,86 +1,582 @@
-<div class="d-flex justify-content-end mb-3">
-  <a routerLink="/admin-layout/job-application-management" class="btn btn-info">
-    View Job Applications
-  </a>
+<!-- Modern Banner -->
+<div class="modern-banner">
+  <div class="banner-content">
+    <h1>Job Offer Management</h1>
+    <p>Create, edit and manage job offers with AI-powered tools</p>
+    <div class="banner-actions">
+      <button class="banner-btn primary-btn" (click)="toggleFormVisibility()">
+        <span class="btn-icon">{{ showForm ? '✖' : '➕' }}</span>
+        <span class="btn-text">{{ showForm ? 'Close Form' : 'Add New Offer' }}</span>
+      </button>
+      <button class="banner-btn secondary-btn" (click)="openAiGenerator()">
+        <span class="btn-icon">🤖</span>
+        <span class="btn-text">AI Description Generator</span>
+      </button>
+    </div>
+  </div>
+  <div class="banner-image">
+    <div class="banner-shape"></div>
+  </div>
 </div>
 
-<div class="container mt-4">
-  <h2 class="mb-4">{{ editingOffer ? 'Edit Job Offer' : 'Add New Job Offer' }}</h2>
+<!-- Top Navigation Bar -->
+<div class="admin-top-bar">
+  <div class="admin-title">
+    <h2>Job Offer Dashboard</h2>
+  </div>
+  <div class="admin-actions">
+    <a routerLink="/admin-layout/job-application-management" class="btn-action">
+      <span class="btn-icon">📋</span>
+      <span class="btn-text">View Applications</span>
+    </a>
+    <button class="btn-action" (click)="toggleFormVisibility()">
+      <span class="btn-icon">{{ showForm ? '✖' : '➕' }}</span>
+      <span class="btn-text">{{ showForm ? 'Close Form' : 'Add New Offer' }}</span>
+    </button>
+  </div>
+</div>
 
-  <form [formGroup]="offerForm" (ngSubmit)="onSubmit()">
-    <div class="mb-3">
-      <label class="form-label">Title</label>
-      <input type="text" formControlName="title" class="form-control" placeholder="Enter title">
+<!-- Dashboard Stats -->
+<div class="dashboard-stats">
+  <div class="stat-card">
+    <div class="stat-icon">📄</div>
+    <div class="stat-content">
+      <h3>{{ jobOffers.length }}</h3>
+      <p>Total Job Offers</p>
     </div>
+  </div>
 
-    <div class="mb-3">
-      <label class="form-label">Job Description</label>
-      <textarea formControlName="jobDescription" rows="4" class="form-control" placeholder="Enter description"></textarea>
+  <div class="stat-card">
+    <div class="stat-icon">✅</div>
+    <div class="stat-content">
+      <h3>{{ getActiveOffers() }}</h3>
+      <p>Active Offers</p>
     </div>
+  </div>
 
-    <div class="mb-3">
-      <label class="form-label">Deadline Date</label>
-      <input type="date" formControlName="date" class="form-control">
-      <div *ngIf="offerForm.get('date')?.errors?.['pastDate']" class="text-danger">
-        Date must be in the future.
+  <div class="stat-card">
+    <div class="stat-icon">⏱️</div>
+    <div class="stat-content">
+      <h3>{{ getExpiredOffers() }}</h3>
+      <p>Expired Offers</p>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">👥</div>
+    <div class="stat-content">
+      <h3>{{ getApplicationsCount() }}</h3>
+      <p>Total Applications</p>
+    </div>
+  </div>
+</div>
+
+<!-- Job Offer Form -->
+<div class="job-form-container" *ngIf="showForm">
+  <div class="form-header">
+    <h2>{{ editingOffer ? 'Edit Job Offer' : 'Add New Job Offer' }}</h2>
+    <button class="btn-close-form" (click)="toggleFormVisibility()">✖</button>
+  </div>
+
+  <form [formGroup]="offerForm" (ngSubmit)="onSubmit()" class="job-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Job Title <span class="required">*</span></label>
+        <input type="text" formControlName="title" class="form-control" placeholder="Enter job title">
+        <div *ngIf="offerForm.get('title')?.invalid && offerForm.get('title')?.touched" class="error-message">
+          Title is required
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Deadline Date <span class="required">*</span></label>
+        <input type="date" formControlName="date" class="form-control">
+        <div *ngIf="offerForm.get('date')?.errors?.['pastDate']" class="error-message">
+          Date must be in the future
+        </div>
       </div>
     </div>
 
-    <div class="mb-3">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Job Type <span class="required">*</span></label>
+        <select formControlName="jobType" class="form-control">
+          <option value="Full-time">Full-time</option>
+          <option value="Part-time">Part-time</option>
+          <option value="Contract">Contract</option>
+          <option value="Internship">Internship</option>
+          <option value="Remote">Remote</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Location <span class="required">*</span></label>
+        <input type="text" formControlName="location" class="form-control" placeholder="City, Country or Remote">
+      </div>
+    </div>
+
+    <div class="form-group full-width">
+      <label class="form-label">Job Description <span class="required">*</span></label>
+      <textarea formControlName="jobDescription" rows="4" class="form-control" placeholder="Enter detailed job description"></textarea>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Required Skills <span class="required">*</span></label>
+        <input type="text" formControlName="skills" class="form-control" placeholder="e.g. Java, Spring Boot, React">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Salary Range</label>
+        <input type="text" formControlName="salary" class="form-control" placeholder="e.g. $50,000 - $70,000">
+      </div>
+    </div>
+
+    <div class="form-group">
       <label class="form-label">Job Image</label>
-      <input type="file" (change)="onFileSelected($event)" class="form-control">
+      <div class="file-upload-container">
+        <input type="file" (change)="onFileSelected($event)" class="file-input" id="job-image">
+        <label for="job-image" class="file-label">
+          <span class="file-icon">📁</span>
+          <span class="file-text">Choose Image</span>
+        </label>
+        <span class="file-name">{{ getSelectedFileName() }}</span>
+      </div>
+      <div class="image-preview" *ngIf="imagePreviewUrl">
+        <img [src]="imagePreviewUrl" alt="Preview">
+        <button type="button" class="remove-image" (click)="removeImage()">✖</button>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Required Skills</label>
-      <input type="text" formControlName="skills" class="form-control" placeholder="e.g. Java, Spring Boot">
-    </div>
-
-    <div class="d-flex gap-2">
-      <button type="submit" class="btn btn-success" [disabled]="offerForm.invalid">
-        {{ editingOffer ? 'Update Offer' : 'Create Offer' }}
+    <div class="form-actions">
+      <button type="submit" class="btn-submit" [disabled]="offerForm.invalid">
+        {{ editingOffer ? '✅ Update Offer' : '✅ Create Offer' }}
       </button>
-      <button type="button" class="btn btn-secondary" (click)="resetForm()" *ngIf="editingOffer">
-        Cancel
+      <button type="button" class="btn-ai" (click)="openAiGenerator()">
+        🤖 AI Description Generator
+      </button>
+      <button type="button" class="btn-cancel" (click)="resetForm()">
+        ✖ Cancel
       </button>
     </div>
   </form>
+</div>
 
-  <hr class="my-4">
+<!-- Job Offers List -->
+<div class="job-list-container">
+  <div class="list-header">
+    <h2>Job Offers</h2>
 
-  <h3>Job Offers</h3>
-  <div *ngIf="jobOffers.length > 0; else noOffers">
-    <table class="table">
+    <div class="list-actions">
+      <div class="search-container">
+        <input
+          type="text"
+          [(ngModel)]="searchKeyword"
+          (input)="searchOffers()"
+          placeholder="Search job offers..."
+          class="search-input"
+        >
+        <button *ngIf="searchKeyword" class="clear-search" (click)="clearSearch()">✖</button>
+      </div>
+
+      <div class="view-toggle">
+        <button
+          [class.active]="viewMode === 'table'"
+          (click)="viewMode = 'table'"
+          class="view-btn"
+        >
+          📋 Table
+        </button>
+        <button
+          [class.active]="viewMode === 'card'"
+          (click)="viewMode = 'card'"
+          class="view-btn"
+        >
+          📱 Cards
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filter Options -->
+  <div class="filter-options">
+    <div class="filter-label">Filter by status:</div>
+    <div class="filter-buttons">
+      <button
+        [class.active]="statusFilter === 'all'"
+        (click)="filterByStatus('all')"
+        class="filter-btn"
+      >
+        All
+      </button>
+      <button
+        [class.active]="statusFilter === 'active'"
+        (click)="filterByStatus('active')"
+        class="filter-btn"
+      >
+        Active
+      </button>
+      <button
+        [class.active]="statusFilter === 'expired'"
+        (click)="filterByStatus('expired')"
+        class="filter-btn"
+      >
+        Expired
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-container" *ngIf="isLoading">
+    <div class="loading-spinner"></div>
+    <p>Loading job offers...</p>
+  </div>
+
+  <!-- Table View -->
+  <div class="table-container" *ngIf="!isLoading && viewMode === 'table' && filteredOffers.length > 0">
+    <table class="job-table">
       <thead>
         <tr>
-          <th>Image</th>
-          <th>Title</th>
-          <th>Description</th>
-          <th>Deadline</th>
-          <th>Skills</th>
-          <th>Actions</th>
+          <th class="th-image">Image</th>
+          <th class="th-title" (click)="sortBy('title')">
+            Title
+            <span class="sort-icon" *ngIf="sortField === 'title'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
+          <th class="th-description">Description</th>
+          <th class="th-deadline" (click)="sortBy('date')">
+            Deadline
+            <span class="sort-icon" *ngIf="sortField === 'date'">
+              {{ sortDirection === 'asc' ? '↑' : '↓' }}
+            </span>
+          </th>
+          <th class="th-skills">Skills</th>
+          <th class="th-status">Status</th>
+          <th class="th-actions">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let offer of jobOffers">
-          <td>
-            <img *ngIf="offer.image" [src]="offer.image" alt="Job Image" style="width: 100px; height: auto;">
-            <span *ngIf="!offer.image">No Image</span>
+        <tr *ngFor="let offer of filteredOffers" [class.expired]="isExpired(offer.date)">
+          <td class="td-image">
+            <img *ngIf="offer.image" [src]="offer.image" alt="Job Image" class="job-image">
+            <div *ngIf="!offer.image" class="no-image">No Image</div>
           </td>
-          <td>{{ offer.title }}</td>
-          <td>{{ offer.jobDescription }}</td>
-          <td>{{ offer.date | date: 'shortDate' }}</td>
-          <td>{{ offer.skills }}</td>
-          <td>
-            <button class="btn btn-primary btn-sm" (click)="editOffer(offer)">Edit</button>
-            <button class="btn btn-danger btn-sm" (click)="deleteOffer(offer.jobOfferId!)">Delete</button>
+          <td class="td-title">{{ offer.title }}</td>
+          <td class="td-description">
+            <div class="description-preview">{{ getDescriptionPreview(offer.jobDescription) }}</div>
+            <button class="view-more" (click)="viewFullDescription(offer)">View More</button>
+          </td>
+          <td class="td-deadline">
+            {{ offer.date | date: 'mediumDate' }}
+          </td>
+          <td class="td-skills">
+            <div class="skills-list">
+              <span *ngFor="let skill of getSkillsArray(offer.skills)" class="skill-tag">
+                {{ skill }}
+              </span>
+            </div>
+          </td>
+          <td class="td-status">
+            <span class="status-badge" [class.status-active]="!isExpired(offer.date)" [class.status-expired]="isExpired(offer.date)">
+              {{ isExpired(offer.date) ? 'Expired' : 'Active' }}
+            </span>
+          </td>
+          <td class="td-actions">
+            <button class="action-btn edit-btn" (click)="editOffer(offer)" title="Edit">
+              ✏️
+            </button>
+            <button class="action-btn delete-btn" (click)="confirmDelete(offer)" title="Delete">
+              🗑️
+            </button>
+            <button class="action-btn view-btn" (click)="viewApplications(offer)" title="View Applications">
+              👥
+            </button>
+            <button class="action-btn analytics-btn" (click)="viewJobAnalytics(offer)" title="Job Analytics">
+              📊
+            </button>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <ng-template #noOffers>
-    <p>No job offers found.</p>
-  </ng-template>
+  <!-- Card View -->
+  <div class="cards-container" *ngIf="!isLoading && viewMode === 'card' && filteredOffers.length > 0">
+    <div class="job-card" *ngFor="let offer of filteredOffers" [class.expired-card]="isExpired(offer.date)">
+      <div class="card-header">
+        <div class="card-image">
+          <img *ngIf="offer.image" [src]="offer.image" alt="Job Image">
+          <div *ngIf="!offer.image" class="no-card-image">No Image</div>
+        </div>
+        <div class="card-status">
+          <span class="status-indicator" [class.active-indicator]="!isExpired(offer.date)" [class.expired-indicator]="isExpired(offer.date)">
+            {{ isExpired(offer.date) ? 'Expired' : 'Active' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="card-body">
+        <h3 class="card-title">{{ offer.title }}</h3>
+        <p class="card-deadline">Deadline: {{ offer.date | date: 'mediumDate' }}</p>
+        <p class="card-description">{{ getDescriptionPreview(offer.jobDescription) }}</p>
+
+        <div class="card-skills">
+          <span *ngFor="let skill of getSkillsArray(offer.skills).slice(0, 3)" class="card-skill-tag">
+            {{ skill }}
+          </span>
+          <span *ngIf="getSkillsArray(offer.skills).length > 3" class="more-skills">
+            +{{ getSkillsArray(offer.skills).length - 3 }} more
+          </span>
+        </div>
+      </div>
+
+      <div class="card-actions">
+        <button class="card-action-btn" (click)="editOffer(offer)">
+          ✏️ Edit
+        </button>
+        <button class="card-action-btn" (click)="confirmDelete(offer)">
+          🗑️ Delete
+        </button>
+        <button class="card-action-btn" (click)="viewApplications(offer)">
+          👥 Applications
+        </button>
+        <button class="card-action-btn" (click)="viewJobAnalytics(offer)">
+          📊 Analytics
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- No Results -->
+  <div class="no-results" *ngIf="!isLoading && filteredOffers.length === 0">
+    <div class="no-results-icon">📭</div>
+    <h3>No job offers found</h3>
+    <p *ngIf="searchKeyword">No results match your search criteria. Try different keywords.</p>
+    <p *ngIf="!searchKeyword">Start by adding your first job offer using the form above.</p>
+    <button class="btn-add-first" *ngIf="!showForm" (click)="toggleFormVisibility()">
+      ➕ Add Your First Job Offer
+    </button>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showDeleteModal">
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>Confirm Deletion</h3>
+      <button class="modal-close" (click)="cancelDelete()">✖</button>
+    </div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete the job offer "<strong>{{ offerToDelete?.title }}</strong>"?</p>
+      <p class="warning-text">This action cannot be undone.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="cancelDelete()">Cancel</button>
+      <button class="btn-delete" (click)="deleteOffer()">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Description Modal -->
+<div class="modal-overlay" *ngIf="showDescriptionModal">
+  <div class="modal-container description-modal">
+    <div class="modal-header">
+      <h3>{{ selectedOffer?.title }}</h3>
+      <button class="modal-close" (click)="closeDescriptionModal()">✖</button>
+    </div>
+    <div class="modal-body">
+      <h4>Job Description</h4>
+      <p class="full-description">{{ selectedOffer?.jobDescription }}</p>
+
+      <h4>Required Skills</h4>
+      <div class="skills-container">
+        <span *ngFor="let skill of getSkillsArray(selectedOffer?.skills || '')" class="skill-tag">
+          {{ skill }}
+        </span>
+      </div>
+
+      <h4>Deadline</h4>
+      <p>{{ selectedOffer?.date | date: 'fullDate' }}</p>
+
+      <div class="status-container">
+        <span class="status-badge" [class.status-active]="!isExpired(selectedOffer?.date)" [class.status-expired]="isExpired(selectedOffer?.date)">
+          {{ isExpired(selectedOffer?.date) ? 'Expired' : 'Active' }}
+        </span>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-primary" (click)="editOffer(selectedOffer!)">Edit Job Offer</button>
+      <button class="btn-secondary" (click)="closeDescriptionModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- AI Job Description Generator Modal -->
+<div class="modal-overlay" *ngIf="showAiGeneratorModal">
+  <div class="modal-container ai-generator-modal">
+    <div class="modal-header">
+      <h3>AI Job Description Generator</h3>
+      <button class="modal-close" (click)="closeAiGenerator()">✖</button>
+    </div>
+    <div class="modal-body">
+      <div class="ai-generator-intro">
+        <div class="ai-icon">🤖</div>
+        <p>Let AI help you create a professional job description. Fill in the details below and our AI will generate a comprehensive job description for you.</p>
+      </div>
+
+      <form [formGroup]="aiGeneratorForm" class="ai-generator-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Job Title <span class="required">*</span></label>
+            <input type="text" formControlName="jobTitle" class="form-control" placeholder="e.g. Senior Software Engineer">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Industry <span class="required">*</span></label>
+            <input type="text" formControlName="industry" class="form-control" placeholder="e.g. Technology, Healthcare">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Experience Level <span class="required">*</span></label>
+            <select formControlName="experienceLevel" class="form-control">
+              <option value="entry-level">Entry Level</option>
+              <option value="mid-level">Mid Level</option>
+              <option value="senior">Senior</option>
+              <option value="lead">Lead/Principal</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Tone</label>
+            <select formControlName="tone" class="form-control">
+              <option value="professional">Professional</option>
+              <option value="casual">Casual</option>
+              <option value="enthusiastic">Enthusiastic</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Key Skills <span class="required">*</span></label>
+          <input type="text" formControlName="keySkills" class="form-control" placeholder="e.g. JavaScript, React, Node.js (comma separated)">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Company Description (Optional)</label>
+          <textarea formControlName="companyDescription" rows="3" class="form-control" placeholder="Brief description of your company"></textarea>
+        </div>
+      </form>
+
+      <div class="ai-generator-actions">
+        <button class="btn-generate" (click)="generateJobDescription()" [disabled]="aiGeneratorForm.invalid || isGeneratingDescription">
+          <span *ngIf="!isGeneratingDescription">🤖 Generate Description</span>
+          <span *ngIf="isGeneratingDescription">
+            <span class="spinner"></span> Generating...
+          </span>
+        </button>
+      </div>
+
+      <div class="generated-content" *ngIf="generatedDescription">
+        <h4>Generated Job Description</h4>
+        <div class="generated-preview">
+          <pre>{{ generatedDescription }}</pre>
+        </div>
+        <button class="btn-use-description" (click)="useGeneratedDescription()">
+          Use This Description
+        </button>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-close" (click)="closeAiGenerator()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Job Analytics Modal -->
+<div class="modal-overlay" *ngIf="showAnalyticsModal">
+  <div class="modal-container analytics-modal">
+    <div class="modal-header">
+      <h3>Job Analytics: {{ selectedOfferAnalytics?.jobOffer.title }}</h3>
+      <button class="modal-close" (click)="closeAnalyticsModal()">✖</button>
+    </div>
+    <div class="modal-body">
+      <div class="analytics-loading" *ngIf="analyticsLoading">
+        <div class="loading-spinner"></div>
+        <p>Loading analytics data...</p>
+      </div>
+
+      <div class="analytics-content" *ngIf="!analyticsLoading && selectedOfferAnalytics">
+        <div class="analytics-summary">
+          <div class="analytics-card">
+            <div class="analytics-icon">👥</div>
+            <div class="analytics-value">{{ selectedOfferAnalytics.applicationsCount }}</div>
+            <div class="analytics-label">Applications</div>
+          </div>
+
+          <div class="analytics-card">
+            <div class="analytics-icon">👁️</div>
+            <div class="analytics-value">{{ selectedOfferAnalytics.viewsCount }}</div>
+            <div class="analytics-label">Views</div>
+          </div>
+
+          <div class="analytics-card">
+            <div class="analytics-icon">📊</div>
+            <div class="analytics-value">{{ selectedOfferAnalytics.clickRate }}</div>
+            <div class="analytics-label">Click Rate</div>
+          </div>
+
+          <div class="analytics-card">
+            <div class="analytics-icon">⏱️</div>
+            <div class="analytics-value">{{ selectedOfferAnalytics.averageTimeToHire }} days</div>
+            <div class="analytics-label">Avg. Time to Hire</div>
+          </div>
+        </div>
+
+        <div class="analytics-section">
+          <h4>Top Source Channels</h4>
+          <div class="source-channels">
+            <div class="channel-item" *ngFor="let channel of selectedOfferAnalytics.topSourceChannels">
+              <div class="channel-name">{{ channel.name }}</div>
+              <div class="channel-bar-container">
+                <div class="channel-bar" [style.width.%]="channel.percentage"></div>
+                <div class="channel-percentage">{{ channel.percentage }}%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="analytics-section">
+          <h4>Candidate Experience Levels</h4>
+          <div class="experience-distribution">
+            <div class="experience-item" *ngFor="let exp of selectedOfferAnalytics.candidateDemographics.experience">
+              <div class="experience-name">{{ exp.level }}</div>
+              <div class="experience-bar-container">
+                <div class="experience-bar" [style.width.%]="exp.percentage"></div>
+                <div class="experience-percentage">{{ exp.percentage }}%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="analytics-section">
+          <h4>Skill Match Analysis</h4>
+          <div class="skills-match">
+            <div class="skill-match-item" *ngFor="let skill of selectedOfferAnalytics.candidateDemographics.skills">
+              <div class="skill-name">{{ skill.name }}</div>
+              <div class="skill-match-bar-container">
+                <div class="skill-match-bar" [style.width.%]="skill.matchPercentage"></div>
+                <div class="skill-match-percentage">{{ skill.matchPercentage }}%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-close" (click)="closeAnalyticsModal()">Close</button>
+    </div>
+  </div>
 </div>

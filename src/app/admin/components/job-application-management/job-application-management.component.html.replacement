@@ -36,7 +36,7 @@
       <p>Total Job Offers</p>
     </div>
   </div>
-
+  
   <div class="stat-card">
     <div class="stat-icon">👥</div>
     <div class="stat-content">
@@ -44,7 +44,7 @@
       <p>Total Applications</p>
     </div>
   </div>
-
+  
   <div class="stat-card">
     <div class="stat-icon">✅</div>
     <div class="stat-content">
@@ -52,7 +52,7 @@
       <p>Active Offers</p>
     </div>
   </div>
-
+  
   <div class="stat-card">
     <div class="stat-icon">📊</div>
     <div class="stat-content">
@@ -66,19 +66,19 @@
 <div class="applications-container" *ngIf="!isLoading">
   <div class="list-header">
     <h2>Applications</h2>
-
+    
     <div class="list-actions">
       <div class="search-container">
-        <input
-          type="text"
-          [(ngModel)]="searchKeyword"
-          (input)="searchApplications()"
-          placeholder="Search applications..."
+        <input 
+          type="text" 
+          [(ngModel)]="searchKeyword" 
+          (input)="searchApplications()" 
+          placeholder="Search applications..." 
           class="search-input"
         >
         <button *ngIf="searchKeyword" class="clear-search" (click)="clearSearch()">✖</button>
       </div>
-
+      
       <div class="filter-dropdown">
         <select [(ngModel)]="statusFilter" (change)="filterByStatus()" class="filter-select">
           <option value="all">All Applications</option>
@@ -88,7 +88,7 @@
       </div>
     </div>
   </div>
-
+  
   <!-- Bulk Actions -->
   <div class="bulk-actions" *ngIf="filteredApplications.length > 0">
     <div class="select-all">
@@ -98,7 +98,7 @@
         <span class="label-text">Select All</span>
       </label>
     </div>
-
+    
     <div class="bulk-actions-dropdown" *ngIf="selectedApplications.size > 0">
       <span class="selected-count">{{ selectedApplications.size }} selected</span>
       <select class="bulk-action-select" #bulkAction>
@@ -108,21 +108,21 @@
       <button class="btn-apply" (click)="performBulkAction(bulkAction.value)">Apply</button>
     </div>
   </div>
-
+  
   <!-- AI Analysis Status -->
   <div class="ai-status" *ngIf="aiAnalysisInProgress">
     <div class="ai-status-icon">🤖</div>
     <div class="ai-status-message">AI is analyzing CVs...</div>
     <div class="ai-status-spinner"></div>
   </div>
-
+  
   <!-- Candidate Rankings -->
   <div class="candidate-rankings" *ngIf="candidateRankings.length > 0">
     <div class="rankings-header">
       <h3>Top Candidates</h3>
       <span class="rankings-count">{{ candidateRankings.length }} analyzed</span>
     </div>
-
+    
     <div class="rankings-list">
       <div class="ranking-item" *ngFor="let candidate of candidateRankings.slice(0, 3); let i = index">
         <div class="ranking-position">{{ i + 1 }}</div>
@@ -138,12 +138,12 @@
         </div>
       </div>
     </div>
-
+    
     <button class="btn-view-all" *ngIf="candidateRankings.length > 3">
       View All Rankings
     </button>
   </div>
-
+  
   <!-- Applications Table -->
   <div class="table-container" *ngIf="filteredApplications.length > 0">
     <table class="applications-table">
@@ -222,7 +222,7 @@
               <button class="action-btn view-btn" (click)="viewApplicationDetails(application)" title="View Details">
                 👁️
               </button>
-              <button class="action-btn ai-btn" (click)="processCV(application)" title="AI Insights">
+              <button class="action-btn ai-btn" (click)="viewAiInsights(application)" title="AI Insights" [disabled]="!skillMatchScores.has(application.jobAppID)">
                 🤖
               </button>
               <button class="action-btn notes-btn" (click)="addNotes(application)" title="Add Notes">
@@ -243,7 +243,7 @@
       </tbody>
     </table>
   </div>
-
+  
   <!-- No Applications Message -->
   <div class="no-results" *ngIf="filteredApplications.length === 0">
     <div class="no-results-icon">📭</div>
@@ -279,7 +279,7 @@
             Applied: {{ selectedApplication.applicationDate | date: 'fullDate' || 'Unknown date' }}
           </div>
         </div>
-
+        
         <div class="applicant-section">
           <h4>Applicant Information</h4>
           <div class="applicant-card">
@@ -293,7 +293,7 @@
             </div>
           </div>
         </div>
-
+        
         <div class="documents-section">
           <h4>Application Documents</h4>
           <div class="documents-grid">
@@ -313,7 +313,7 @@
             </div>
           </div>
         </div>
-
+        
         <div class="score-section" *ngIf="selectedApplication.cvScore">
           <h4>CV Match Analysis</h4>
           <div class="score-card">
@@ -327,7 +327,7 @@
             <p>This score represents how well the applicant's CV matches the job requirements.</p>
           </div>
         </div>
-
+        
         <div class="score-section" *ngIf="!selectedApplication.cvScore">
           <h4>CV Match Analysis</h4>
           <div class="no-score">
@@ -335,14 +335,14 @@
             <button class="btn-analyze" (click)="processCV(selectedApplication)">Analyze CV</button>
           </div>
         </div>
-
+        
         <div class="notes-section" *ngIf="candidateNotes.has(selectedApplication.jobAppID)">
           <h4>Recruiter Notes</h4>
           <div class="notes-content">
             {{ candidateNotes.get(selectedApplication.jobAppID) }}
           </div>
         </div>
-
+        
         <div class="interview-section" *ngIf="interviewSchedules.has(selectedApplication.jobAppID)">
           <h4>Interview Schedule</h4>
           <div class="interview-details">
@@ -421,7 +421,7 @@
             <div class="candidate-position">{{ selectedApplication.jobOffer?.title || 'Unknown Position' }}</div>
           </div>
         </div>
-
+        
         <form [formGroup]="interviewForm" (ngSubmit)="submitInterviewSchedule()" class="interview-form">
           <div class="form-row">
             <div class="form-group">
@@ -431,7 +431,7 @@
                 Date is required
               </div>
             </div>
-
+            
             <div class="form-group">
               <label class="form-label">Time <span class="required">*</span></label>
               <input type="time" formControlName="time" class="form-control">
@@ -440,7 +440,7 @@
               </div>
             </div>
           </div>
-
+          
           <div class="form-row">
             <div class="form-group">
               <label class="form-label">Interview Type <span class="required">*</span></label>
@@ -450,7 +450,7 @@
                 <option value="in-person">In-Person</option>
               </select>
             </div>
-
+            
             <div class="form-group">
               <label class="form-label">Interviewers <span class="required">*</span></label>
               <input type="text" formControlName="interviewers" class="form-control" placeholder="Names of interviewers">
@@ -459,12 +459,12 @@
               </div>
             </div>
           </div>
-
+          
           <div class="form-group">
             <label class="form-label">Notes</label>
             <textarea formControlName="notes" rows="3" class="form-control" placeholder="Additional notes about the interview"></textarea>
           </div>
-
+          
           <div class="form-group">
             <label class="checkbox-container">
               <input type="checkbox" formControlName="sendNotification">
@@ -494,9 +494,9 @@
       <button class="modal-close" (click)="closeNotesModal()">✖</button>
     </div>
     <div class="modal-body">
-      <textarea
-        [(ngModel)]="currentNotes"
-        class="notes-textarea"
+      <textarea 
+        [(ngModel)]="currentNotes" 
+        class="notes-textarea" 
         placeholder="Add your notes about this candidate here..."
         rows="8"
       ></textarea>
@@ -527,7 +527,7 @@
           <div class="ai-subtitle">{{ aiInsights.jobTitle }}</div>
         </div>
       </div>
-
+      
       <div class="ai-summary">
         <div class="summary-item">
           <div class="summary-label">Match Score</div>
@@ -542,7 +542,7 @@
           <div class="summary-value">{{ aiInsights.potentialFit }}</div>
         </div>
       </div>
-
+      
       <div class="ai-section">
         <h5>Matched Skills</h5>
         <div class="skills-container">
@@ -554,7 +554,7 @@
           </span>
         </div>
       </div>
-
+      
       <div class="ai-section">
         <h5>Missing Skills</h5>
         <div class="skills-container">
@@ -566,7 +566,7 @@
           </span>
         </div>
       </div>
-
+      
       <div class="ai-section">
         <h5>Additional Skills</h5>
         <div class="skills-container">
@@ -578,7 +578,7 @@
           </span>
         </div>
       </div>
-
+      
       <div class="ai-section">
         <h5>AI Recommendations</h5>
         <ul class="recommendations-list">
@@ -586,7 +586,7 @@
             {{ recommendation }}
           </li>
         </ul>
-
+        
         <div class="interview-recommendation">
           <div class="recommendation-label">Interview Recommendation:</div>
           <div class="recommendation-text">{{ aiInsights.interviewRecommendation }}</div>

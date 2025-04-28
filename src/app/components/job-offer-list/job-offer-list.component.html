@@ -1,31 +1,69 @@
 <div class="subscription-container">
-  <h6 class="pricing-smalltitle"><span>Discover your next opportunity .</span></h6>
-  <h2 class="pricing-title">Job Offers</h2>
+  <!-- Modern Banner -->
+  <div class="modern-banner">
+    <div class="banner-content">
+      <h1 class="banner-title">Trouvez l'emploi de vos rêves</h1>
+      <p class="banner-subtitle">Explorez les opportunités qui correspondent à vos compétences et objectifs de carrière</p>
 
-  <div class="greeting-message">
-    Welcome! Browse through our exciting offers and apply for your dream job today!
+      <div class="banner-stats">
+        <div class="banner-stat">
+          <div class="banner-stat-value">{{ filteredOffers.length }}</div>
+          <div class="banner-stat-label">Emplois actifs</div>
+        </div>
+        <div class="banner-stat">
+          <div class="banner-stat-value">{{ getCompaniesCount() }}</div>
+          <div class="banner-stat-label">Entreprises</div>
+        </div>
+        <div class="banner-stat">
+          <div class="banner-stat-value">{{ getSkillsCount() }}</div>
+          <div class="banner-stat-label">Compétences recherchées</div>
+        </div>
+      </div>
+
+      <div class="banner-search">
+        <input type="text" placeholder="Rechercher des titres d'emploi, compétences ou mots-clés..." [(ngModel)]="titleFilter" (input)="searchSubject.next('')">
+        <button (click)="applyFilter()">Rechercher</button>
+      </div>
+    </div>
+    <div class="banner-image">
+      <div class="banner-shape"></div>
+    </div>
+  </div>
+
+  <!-- Wishlist Toggle Button -->
+  <div class="wishlist-toggle-container">
+    <button class="wishlist-toggle-btn" [class.active]="showWishlistSection" (click)="toggleWishlistSection()">
+      ❤ {{ showWishlistSection ? 'Affichage des emplois sauvegardés' : 'Voir mes emplois sauvegardés' }}
+    </button>
   </div>
 
   <div class="row">
     <!-- Filters Column -->
     <div class="filter-section col-3">
-      <h3><i class="fas fa-filter"></i> Filter Job Offers</h3>
+      <h3>🔍 Filtrer les offres d'emploi</h3>
 
-      <label for="titleFilter"><i class="fas fa-heading"></i> Title :</label>
-      <input type="text" id="titleFilter" [(ngModel)]="titleFilter" (input)="applyFilter()" class="form-control mb-2">
+      <label for="titleFilter">📝 Titre :</label>
+      <input type="text" id="titleFilter" [(ngModel)]="titleFilter" (input)="searchSubject.next('')" class="form-control mb-2">
 
-      <label for="minDate"><i class="fas fa-calendar-minus"></i> Min Deadline :</label>
+      <label for="minDate">📅 Date limite min :</label>
       <input type="date" id="minDate" [(ngModel)]="minDate" (change)="applyFilter()" class="form-control mb-2">
 
-      <label for="maxDate"><i class="fas fa-calendar-plus"></i> Max Deadline :</label>
+      <label for="maxDate">📅 Date limite max :</label>
       <input type="date" id="maxDate" [(ngModel)]="maxDate" (change)="applyFilter()" class="form-control mb-2">
 
-      <label for="skillsFilter"><i class="fas fa-tools"></i> Skills :</label>
-      <input type="text" id="skillsFilter" [(ngModel)]="skillsFilter" (input)="applyFilter()" class="form-control mb-3">
+      <label for="skillsFilter">🔧 Compétences :</label>
+      <input type="text" id="skillsFilter" [(ngModel)]="skillsFilter" (input)="searchSubject.next('')" class="form-control mb-3">
 
-      <button (click)="resetFilters()" class="btn btn-secondary w-100">
-        <i class="fas fa-undo"></i> Reset Filters
+      <button class="saved-jobs-filter-btn mb-3" [class.active]="showSavedOnly" (click)="toggleSavedJobsFilter()">
+        ★
+        {{ showSavedOnly ? 'Affichage des emplois sauvegardés' : 'Afficher les emplois sauvegardés' }}
       </button>
+
+      <div class="text-center">
+        <button (click)="resetFilters()" class="reset-filters-btn">
+          🔄 Réinitialiser les filtres
+        </button>
+      </div>
     </div>
 
     <!-- Offers Column -->
@@ -37,25 +75,58 @@
           </div>
           <h3>{{ offer.title }}</h3>
           <p class="description">{{ offer.jobDescription }}</p>
-          <p class="subscription-info">
-            <strong>Deadline:</strong> {{ offer.date | date: 'shortDate' }}<br>
-            <strong>Skills:</strong> {{ offer.skills }}
+          <p class="subscription-info" [class.expired]="isJobExpired(offer)">
+            <strong>Date limite:</strong> {{ offer.date | date: 'shortDate' }}
+            <span *ngIf="isJobExpired(offer)" class="expired-badge">Expiré</span><br>
+            <strong>Compétences:</strong> {{ offer.skills }}
           </p>
+
+          <!-- Action Buttons -->
+          <div class="job-action-buttons">
+            <!-- Save Job Button -->
+            <button
+              class="btn-save-job"
+              (click)="toggleSaveJob(offer); $event.stopPropagation();"
+              [class.saved]="isJobSaved(offer)"
+              title="{{ isJobSaved(offer) ? 'Retirer des emplois sauvegardés' : 'Sauvegarder cet emploi' }}"
+            >
+              ★
+            </button>
+
+            <!-- Share Job Button -->
+            <button
+              class="btn-share-job"
+              (click)="shareJob(offer); $event.stopPropagation();"
+              title="Partager cet emploi"
+            >
+              ↗
+            </button>
+          </div>
+
+          <!-- Apply Button -->
           <button
             class="subscribe-button"
             (click)="selectOffer(offer)"
-            [disabled]="appliedOffers.has(offer.jobOfferId!)"
+            [disabled]="appliedOffers.has(offer.jobOfferId!) || isJobExpired(offer)"
+            [class.expired-btn]="isJobExpired(offer)"
           >
-            {{ appliedOffers.has(offer.jobOfferId!) ? 'Already Applied' : 'Apply' }}
+            {{ appliedOffers.has(offer.jobOfferId!) ? '✓' : isJobExpired(offer) ? '⏱' : '✉' }}
+            {{ appliedOffers.has(offer.jobOfferId!) ? 'Déjà postulé' : isJobExpired(offer) ? 'Date limite dépassée' : 'Postuler maintenant' }}
           </button>
+
+          <!-- Ask AI Button -->
+          <button class="btn-ai-career mt-2" (click)="openAIModal()">
+            🤖 Assistant de carrière IA
+          </button>
+
         </div>
       </div>
 
-      <div *ngIf="paginatedOffers.length > 0" class="d-flex justify-content-center mt-4">
+      <div *ngIf="paginatedOffers.length > 0" class="pagination-container mt-4">
         <button
           *ngFor="let page of getPageNumbers()"
           (click)="changePage(page)"
-          class="btn btn-outline-primary mx-1"
+          class="pagination-btn"
           [class.active]="page === currentPage"
         >
           {{ page }}
@@ -68,34 +139,166 @@
     </div>
   </div>
 
-  <div *ngIf="selectedOffer" class="modal show d-block" tabindex="-1">
-    <div class="modal-dialog">
+  <!-- Apply Modal -->
+  <div *ngIf="selectedOffer" class="modal show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <form [formGroup]="applicationForm" (ngSubmit)="submitApplication()">
           <div class="modal-header">
-            <h5 class="modal-title">Apply for {{ selectedOffer.title }}</h5>
-            <button type="button" class="btn-close" (click)="selectedOffer = null"></button>
+            <h5 class="modal-title text-dark">Postuler pour {{ selectedOffer.title }}</h5>
+            <div class="modal-actions">
+              <button type="button" class="btn-icon" title="Save this job" (click)="toggleSaveJob(selectedOffer)">
+                ★
+              </button>
+              <button type="button" class="btn-icon" title="Share this job" (click)="shareJob(selectedOffer)">
+                ↗
+              </button>
+              <button type="button" class="btn-close" (click)="selectedOffer = null">✕</button>
+            </div>
           </div>
           <div class="modal-body">
+            <div class="job-details mb-4">
+              <h6 class="text-primary">Détails de l'emploi:</h6>
+              <p><strong>Titre:</strong> {{ selectedOffer.title }}</p>
+              <p><strong>Description:</strong> {{ selectedOffer.jobDescription }}</p>
+              <p><strong>Compétences requises:</strong> {{ selectedOffer.skills }}</p>
+              <p><strong>Date limite de candidature:</strong> {{ selectedOffer.date | date: 'mediumDate' }}</p>
+            </div>
+            <hr>
+            <h6 class="text-primary mb-3">Votre candidature:</h6>
             <div class="mb-3">
-              <label>Upload Motivation Letter (PDF only)</label>
+              <label>Télécharger lettre de motivation (PDF uniquement)</label>
               <input type="file" (change)="onMotivationFileSelected($event)" class="form-control" accept="application/pdf">
             </div>
             <div class="mb-3">
-              <label>Upload CV (PDF only)</label>
+              <label>Télécharger CV (PDF uniquement)</label>
               <input type="file" (change)="onCVFileSelected($event)" class="form-control" accept="application/pdf">
             </div>
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-success" [disabled]="applicationForm.invalid">
-              Submit Application
+              ✉ Soumettre la candidature
             </button>
             <button type="button" class="btn btn-secondary" (click)="selectedOffer = null">
-              Cancel
+              ✕ Annuler
             </button>
           </div>
         </form>
       </div>
     </div>
   </div>
+
+  <!-- Advanced Career Services Section -->
+  <hr class="my-4">
+
+  <div class="advanced-services-section">
+    <h2 class="text-center mb-4">Accélérez votre évolution professionnelle</h2>
+    <p class="text-center services-subtitle">Services professionnels pour vous démarquer sur le marché du travail</p>
+
+    <div class="services-container">
+      <div class="service-card" *ngFor="let service of services" [class.popular]="service.popular">
+        <div class="service-icon">
+          {{ service.icon === 'fa-file-text-o' ? '📄' :
+             service.icon === 'fa-comments-o' ? '💬' :
+             service.icon === 'fa-road' ? '🛣️' :
+             service.icon === 'fa-linkedin-square' ? '🔗' :
+             service.icon === 'fa-money' ? '💰' :
+             service.icon === 'fa-id-card-o' ? '🪪' : '📋' }}
+        </div>
+        <div class="service-content">
+          <span *ngIf="service.popular" class="popular-badge">Popular</span>
+          <h3 class="service-title">{{ service.title }}</h3>
+          <p class="service-description">{{ service.description }}</p>
+          <div class="service-footer">
+            <span class="service-price">{{ service.price }}</span>
+            <button class="service-button" (click)="requestService(service.title)">
+              <span>→</span>
+              <span>Commencer</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Career Assistant Modal (chat style) -->
+  <div *ngIf="aiModalOpen" class="modal show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content ai-modal-content">
+        <div class="ai-modal-header">
+          <div class="ai-assistant-info">
+            <div class="ai-avatar">
+              🤖
+            </div>
+            <div class="ai-title">
+              <h5>Coach de carrière IA</h5>
+              <span>Propulsé par l'IA avancée</span>
+            </div>
+          </div>
+          <button type="button" class="ai-close-btn" aria-label="Close" (click)="closeAIModal()">
+            ✕
+          </button>
+        </div>
+
+        <div class="ai-modal-body">
+          <!-- AI Tips Section -->
+          <div class="ai-tips" *ngIf="!aiResponse">
+            <h6>💡 Comment je peux vous aider</h6>
+            <ul>
+              <li>✓ Analyser et améliorer votre CV</li>
+              <li>✓ Préparer vos entretiens avec des questions pratiques</li>
+              <li>✓ Fournir des conseils sur votre parcours professionnel</li>
+              <li>✓ Offrir des stratégies de négociation salariale</li>
+              <li>✓ Aider avec vos documents de candidature</li>
+            </ul>
+          </div>
+
+          <!-- AI Response Chat Bubble -->
+          <div *ngIf="aiResponse" class="ai-chat-container">
+            <div class="ai-message">
+              <div class="ai-message-avatar">
+                🤖
+              </div>
+              <div class="ai-message-content">
+                {{ aiResponse }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Loading Indicator -->
+          <div *ngIf="isLoading" class="ai-loading">
+            <div class="ai-loading-dots">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p>Analyse de votre demande...</p>
+          </div>
+
+          <!-- User Input Chat -->
+          <div class="ai-input-container">
+            <textarea
+              [(ngModel)]="aiInput"
+              rows="3"
+              class="ai-input"
+              placeholder="Demandez des conseils sur votre CV, des astuces pour les entretiens, ou collez votre CV pour analyse..."
+              [disabled]="isLoading"
+            ></textarea>
+
+            <div class="ai-actions">
+              <button class="ai-voice-btn" (click)="startRecording()" [disabled]="isRecording || isLoading">
+                🎤
+                {{ isRecording ? 'Enregistrement...' : 'Entrée vocale' }}
+              </button>
+              <button class="ai-send-btn" (click)="sendToGroq()" [disabled]="isLoading || (!aiInput.trim())">
+                ✉
+                {{ isLoading ? 'Traitement...' : 'Envoyer' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
