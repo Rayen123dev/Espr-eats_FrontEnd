@@ -1,0 +1,16 @@
+<form [formGroup]="replyForm" (ngSubmit)="onSubmit()" class="reply-form">
+    <div class="form-group">
+      <textarea formControlName="content" class="form-control" placeholder="Write your reply..." rows="3"></textarea>
+    </div>
+    
+    <div class="form-group">
+      <input type="file" (change)="onFileChange($event)" accept="image/*, video/*">
+    </div>
+    
+    <div class="form-actions">
+      <button type="button" class="btn btn-cancel" (click)="replyComplete.emit()">Cancel</button>
+      <button type="submit" class="btn btn-submit" [disabled]="isSubmitting || replyForm.invalid">
+        {{ isSubmitting ? 'Posting...' : 'Post Reply' }}
+      </button>
+    </div>
+  </form>

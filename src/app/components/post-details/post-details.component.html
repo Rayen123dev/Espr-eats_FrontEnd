@@ -1,0 +1,101 @@
+<br><br><br><br>
+<div class="post-container">
+    <!-- Main Post -->
+    <div *ngIf="post" class="main-post">
+      <div class="post-header">
+        <div class="post-meta">
+            <div class="user-info">
+                <div class="avatar-placeholder"></div>
+                <span class="username">Posted by: {{ post.authorUsername }}</span>
+                <span class="post-time">{{ formatDate(post.createdAt) }}</span>
+            </div>
+        </div>
+      </div>
+  
+      <div class="post-content">
+        <p>{{ post.content }}</p>
+        
+        <!-- Media Display - This is the fixed media container -->
+        <div *ngIf="post.mediaURL" class="media-container">
+          <img *ngIf="isImage(post.mediaURL)"
+               [src]="getmediaURL(post.mediaURL)" 
+               alt="Post image"
+               class="post-media"
+               (error)="handleImageError($event)">
+  
+          <video *ngIf="isVideo(post.mediaURL)"
+                 controls
+                 class="post-media">
+            <source [src]="getmediaURL(post.mediaURL)" [type]="getVideoType(post.mediaURL)">
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      </div>
+  
+      <!-- Post Actions - This is the fixed action buttons section -->
+      <div class="post-actions">
+        <button class="btn-reply" (click)="startReply(post.postID)">
+          <i class="fas fa-reply"></i> Reply
+        </button>
+        <div *ngIf="post.author?.userid === currentUserId" class="owner-actions">
+          <button class="btn btn-edit" (click)="updatePost(post.postID)">Edit</button>
+          <button class="btn btn-delete" (click)="deletePost(post.postID)">Delete</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Reply Form (shown when replying) -->
+    <div *ngIf="showReplyForm && replyingToPostId" class="reply-form-container">
+      <app-add-post 
+        [isReplyMode]="true"
+        [parentPostId]="replyingToPostId"
+        (replyComplete)="onReplyComplete()">
+      </app-add-post>
+    </div>
+  
+    <!-- Replies Section -->
+    <div *ngIf="post?.replies?.length" class="replies-container">
+      <h3>Replies</h3>
+      <div class="replies-list">
+        <div *ngFor="let reply of post?.replies" class="reply">
+          <div class="reply-header">
+            <div class="user-info">
+              <div class="avatar-placeholder"></div>
+              <span class="username">Posted by: {{ reply.authorUsername }}</span>
+              <span class="post-time">{{ formatDate(reply.createdAt) }}</span>
+          </div>
+          </div>
+          
+          <div class="reply-content">
+            <p>{{ reply.content }}</p>
+            
+            <!-- Display media if exists in reply -->
+            <div *ngIf="reply.mediaURL" class="reply-media">
+              <img *ngIf="isImage(reply.mediaURL)" [src]="getmediaURL(reply.mediaURL)" alt="Reply image" class="img-fluid">
+              <video *ngIf="isVideo(reply.mediaURL)" controls class="img-fluid">
+                <source [src]="getmediaURL(reply.mediaURL)" [type]="getVideoType(reply.mediaURL)">
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+  
+         <!-- <div class="reply-actions">
+            <button class="btn btn-reply" (click)="startReply(reply.postID)">Reply</button>
+            <div *ngIf="reply.author?.userid === currentUserId" class="owner-actions">
+              <button class="btn btn-edit" (click)="updatePost(reply.postID)">Edit</button>
+              <button class="btn btn-delete" (click)="deletePost(reply.postID)">Delete</button>
+            </div>
+          </div>-->
+  
+          <!-- Nested Reply Form -->
+          <div *ngIf="showReplyForm && replyingToPostId === reply.postID" class="nested-reply-form">
+            <app-reply-form 
+              [postId]="replyingToPostId" 
+              (replyComplete)="onReplyComplete()">
+            </app-reply-form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+  

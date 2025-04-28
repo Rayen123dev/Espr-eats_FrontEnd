@@ -1,39 +1,50 @@
-<div class="container"  >
-  <!-- Conteneur pour le sélecteur de date et la barre de filtrage -->
-  <div class="filter-container mb-4">
-    <!-- Sélecteur de date -->
-    <div class="date-picker">
-      <label for="dateSelect">Date :</label>
+<div class="menu-page">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-content">
+      <h1>Delicious Food Is Waiting For You</h1>
+      <p>Discover our carefully curated menu with fresh ingredients and amazing flavors</p>
+      <div class="hero-buttons">
+        <button class="btn-primary">View Menu</button>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="assets/images/Fable.jpg" alt="Featured dish" class="featured-dish">
+    </div>
+  </section>
+
+  <!-- Filter Section -->
+  <section class="filter-section">
+    <div class="date-selector">
+      <label for="dateSelect">Select Date:</label>
       <input 
         type="date" 
         id="dateSelect" 
-        class="form-control date-input" 
+        class="date-input" 
         [(ngModel)]="selectedDate"
         (change)="filterByDate()"
       >
     </div>
-
-    <!-- Barre de filtrage par catégorie -->
-    <div class="category-filter">
+    <div class="category-selector">
       <button 
-        class="btn-standard" 
-        [class.active]="selectedCategory === ''"
+        class="category-btn" 
+        [ngClass]="{'active': selectedCategory === ''}"
         (click)="filterByCategory('')"
       >
-        Toutes
+        All
       </button>
       <button 
         *ngFor="let category of categories" 
-        class="btn-standard"
-        [class.active]="selectedCategory === category"
+        class="category-btn"
+        [ngClass]="{'active': selectedCategory === category}"
         (click)="filterByCategory(category)"
       >
         {{ category }}
       </button>
     </div>
-  </div>
+  </section>
 
-  <!-- Liste des menus -->
+  <!-- Menu Section -->
   <div *ngIf="paginatedMenus.length > 0; else noMenus">
     <div class="row" >
       <div class="col-12 mb-4" *ngFor="let menu of paginatedMenus">
@@ -53,12 +64,16 @@
                     <div class="card">
                       <img class="card-img-top" [src]="plat.imagePath" alt="{{ plat.nom }}">
                       <div class="card-body">
+                        
                         <h6 class="card-title">{{ plat.nom }}</h6>
                         <p class="card-text">{{ plat.description }} </p>
                       </div>
+                      
                     </div>
                   </div>
+                  
                 </div>
+                
               </div>
 
               <div class="menu-section">
@@ -121,9 +136,37 @@
     </div>
   </div>
 
+  <!-- Service Section -->
+  <section class="services-section">
+    <h2>Our Services</h2>
+    <div class="services-grid">
+      <div class="service-item">
+        <div class="service-icon">
+          <span class="icon">🖥️</span>
+        </div>
+        <p>Online booking</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon">
+          <span class="icon">🍽️</span>
+        </div>
+        <p>Catering service</p>
+      </div>
+      <div class="service-item">
+        <div class="service-icon">
+          <span class="icon">👥</span>
+        </div>
+        <p>Membership</p>
+      </div>
+    </div>
+  </section>
+
   <ng-template #noMenus>
-    <div class="no-menus">
-      <p>Aucun menu disponible pour cette date ou catégorie.</p>
+    <div class="no-menus-message">
+      <img src="/api/placeholder/200/200" alt="No menus available">
+      <h3>No menus available</h3>
+      <p>Sorry, there are no menus available for the selected date or category.</p>
+      <button class="btn-primary" (click)="resetFilters()">Reset Filters</button>
     </div>
   </ng-template>
 </div>

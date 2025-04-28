@@ -74,9 +74,8 @@ export class GestionUsersComponent implements OnInit, OnDestroy {
 
   filterUser(status: string): void {
     this.statusFilter = status;
-    this.filteredUsers = status === 'ALL'
-      ? this.Users
-      : this.Users.filter(u => u.role === status);
+    this.currentPage = 1; // Reset to first page when changing filters
+    this.loadPaginatedUsers(); // This should take the filter into account
   }
 
   ngOnInit() {
@@ -167,16 +166,17 @@ searchUsers(): void {
    
 
 loadPaginatedUsers(): void {
-  // Si une recherche est active, utilisez searchUsers
+  // If a search is active, use searchUsers
   if (this.searchQuery && this.searchQuery.trim().length > 0) {
     this.searchUsers();
     return;
   }
 
-  // Sinon, chargez normalement
+  // Otherwise, load normally with filters
   const params = {
     page: this.currentPage,
     size: this.pageSize,
+    filter: this.statusFilter !== 'ALL' ? this.statusFilter : undefined
   };
 
   const sub = this.loginService.getPaginatedUsers(params).subscribe({
@@ -504,7 +504,7 @@ loadPaginatedUsers(): void {
     const sub = this.loginService.BlocUser(id).subscribe({
       next: (response) => {
         console.log('User blocked:', response);
-        // Refresh user data to update charts
+        this.loadUserData();
         this.loadPaginatedUsers();
       },
       error: (error) => {
@@ -518,7 +518,7 @@ loadPaginatedUsers(): void {
     const sub = this.loginService.ActiveUser(id).subscribe({
       next: (response) => {
         console.log('User blocked:', response);
-        // Refresh user data to update charts
+        this.loadUserData();
         this.loadPaginatedUsers();
       },
       error: (error) => {

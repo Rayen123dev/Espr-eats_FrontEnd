@@ -10,9 +10,10 @@ export interface User {
   age: string;
   role: string;
   avatarUrl: string;
-  link_Image: string; 
+  link_Image: string;
   verified: boolean;
   lastLogin: Date;
+  abonnement: boolean;
 }
 
 export interface CloudinaryUploadResponse {
@@ -20,6 +21,8 @@ export interface CloudinaryUploadResponse {
   public_id: string;
   asset_id: string;
   // Add other properties as needed based on Cloudinary response
+  avatarUrl: string;
+  abonnement?: boolean;
 }
 
 @Injectable({
@@ -35,11 +38,11 @@ export class LoginService {
     let httpParams = new HttpParams()
       .set('page', params.page.toString())
       .set('size', params.size.toString());
-    
+
     if (params.filter) {
       httpParams = httpParams.set('role', params.filter);
     }
-    
+
     return this.http.get<any>(`${this.baseUrl}/usersp`, { params: httpParams });
   }
 
@@ -48,16 +51,23 @@ export class LoginService {
     formData.append('file', file);
     return this.http.post(`${this.baseUrl}/upload-image`, formData);
   }
-  
+
 
   login(user: { email: string; mdp: string }): Observable<any> {
+    localStorage.removeItem('token');
+
     return this.http.post<{ token: string }>(`${this.baseUrl}/login`, user).pipe(
       tap(response => {
-        if (response.token) {
+        if (response && response.token) {
           localStorage.setItem('token', response.token);
           console.log('Token', response.token);
           console.log('Role', this.getRole());
         }
+      }),
+      catchError(error => {
+        console.error('Login error:', error);
+        localStorage.removeItem('token');
+        return throwError(() => error);
       })
     );
   }
@@ -87,6 +97,7 @@ export class LoginService {
     }
   }
 
+  // Improved JWT decoding method
   private jwtDecode(token: string): any {
     try {
       const base64Url = token.split('.')[1];
@@ -101,23 +112,26 @@ export class LoginService {
   getUserIdFromToken(): number | null {
     const token = localStorage.getItem('token');
     if (!token) return null;
-  
+
     try {
       const decodedToken = this.jwtDecode(token);
+      // Directly parse the 'id' claim as a number
       return decodedToken?.id ? parseInt(decodedToken.id, 10) : null;
     } catch (error) {
       console.error('Error extracting user ID', error);
       return null;
     }
   }
-  
+
   updateUserProfile(userId: string, profile: User): Observable<User> {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
+      console.error('No authentication token found');
+      // Optionally throw an error or return an observable that errors out
       return throwError(() => new Error('No authentication token found'));
     }
-  
+
     return this.http.put<User>(`${this.baseUrl}/userUpdate/${userId}`, profile, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`,
@@ -133,11 +147,11 @@ export class LoginService {
 
   BlocUser(userId: string): Observable<User> {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
       return throwError(() => new Error('No authentication token found'));
     }
-  
+
     return this.http.put<User>(`${this.baseUrl}/BlocUser/${userId}`, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`,
@@ -154,11 +168,11 @@ export class LoginService {
 
   ActiveUser(userId: string): Observable<User> {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
       return throwError(() => new Error('No authentication token found'));
     }
-  
+
     return this.http.put<User>(`${this.baseUrl}/ActiveUser/${userId}`, {
       headers: new HttpHeaders({
         'Authorization': `Bearer ${token}`,
@@ -182,13 +196,13 @@ export class LoginService {
   isLoggedIn(): boolean {
     const token = localStorage.getItem('token');
     if (!token) return false;
-  
+
     const decoded = this.jwtDecode(token);
     if (!decoded || !decoded.exp) return false;
-  
+
     const expiry = decoded.exp * 1000; // exp est en secondes
     return Date.now() < expiry;
-  }  
+  }
 
   register(user: {
     nom: string;
@@ -199,7 +213,7 @@ export class LoginService {
     Link_Image: string;
   }): Observable<any> {
     console.log('Registering user:', user);
-    
+
     // Add content type header explicitly
     return this.http.post(`${this.baseUrl}/signup`,  user, { responseType: 'text' })
     .pipe(
@@ -214,17 +228,17 @@ export class LoginService {
     const url = `${this.baseUrl}/verify-email?token=${token}&email=${email}`;
     return this.http.get<any>(url);
   }
-  
+
 
   forgotPassword(email: string): Observable<any> {
     return this.http.post(`${this.baseUrl}/forgot-password`, { email });
   }
-  
+
   resetPassword(token: string, newPassword: string) {
     const params = new HttpParams()
       .set('token', token)
       .set('newPassword', newPassword);
-  
+
     return this.http.post(
       `${this.baseUrl}/reset-password`,
       null,
@@ -237,20 +251,20 @@ export class LoginService {
       }
     );
   }
-  
+
   searchUsers(query: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.baseUrl}/search?query=${encodeURIComponent(query)}`);
   }
 
 
-  url = 'http://192.168.1.19:5000'
+  url = 'http://172.20.10.2:5000'
   vvv(imageUrl: string): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json'
     });
-    
+
     return this.http.post<any>(`${this.url}/recognize`, {
       url: imageUrl
     }, { headers });

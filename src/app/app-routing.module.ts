@@ -22,6 +22,23 @@ import { MesConsultationsComponent } from './mes-consultations/mes-consultations
 import { VisioComponent } from './visio/visio.component';
 import { AnalysePlatComponent } from './analyse-plat/analyse-plat.component';
 
+import { ProduitDashboardComponent } from './pages/products/produit-dashboard/produit-dashboard.component';
+import { ProductFormComponent } from './pages/products/product-form/product-form.component';
+import { ProductListComponent } from './pages/products/product-list/product-list.component';
+import { ProduitHistoriqueComponent } from './pages/products/produit-historique/produit-historique.component';
+import { AbonnementComponent } from './abonnement/abonnement.component';
+import { PaymentConfirmationComponent } from './payment-confirmation/payment-confirmation.component';
+import { AbonnementConfirmeComponent } from './abonnement-confirme/abonnement-confirme.component';
+import { AbonnementDetailsComponent } from './abonnement-details/abonnement-details.component';
+import { AbonnementReportComponent } from './abonnement-report/abonnement-report.component';
+import { PostListComponent } from './components/post-list/post-list.component';
+import { PostDetailsComponent } from './components/post-details/post-details.component';
+import { PostManagementComponent } from './admin/components/post-management/post-management.component';
+import { AddPostComponent } from './components/add-post/add-post.component';
+import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
+import { JobOfferListComponent } from './components/job-offer-list/job-offer-list.component';
+import { JobOfferManagementComponent } from './admin/components/job-offer-management/job-offer-management.component';
+import { JobApplicationManagementComponent } from './admin/components/job-application-management/job-application-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -88,14 +105,79 @@ const routes: Routes = [
     data: { expectedRoles: ['User'] }
   },
 
+  { path: 'verify-email', component: EmailVerificationComponent },
 
-  { path: 'auth', component: AuthGComponent }, // Route for OAuth2 success page
+ 
+
+
+
+    { path: 'produits-dashboard', component: ProduitDashboardComponent, canActivate: [AuthGuard] , data: { expectedRole: 'Admin' }  },
+    { path: 'products', redirectTo: '/produits-dashboard', pathMatch: 'full' },
+    { path: 'add-product', component: ProductFormComponent, canActivate: [AuthGuard] },
+    //{ path: 'produit-historique', component: ProduitHistoriqueComponent, canActivate: [AuthGuard] },
+    //{ path: 'product-list', component: ProductListComponent, canActivate: [AuthGuard] },
+    { path: 'products/edit/:id', component: ProductFormComponent, canActivate: [AuthGuard] },
+
+  { path: 'auth' , component: AuthGComponent }, // Route for OAuth2 success page
 
   { path: 'face-confirmation', component: FaceConfirmationComponent, canActivate: [AuthGuard] },
 
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'profile', component: ProfileComponent },
+  { path: 'add-reclamation', component: AddReclamationComponent },
+  { path: 'user-reclamations', component: UserReclamationsComponent },
+  { path: 'gestionuser', component: GestionUsersComponent },
+  { path: 'abonnement', component: AbonnementComponent },
+  {
+    path: 'abonnement/payment-confirmation',
+    component: PaymentConfirmationComponent,
+  },
+  { path: 'abonnement-confirme', component: AbonnementConfirmeComponent },
+  { path: 'abonnement-details', component: AbonnementDetailsComponent },
+  { path: 'abonnement-report', component: AbonnementReportComponent },
+
+  
+
+  { path: 'posts', component: PostListComponent, canActivate: [AuthGuard]  },
+  { path: 'posts/post-details/:postID', component: PostDetailsComponent, canActivate: [AuthGuard]  },
+  { path: 'posts/add-post', component: AddPostComponent, canActivate: [AuthGuard]  },
+  { path: 'admin', component: PostManagementComponent, canActivate: [AuthGuard] ,
+    data: { expectedRoles: ['Admin'] } },
+  
+   {
+      path: 'job-offers',
+      component: JobOfferListComponent,
+      data: { expectedRoles: ['User'] }
+    },
+    
+    {
+      path: 'admin-layout',
+      component: AdminLayoutComponent,
+      children: [
+        {
+          path: 'job-offer-management',
+          component: JobOfferManagementComponent,
+          data: { expectedRoles: ['Admin'] }
+        },
+        {
+          path: 'job-application-management',
+          component: JobApplicationManagementComponent,
+          canActivate: [AuthGuard],
+          data: { expectedRoles: ['Admin'] }
+        },
+        
+        { path: 'gestionuser', component: GestionUsersComponent },
+        { path: 'staffdashboard', component: StaffDashboardComponent },
+        { path: 'produits-dashboard', component: ProduitDashboardComponent },
+        { path: 'admin', component: PostManagementComponent },
+        { path: 'product-list', component: ProductListComponent},
+        { path: 'abonnement-report', component: AbonnementReportComponent },
+        { path: 'produit-historique', component: ProduitHistoriqueComponent},
+
+        { path: '', redirectTo: 'gestionuser', pathMatch: 'full' }
+      ]
+    }  
 ];
-
-
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]

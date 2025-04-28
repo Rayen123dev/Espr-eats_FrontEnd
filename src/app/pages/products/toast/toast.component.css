@@ -1,0 +1,21 @@
+/* toast.component.css */
+.toast {
+    position: fixed;
+    bottom: 20px;  /* Distance from the bottom of the screen */
+    left: 20px;    /* Distance from the left of the screen */
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    opacity: 0.9;
+    z-index: 9999; /* Ensure the toast appears above other elements */
+    display: block;
+    transition: opacity 0.5s ease-in-out;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  }
+  
+  .toast p {
+    margin: 0;
+  }
+  

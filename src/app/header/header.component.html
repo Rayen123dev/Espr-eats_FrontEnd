@@ -13,21 +13,26 @@
           <a routerLink="/profil-nutritionnel" routerLinkActive="active" *ngIf="userRole === 'User'">Nutrition</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/projects" routerLinkActive="active" *ngIf="userRole === 'User'">Projects</a>
+          <a routerLink="/job-offers" routerLinkActive="active" *ngIf="userRole === 'User'">Jobs</a>
         </li>
         <li class="nav-item">
-          <a routerLink="/reports" routerLinkActive="active" *ngIf="userRole === 'User'">Reports</a>
+          <a routerLink="/posts" routerLinkActive="active" *ngIf="userRole === 'User'">Forum</a>
         </li>
+        <li class="nav-item" *ngIf="userRole === 'User' || userRole === 'Admin'">
+          <!-- Conditionally set the routerLink based on userRole and hasAbonnement -->
+          <a 
+            [routerLink]="userRole === 'Admin' ? '/admin-layout/abonnement-report' : (hasAbonnement ? '/abonnement-details' : '/abonnement')" 
+            routerLinkActive="active"
+          >
+            {{ userRole === 'Admin' ? 'Abonnements Report' : 'Abonnement' }}
+          </a>
+        </li>
+        
       </ul>
     </nav>
 
     <div class="user-actions">
-      <div class="notifications" *ngIf="userRole === 'User'">
-        <button class="notification-btn">
-          <i class="icon-bell"></i>
-          <span class="notification-badge">3</span>
-        </button>
-      </div>
+      
 
       <div class="user-profile" (click)="toggleProfileDropdown()">
         <img [src]="user.link_Image" alt="User Avatar" class="user-avatar">
@@ -39,17 +44,22 @@
             <li (click)="navigateToProfile()">
               <i class="icon-user"></i> Profile
             </li>
-            <li (click)="navigateToSettings()">
+            
+            <!-- Only show for role 'User' -->
+            <li *ngIf="userRole === 'User'" (click)="navigateToSettings()">
               <i class="icon-settings"></i> Réclamations
             </li>
-            <li (click)="navigateToAddRec()">
-              <i class="icon-settings"></i> Abonnement
+
+            <li *ngIf="userRole === 'Admin'" (click)="navigateToDashboard()">
+              <i class="icon-settings"></i> Dashboard
             </li>
+        
             <li (click)="logout()">
               <i class="icon-logout"></i> Logout
             </li>
           </ul>
         </div>
+        
       </div>
     </div>
   </div>

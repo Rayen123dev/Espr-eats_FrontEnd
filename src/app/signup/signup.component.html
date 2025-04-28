@@ -4,6 +4,9 @@
       <div class="login-content">
         <h1 class="welcome-text">University Restaurant</h1>
         <p class="slogan">Join our team, make a difference</p>
+        <div class="logo-container">
+          <img src="assets/Espreats.png" alt="University Logo" class="university-logo">
+        </div>
         <div class="food-animation">
           <svg class="food-icon" viewBox="0 0 24 24">
             <path d="M18.06 23H19.72C20.56 23 21.25 22.35 21.35 21.53L23 5.05H18V1H16.03V5.05H11.06L11.36 7.39C13.07 7.86 14.67 8.71 15.94 9.88C17.45 11.29 18.5 13.14 18.88 15.23L18.06 23M1 22V21H16.03V22C16.03 22.54 15.58 23 15 23H2C1.45 23 1 22.54 1 22M16.03 15C16.03 7 1 7 1 15H16.03Z" />
@@ -38,13 +41,8 @@
 
       <!-- Registration Form -->
       <div class="login-form-container" *ngIf="!verificationSent">
-        <div class="logo-container">
-          <div class="university-logo">
-            <span>U</span>
-          </div>
-        </div>
-        <h2>Team Member Registration</h2>
-        <p class="form-subtitle">Join our diverse and talented team!</p>
+        <h2 class="form-title">Create Your Account</h2>
+        <p class="form-subtitle">Fill in the details below to get started</p>
         
         <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
           <!-- Profile Image Upload -->

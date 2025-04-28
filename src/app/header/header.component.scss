@@ -6,16 +6,16 @@
 
 @keyframes glow {
   0% { box-shadow: 0 0 5px rgba(0, 123, 255, 0.2); }
-  50% { box-shadow: 0 0 15px rgba(0, 123, 255, 0.6); }
+  50% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.6); }
   100% { box-shadow: 0 0 5px rgba(0, 123, 255, 0.2); }
 }
 
 @keyframes slideDown {
-  from {
+  from { 
     transform: translateY(-20px);
     opacity: 0;
   }
-  to {
+  to { 
     transform: translateY(0);
     opacity: 1;
   }
@@ -64,7 +64,7 @@
       object-fit: contain;
       filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
       transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-
+      
       &:hover {
         transform: scale(1.15) rotate(5deg);
         filter: drop-shadow(0 4px 8px rgba(0, 123, 255, 0.3));
@@ -103,14 +103,14 @@
             left: 0;
             width: 0;
             height: 3px;
-            background: linear-gradient(90deg, #007bff, #6610f2);
+            background: linear-gradient(90deg, #ff0000, #f04b21);
             transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
             border-radius: 3px;
           }
 
           &:hover,
           &.active {
-            color: #007bff;
+            color: #ff0000;
             text-shadow: 0 0 1px rgba(0, 123, 255, 0.3);
 
             &:before {
@@ -155,7 +155,7 @@
         }
 
         &:hover .icon-bell {
-          color: #007bff;
+          color: #ff0000;
           animation: bounce 1s ease;
         }
 
@@ -184,7 +184,7 @@
       transition: all 0.3s ease;
       padding: 5px 15px;
       border-radius: 25px;
-      background-color: rgba(0, 123, 255, 0.05);
+      background-color: rgba(255, 0, 0, 0.05);
 
       &:hover {
         transform: translateY(-3px);
@@ -203,7 +203,7 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 
         &:hover {
-          border-color: #007bff;
+          border-color: #ff0000;
           transform: rotate(5deg);
           box-shadow: 0 0 0 4px rgba(0, 123, 255, 0.2);
         }
@@ -225,7 +225,7 @@
 
       &:hover .icon-chevron-down {
         transform: rotate(180deg);
-        color: #007bff;
+        color: #ff0000;
       }
 
       .profile-dropdown {
@@ -285,7 +285,7 @@
             }
 
             &:hover {
-              color: #007bff;
+              color: #ff0000;
 
               &:before {
                 width: 100%;
@@ -293,7 +293,7 @@
 
               i {
                 transform: translateX(5px);
-                color: #007bff;
+                color: #ff0000;
               }
             }
 
@@ -328,12 +328,12 @@
     .navigation {
       margin: 15px 0;
       width: 100%;
-
+      
       .nav-list {
         justify-content: center;
       }
     }
-
+    
     .user-actions {
       width: 100%;
       justify-content: center;
@@ -346,60 +346,60 @@
   .main-header {
     background: linear-gradient(135deg, #1a1c20, #121417);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-
+    
     .navigation .nav-list .nav-item a {
       color: #e9ecef;
-
+      
       &:hover, &.active {
         color: #74b9ff;
       }
-
+      
       &:before {
-        background: linear-gradient(90deg, #74b9ff, #6c5ce7);
+        background: linear-gradient(90deg, #ff7474, #e75c5c);
       }
     }
-
+    
     .user-actions {
       .notifications .notification-btn .icon-bell {
         color: #dee2e6;
       }
-
+      
       .user-profile {
         background-color: rgba(255, 255, 255, 0.05);
-
+        
         &:hover {
           background-color: rgba(255, 255, 255, 0.1);
         }
-
+        
         .user-name {
           color: #e9ecef;
         }
-
+        
         .profile-dropdown {
           background: #1a1c20;
           border: 1px solid rgba(255, 255, 255, 0.1);
-
+          
           &:before {
             background: #1a1c20;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             border-left: 1px solid rgba(255, 255, 255, 0.1);
           }
-
+          
           ul li {
             color: #dee2e6;
-
+            
             &:before {
               background: linear-gradient(90deg, rgba(116, 185, 255, 0.1), transparent);
             }
-
+            
             &:hover {
-              color: #74b9ff;
-
+              color: #ff8774;
+              
               i {
-                color: #74b9ff;
+                color: #ff8074;
               }
             }
-
+            
             &.divider {
               background-color: rgba(255, 255, 255, 0.1);
             }

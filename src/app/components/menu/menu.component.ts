@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuService } from '../../services/menu.service';
 import { Menu } from '../../../core/models/menu.model';
 import { LoginService } from 'src/app/login.service';
@@ -19,10 +19,12 @@ export class MenuComponent implements OnInit {
   currentPage: number = 1;
   pageSize: number = 3;
   totalPages: number = 1;
-
   
-
-  constructor(private menuService: MenuService,private loginService: LoginService, private router: Router) {}
+  constructor(
+    private menuService: MenuService,
+    private loginService: LoginService, 
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     // Vérifier si l'utilisateur a le rôle 'User'
@@ -32,14 +34,14 @@ export class MenuComponent implements OnInit {
       this.router.navigate(['/login']);
       return; // Arrêter l'exécution si le rôle n'est pas correct
     }
-  
+    
     // Si le rôle est correct, charger les menus
     this.menuService.getValidatedMenus().subscribe(
       data => {
         this.menus = data;
         this.filteredMenus = data;
         this.updatePagination();
-      }, 
+      },
       error => {
         console.error('Erreur lors de la récupération des menus:', error);
       }
@@ -59,7 +61,7 @@ export class MenuComponent implements OnInit {
 
   applyFilters() {
     let result = this.menus;
-
+    
     // Filtrer par date uniquement si une date est sélectionnée et "Appliquer" est cliqué
     if (this.selectedDate) {
       result = result.filter(menu => {
@@ -67,14 +69,14 @@ export class MenuComponent implements OnInit {
         return menuDate === this.selectedDate;
       });
     }
-
+    
     // Filtrer par catégorie si une catégorie est sélectionnée
     if (this.selectedCategory) {
       result = result.filter(menu => 
         menu.regime.toLowerCase() === this.selectedCategory.toLowerCase()
       );
     }
-
+    
     this.filteredMenus = result;
     this.updatePagination();
   }
@@ -102,5 +104,13 @@ export class MenuComponent implements OnInit {
 
   getPlatsByType(menu: Menu, type: string): any[] {
     return menu.plats.filter(plat => plat.categorie.toLowerCase() === type.toLowerCase());
+  }
+  
+  resetFilters() {
+    this.selectedCategory = '';
+    this.selectedDate = '';
+    this.currentPage = 1;
+    this.filteredMenus = this.menus;
+    this.updatePagination();
   }
 }
