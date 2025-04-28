@@ -1,11 +1,15 @@
 <canvas #canvas class="particles-canvas"></canvas>
+
+<!-- Added restaurant-themed background elements -->
+<div class="food-particles" id="food-particles"></div>
+
 <div class="background-overlay">
   <div class="login-card">
     <div class="login-left">
       <div class="login-content">
         <div class="logo-container">
           <div class="university-logo">
-            <img src="assets/Espreats.png" alt="University Logo">
+            <img src="assets/Espreats.png" width="80px" height="80px" alt="University Logo">
           </div>
         </div>
         <h1 class="welcome-text">University Restaurant</h1>
@@ -22,13 +26,18 @@
           <svg class="food-icon" viewBox="0 0 24 24">
             <path d="M12,3C8,3 4,5 4,9C4,11.5 5.25,13.2 7,14.6V22H9V16H11V22H13V16H15V22H17V14.6C18.8,13.2 20,11.5 20,9C20,5 16,3 12,3M12,5A3,3 0 0,1 15,8A3,3 0 0,1 12,11A3,3 0 0,1 9,8A3,3 0 0,1 12,5Z" />
           </svg>
+          <!-- Added more food icons for enhanced animation -->
+          <svg class="food-icon" viewBox="0 0 24 24">
+            <path d="M8.1,13.34L3.91,9.16C2.35,7.59 2.35,5.06 3.91,3.5L10.93,10.5L8.1,13.34M14.88,11.53L13.41,13L20.29,19.88L18.88,21.29L12,14.41L5.12,21.29L3.71,19.88L13.47,10.12C12.76,8.59 13.26,6.44 14.85,4.85C16.76,2.93 19.5,2.57 20.96,4.03C22.43,5.5 22.07,8.24 20.15,10.15C18.56,11.74 16.41,12.24 14.88,11.53Z" />
+          </svg>
+          <svg class="food-icon" viewBox="0 0 24 24">
+            <path d="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12A8,8 0 0,1 12,20A8,8 0 0,1 4,12A8,8 0 0,1 12,4M12,10.5A1.5,1.5 0 0,0 10.5,12A1.5,1.5 0 0,0 12,13.5A1.5,1.5 0 0,0 13.5,12A1.5,1.5 0 0,0 12,10.5M7.5,10.5A1.5,1.5 0 0,0 6,12A1.5,1.5 0 0,0 7.5,13.5A1.5,1.5 0 0,0 9,12A1.5,1.5 0 0,0 7.5,10.5M16.5,10.5A1.5,1.5 0 0,0 15,12A1.5,1.5 0 0,0 16.5,13.5A1.5,1.5 0 0,0 18,12A1.5,1.5 0 0,0 16.5,10.5Z" />
+          </svg>
         </div>
       </div>
     </div>
     <div class="login-right">
       <div class="login-form-container">
-        <br>
-        <br>
         <h2>Log In</h2>
         <p class="form-subtitle">Welcome back! Please enter your details</p>
         
@@ -36,7 +45,6 @@
           <div class="form-group" [ngClass]="{'has-error': isSubmitted && formControls['email'].errors}">
             <label for="email">Email</label>
             <div class="input-container">
-              <i class="fas fa-envelope"></i>
               <input 
                 type="email" 
                 id="email" 
@@ -54,7 +62,6 @@
           <div class="form-group" [ngClass]="{'has-error': isSubmitted && formControls['password'].errors}">
             <label for="password">Password</label>
             <div class="input-container">
-              <i class="fas fa-lock"></i>
               <input 
                 [type]="showPassword ? 'text' : 'password'" 
                 id="password" 

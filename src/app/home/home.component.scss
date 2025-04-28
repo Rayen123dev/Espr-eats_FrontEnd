@@ -100,7 +100,7 @@ h1, h2, h3, h4 {
   color: white;
   overflow: hidden;
   
-  // Parallax background
+  // Enhanced parallax background with better performance
   &::before {
     content: '';
     position: absolute;
@@ -115,6 +115,7 @@ h1, h2, h3, h4 {
     filter: brightness(0.7);
     z-index: -1;
     will-change: transform;
+    transition: transform 0.5s ease-out;
   }
   
   .hero-content {
@@ -135,7 +136,7 @@ h1, h2, h3, h4 {
       margin-bottom: 1.5rem;
       opacity: 0.9;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      color: #d10909;
+      color: #FF6B6B;
     }
     
     h1 {
@@ -144,13 +145,14 @@ h1, h2, h3, h4 {
       font-weight: 900;
       margin-bottom: 2rem;
       text-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-      color: #d10909;
+      color: white;
       
       span {
         display: block;
         font-size: 3.5rem;
         font-weight: 400;
         margin-top: 0.5rem;
+        color: rgba(255, 255, 255, 0.9);
       }
     }
     
@@ -160,7 +162,7 @@ h1, h2, h3, h4 {
       margin: 0 auto 3rem;
       line-height: 1.8;
       text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-      color: #d10909;
+      color: rgba(255, 255, 255, 0.9);
     }
     
     .hero-buttons {
@@ -170,7 +172,7 @@ h1, h2, h3, h4 {
     }
   }
   
-  // Animated food icons
+  // Improved animated food icons with performance optimizations
   .floating-food {
     position: absolute;
     width: 100%;
@@ -178,12 +180,14 @@ h1, h2, h3, h4 {
     top: 0;
     left: 0;
     pointer-events: none;
+    perspective: 1000px;
     
     .food-item {
       position: absolute;
       opacity: 0.85;
       filter: drop-shadow(0 10px 15px rgba(0, 0, 0, 0.3));
       will-change: transform;
+      backface-visibility: hidden;
       
       &:nth-child(1) {
         top: 15%;
@@ -215,7 +219,7 @@ h1, h2, h3, h4 {
     }
   }
   
-  // Scroll indicator
+  // Improved scroll indicator
   .scroll-down {
     position: absolute;
     bottom: 40px;
@@ -225,6 +229,11 @@ h1, h2, h3, h4 {
     flex-direction: column;
     align-items: center;
     color: white;
+    transition: opacity 0.3s ease;
+    
+    &:hover {
+      opacity: 0.8;
+    }
     
     span {
       text-transform: uppercase;
@@ -256,14 +265,14 @@ h1, h2, h3, h4 {
   }
 }
 
-// Menu Section
+// Menu Section - Enhanced
 .menu-section {
   position: relative;
   padding: 8rem 2rem;
   background-color: #fff;
   overflow: hidden;
   
-  // Background decoration
+  // Enhanced background decoration
   &::before {
     content: '';
     position: absolute;
@@ -274,6 +283,7 @@ h1, h2, h3, h4 {
     background: linear-gradient(135deg, rgba(255, 107, 107, 0.1), rgba(255, 142, 83, 0.1));
     border-radius: 50%;
     z-index: 0;
+    animation: pulse 15s infinite alternate;
   }
   
   &::after {
@@ -286,6 +296,7 @@ h1, h2, h3, h4 {
     background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(255, 142, 83, 0.05));
     border-radius: 50%;
     z-index: 0;
+    animation: pulse 20s infinite alternate-reverse;
   }
   
   .container {
@@ -323,6 +334,7 @@ h1, h2, h3, h4 {
     display: flex;
     justify-content: center;
     margin-bottom: 4rem;
+    flex-wrap: wrap;
     
     .tab {
       padding: 1rem 2rem;
@@ -361,6 +373,7 @@ h1, h2, h3, h4 {
     }
   }
   
+  // Improved menu grid with better transitions
   .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -383,7 +396,7 @@ h1, h2, h3, h4 {
         }
         
         .item-badge {
-          transform: rotate(10deg);
+          transform: rotate(10deg) scale(1.05);
         }
       }
       
@@ -453,6 +466,12 @@ h1, h2, h3, h4 {
             padding: 0.3rem 0.8rem;
             border-radius: 20px;
             font-size: 0.8rem;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            
+            &:hover {
+              background-color: #eaeaea;
+              color: #333;
+            }
           }
         }
         
@@ -498,13 +517,27 @@ h1, h2, h3, h4 {
   }
 }
 
-// About Section with 3D parallax effect
+// About Section with enhanced 3D parallax effect
 .about-section {
   position: relative;
   background-color: #f8f9fa;
   padding: 8rem 0;
   perspective: 1000px;
   overflow: hidden;
+  
+  // Add subtle animated background pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(255, 107, 107, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(255, 107, 107, 0.03) 0%, transparent 50%);
+    animation: subtleBackground 20s infinite alternate;
+  }
   
   .about-container {
     display: grid;
@@ -514,6 +547,8 @@ h1, h2, h3, h4 {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 2rem;
+    position: relative;
+    z-index: 1;
   }
   
   .about-images {
@@ -530,6 +565,13 @@ h1, h2, h3, h4 {
         border-radius: 15px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
         object-fit: cover;
+        width: 100%;
+        height: 100%;
+        transition: filter 0.3s ease;
+      }
+      
+      &:hover img {
+        filter: brightness(1.05);
       }
       
       &:nth-child(1) {
@@ -566,10 +608,21 @@ h1, h2, h3, h4 {
       font-size: 3.5rem;
       margin-bottom: 2rem;
       line-height: 1.2;
+      position: relative;
       
       span {
         display: block;
         color: #FF6B6B;
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #FF6B6B, #d10909);
       }
     }
     
@@ -580,6 +633,7 @@ h1, h2, h3, h4 {
       margin-bottom: 2rem;
     }
     
+    // Enhanced stats with animated counters
     .stats {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -588,12 +642,25 @@ h1, h2, h3, h4 {
       
       .stat-item {
         text-align: center;
+        padding: 1.5rem;
+        border-radius: 10px;
+        transition: transform 0.3s ease, background-color 0.3s ease;
+        
+        &:hover {
+          transform: translateY(-5px);
+          background-color: rgba(255, 255, 255, 0.8);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
         
         h3 {
           font-size: 3rem;
           font-weight: 700;
           color: #FF6B6B;
           margin-bottom: 0.5rem;
+          background: linear-gradient(90deg, #FF6B6B, #d10909);
+          -webkit-background-clip: text;
+          background-clip: text;
+          color: transparent;
         }
         
         p {
@@ -608,7 +675,7 @@ h1, h2, h3, h4 {
   }
 }
 
-// Hours Section with dynamic clock
+// Hours Section with enhanced dynamic clock
 .hours-section {
   padding: 8rem 2rem;
   background: linear-gradient(135deg, #FF6B6B, #d10909);
@@ -616,6 +683,7 @@ h1, h2, h3, h4 {
   position: relative;
   overflow: hidden;
   
+  // Enhanced particles
   .particles {
     position: absolute;
     top: 0;
@@ -640,6 +708,7 @@ h1, h2, h3, h4 {
           top: random(100) * 1%;
           animation: float-particle #{random(15) + 10}s ease-in-out infinite;
           animation-delay: #{random(5)}s;
+          opacity: #{random(7) * 0.1 + 0.1};
         }
       }
     }
@@ -655,13 +724,28 @@ h1, h2, h3, h4 {
   h2 {
     font-size: 3.5rem;
     margin-bottom: 2rem;
+    position: relative;
+    display: inline-block;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.5);
+    }
   }
   
+  // Enhanced clock container
   .clock-container {
     display: flex;
     justify-content: center;
     gap: 2rem;
     margin: 4rem 0;
+    perspective: 1000px;
     
     .clock-face {
       width: 180px;
@@ -670,6 +754,13 @@ h1, h2, h3, h4 {
       border-radius: 50%;
       position: relative;
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+      backdrop-filter: blur(5px);
+      transform-style: preserve-3d;
+      transition: transform 0.3s ease;
+      
+      &:hover {
+        transform: scale(1.05) rotateY(10deg);
+      }
       
       .hand {
         position: absolute;
@@ -678,6 +769,7 @@ h1, h2, h3, h4 {
         transform-origin: bottom center;
         background: white;
         border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         
         &.hour {
           height: 35%;
@@ -695,7 +787,7 @@ h1, h2, h3, h4 {
           height: 50%;
           width: 2px;
           transform: translateX(-50%) rotate(90deg);
-          background: #d10909;
+          background: white;
         }
       }
       
@@ -708,6 +800,7 @@ h1, h2, h3, h4 {
         height: 12px;
         background: white;
         border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
       }
       
       .hour-marks {
@@ -733,6 +826,7 @@ h1, h2, h3, h4 {
     }
   }
   
+  // Enhanced hours grid
   .hours-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -747,8 +841,9 @@ h1, h2, h3, h4 {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
       
       &:hover {
-        transform: translateY(-10px);
+        transform: translateY(-10px) scale(1.03);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.15);
       }
       
       h3 {
@@ -764,7 +859,12 @@ h1, h2, h3, h4 {
           width: 50px;
           height: 2px;
           background: rgba(255, 255, 255, 0.5);
+          transition: width 0.3s ease;
         }
+      }
+      
+      &:hover h3::after {
+        width: 70px;
       }
       
       .hours {
@@ -783,7 +883,7 @@ h1, h2, h3, h4 {
   }
 }
 
-// Footer with wave effect
+// Enhanced Footer with wave effect
 .footer {
   position: relative;
   background: #222;
@@ -791,6 +891,7 @@ h1, h2, h3, h4 {
   padding: 8rem 2rem 4rem;
   overflow: hidden;
   
+  // Enhanced wave animation
   .wave {
     position: absolute;
     top: -50px;
@@ -847,6 +948,11 @@ h1, h2, h3, h4 {
       
       img {
         height: 50px;
+        transition: filter 0.3s ease;
+        
+        &:hover {
+          filter: brightness(1.2);
+        }
       }
     }
     
@@ -864,6 +970,11 @@ h1, h2, h3, h4 {
         width: 50px;
         height: 2px;
         background: #FF6B6B;
+        transition: width 0.3s ease;
+      }
+      
+      &:hover::after {
+        width: 70px;
       }
     }
     
@@ -873,6 +984,7 @@ h1, h2, h3, h4 {
       margin-bottom: 1.5rem;
     }
     
+    // Enhanced social icons
     .social-icons {
       display: flex;
       gap: 1rem;
@@ -890,7 +1002,8 @@ h1, h2, h3, h4 {
         
         &:hover {
           background: #FF6B6B;
-          transform: translateY(-5px);
+          transform: translateY(-5px) scale(1.1);
+          box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
         }
         
         i {
@@ -899,6 +1012,7 @@ h1, h2, h3, h4 {
       }
     }
     
+    // Enhanced footer links
     .footer-links {
       list-style: none;
       
@@ -908,12 +1022,27 @@ h1, h2, h3, h4 {
         a {
           color: #aaa;
           text-decoration: none;
-          transition: color 0.3s ease;
+          transition: all 0.3s ease;
           display: inline-block;
+          position: relative;
+          padding-left: 0;
+          
+          &::before {
+            content: '>';
+            position: absolute;
+            left: -15px;
+            opacity: 0;
+            transition: all 0.3s ease;
+          }
           
           &:hover {
             color: #FF6B6B;
-            transform: translateX(5px);
+            padding-left: 15px;
+            
+            &::before {
+              opacity: 1;
+              left: 0;
+            }
           }
         }
       }
@@ -924,233 +1053,8 @@ h1, h2, h3, h4 {
         display: flex;
         gap: 1rem;
         margin-bottom: 1.5rem;
-        
-        i {
-          color: #FF6B6B;
-          font-size: 1.2rem;
-        }
-        
-        p {
-          margin: 0;
-        }
-      }
-    }
-    
-    .newsletter {
-      .newsletter-form {
-        display: flex;
-        margin-top: 1.5rem;
-        
-        input {
-          flex: 1;
-          padding: 0.8rem 1rem;
-          border: none;
-          background: rgba(255, 255, 255, 0.1);
-          color: white;
-          border-radius: 5px 0 0 5px;
-          
-          &::placeholder {
-            color: #aaa;
-          }
-        }
-        
-        button {
-          background: linear-gradient(45deg, #FF6B6B, #d10909);
-          color: white;
-          border: none;
-          padding: 0 1.5rem;
-          border-radius: 0 5px 5px 0;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          
-          &:hover {
-            background: linear-gradient(45deg, #d10909, #FF6B6B);
-          }
-        }
-      }
-    }
-  }
-  
-  .copyright {
-    text-align: center;
-    padding-top: 3rem;
-    margin-top: 3rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: #aaa;
-    position: relative;
-    z-index: 2;
-    
-    a {
-      color: #FF6B6B;
-      text-decoration: none;
-    }
-  }
-}
-
-// Keyframe Animations
-@keyframes float {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
-@keyframes float-particle {
-  0%, 100% {
-    transform: translateY(0) translateX(0);
-  }
-  25% {
-    transform: translateY(-30px) translateX(15px);
-  }
-  50% {
-    transform: translateY(-15px) translateX(30px);
-  }
-  75% {
-    transform: translateY(15px) translateX(15px);
-  }
-}
-
-@keyframes scrollWheel {
-  0% {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateX(-50%) translateY(15px);
-  }
-}
-
-@keyframes wave {
-  0% {
-    background-position-x: 0;
-  }
-  100% {
-    background-position-x: 1000px;
-  }
-}
-
-@keyframes wave2 {
-  0% {
-    background-position-x: 0;
-  }
-  100% {
-    background-position-x: -1000px;
-  }
-}
-
-// Media Queries
-@media (max-width: 1200px) {
-  .hero .hero-content h1 {
-    font-size: 5rem;
-    
-    span {
-      font-size: 2.5rem;
-    }
-  }
-  
-  .about-section .about-images {
-    height: 500px;
-    
-    .image-wrapper {
-      &:nth-child(1) {
-        width: 350px;
-        height: 350px;
-      }
-      
-      &:nth-child(2) {
-        width: 250px;
-        height: 300px;
-      }
-      
-      &:nth-child(3) {
-        width: 200px;
-        height: 250px;
-      }
-    }
-  }
-}
-
-@media (max-width: 992px) {
-  .hero .hero-content h1 {
-    font-size: 4rem;
-    
-    span {
-      font-size: 2rem;
-    }
-  }
-  
-  .about-section .about-container {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
-  
-  .about-section .about-images {
-    order: 2;
-    height: 450px;
-  }
-  
-  .about-section .about-content {
-    order: 1;
-  }
-}
-
-// Media Queries (continued)
-@media (max-width: 768px) {
-    .hero .hero-content {
-      .hero-buttons {
-        flex-direction: column;
         align-items: center;
-        gap: 1rem;
-        
-        .btn {
-          width: 100%;
-          max-width: 250px;
-        }
-      }
-    }
-    
-    .menu-section .menu-tabs {
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      
-      .tab {
-        padding: 0.8rem 1.2rem;
-        font-size: 0.9rem;
-      }
-    }
-    
-    .menu-section .menu-grid {
-      grid-template-columns: 1fr;
-    }
-    
-    .hours-section .clock-container {
-      flex-direction: column;
-      align-items: center;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .hero .hero-content h1 {
-      font-size: 2.8rem;
-      
-      span {
-        font-size: 1.5rem;
-      }
-    }
-    
-    .section-header h2 {
-      font-size: 2.5rem;
-    }
-    
-    .about-section .about-content h2 {
-      font-size: 2.5rem;
-    }
-    
-    .about-section .stats {
-      grid-template-columns: 1fr;
-      gap: 2rem;
-    }
-  }
+        color: #aaa;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }}}}
