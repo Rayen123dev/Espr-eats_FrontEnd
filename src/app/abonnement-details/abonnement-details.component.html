@@ -1,5 +1,27 @@
 <div class="billing-container">
+  <div style="display: flex; justify-content: space-between;">
+    <div style="display: flex;">
   <h1 class="page-title">Welcome to Your Payment Dashboard</h1>
+  <span style="font-size: 26px;">👋</span>
+</div>
+  <button class="cssbuttons-io-button" (click)="navigateToMenu()">
+    <span style="font-size: 26px; margin-right: 8px;">🍔</span> Explorer Menu
+    <div class="icon">
+      <svg
+        height="24"
+        width="24"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path d="M0 0h24v24H0z" fill="none"></path>
+        <path
+          d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
+          fill="currentColor"
+        ></path>
+      </svg>
+    </div>
+  </button>
+</div>
 
   <!-- Toast Notification -->
   <div class="toast" *ngIf="showToast" [ngClass]="toastType">
@@ -47,23 +69,7 @@
               [disabled]="isDeleting">
               {{ isDeleting ? 'Suppression...' : 'Supprimer Plan' }}
             </button>
-            <button class="cssbuttons-io-button" (click)="navigateToMenu()">
-              Explorer Menu
-              <div class="icon">
-                <svg
-                  height="24"
-                  width="24"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path d="M0 0h24v24H0z" fill="none"></path>
-                  <path
-                    d="M16.172 11l-5.364-5.364 1.414-1.414L20 12l-7.778 7.778-1.414-1.414L16.172 13H4v-2z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </div>
-            </button>
+            
           </div>
         </div>
       </div>
