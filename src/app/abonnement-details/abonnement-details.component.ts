@@ -103,6 +103,9 @@ export class AbonnementDetailsComponent implements OnInit {
         },
       });
   }
+  navigateToMenu(): void {
+    this.router.navigate(['/menu']);
+    }
 
   fetchTransactions(): void {
     if (!this.currentUserId || !this.subscriptionDetails?.idAbonnement) {
