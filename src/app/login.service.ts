@@ -257,7 +257,7 @@ export class LoginService {
   }
 
 
-  url = 'http://192.168.1.19:5000'
+  url = 'http://172.20.10.2:5000'
   vvv(imageUrl: string): Observable<any> {
     const token = localStorage.getItem('token');
     const headers = new HttpHeaders({

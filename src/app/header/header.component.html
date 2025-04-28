@@ -13,6 +13,9 @@
           <a routerLink="/profil-nutritionnel" routerLinkActive="active" *ngIf="userRole === 'User'">Nutrition</a>
         </li>
         <li class="nav-item">
+          <a routerLink="/job-offers" routerLinkActive="active" *ngIf="userRole === 'User'">Jobs</a>
+        </li>
+        <li class="nav-item">
           <a routerLink="/posts" routerLinkActive="active" *ngIf="userRole === 'User'">Forum</a>
         </li>
         <li class="nav-item" *ngIf="userRole === 'User' || userRole === 'Admin'">

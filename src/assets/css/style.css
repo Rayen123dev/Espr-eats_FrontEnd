@@ -87,11 +87,11 @@
   --rgba-primary-9: rgba(220, 98, 67, 0.9);
   --font-family-base: Roboto, sans-serif;
   --font-family-title: Roboto, sans-serif;
-  --title: #3d4465; }
+  --title: #ff0000; }
 
 /* Button for viewing details */
 .btn-view {
-  background-color: #007bff; /* Blue color */
+  background-color: #e10707; /* Blue color */
   color: white;
   border: none;
   padding: 10px 20px;
@@ -101,7 +101,7 @@
 }
 
 .btn-view:hover {
-  background-color: #0056b3; /* Darker blue for hover */
+  background-color: #ff0202; /* Darker blue for hover */
 }
 
 /* Button for deleting (only shows when status is 'PENDING') */
@@ -123,10 +123,10 @@
   background-image: linear-gradient(to right, rgba(186, 1, 181, 0.85) 0%, rgba(103, 25, 255, 0.85) 100%); }
 
 .gradient-1 {
-  background: #f0a907;
-  background: -moz-linear-gradient(top, #f0a907 0%, #f53c79 100%);
-  background: -webkit-linear-gradient(top, #f0a907 0%, #f53c79 100%);
-  background: linear-gradient(to bottom, #f0a907 0%, #f53c79 100%) !important;
+  background: #f30303;
+  background: -moz-linear-gradient(top, #f00707 0%, #f53c79 100%);
+  background: -webkit-linear-gradient(top, #f00707f0 0%, #f53c79 100%);
+  background: linear-gradient(to bottom, #ff0000 0%, #f53c79 100%) !important;
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f0a907', endColorstr='#f53c79',GradientType=0 ); }
 
 .gradient-2 {

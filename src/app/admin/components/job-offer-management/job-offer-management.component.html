@@ -1,0 +1,86 @@
+<div class="d-flex justify-content-end mb-3">
+  <a routerLink="/admin-layout/job-application-management" class="btn btn-info">
+    View Job Applications
+  </a>
+</div>
+
+<div class="container mt-4">
+  <h2 class="mb-4">{{ editingOffer ? 'Edit Job Offer' : 'Add New Job Offer' }}</h2>
+
+  <form [formGroup]="offerForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input type="text" formControlName="title" class="form-control" placeholder="Enter title">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Job Description</label>
+      <textarea formControlName="jobDescription" rows="4" class="form-control" placeholder="Enter description"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Deadline Date</label>
+      <input type="date" formControlName="date" class="form-control">
+      <div *ngIf="offerForm.get('date')?.errors?.['pastDate']" class="text-danger">
+        Date must be in the future.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Job Image</label>
+      <input type="file" (change)="onFileSelected($event)" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Required Skills</label>
+      <input type="text" formControlName="skills" class="form-control" placeholder="e.g. Java, Spring Boot">
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-success" [disabled]="offerForm.invalid">
+        {{ editingOffer ? 'Update Offer' : 'Create Offer' }}
+      </button>
+      <button type="button" class="btn btn-secondary" (click)="resetForm()" *ngIf="editingOffer">
+        Cancel
+      </button>
+    </div>
+  </form>
+
+  <hr class="my-4">
+
+  <h3>Job Offers</h3>
+  <div *ngIf="jobOffers.length > 0; else noOffers">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Description</th>
+          <th>Deadline</th>
+          <th>Skills</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let offer of jobOffers">
+          <td>
+            <img *ngIf="offer.image" [src]="offer.image" alt="Job Image" style="width: 100px; height: auto;">
+            <span *ngIf="!offer.image">No Image</span>
+          </td>
+          <td>{{ offer.title }}</td>
+          <td>{{ offer.jobDescription }}</td>
+          <td>{{ offer.date | date: 'shortDate' }}</td>
+          <td>{{ offer.skills }}</td>
+          <td>
+            <button class="btn btn-primary btn-sm" (click)="editOffer(offer)">Edit</button>
+            <button class="btn btn-danger btn-sm" (click)="deleteOffer(offer.jobOfferId!)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noOffers>
+    <p>No job offers found.</p>
+  </ng-template>
+</div>

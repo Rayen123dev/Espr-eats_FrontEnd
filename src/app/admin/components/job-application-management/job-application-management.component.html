@@ -1,0 +1,43 @@
+<div *ngIf="isLoading" class="loading">Loading...</div>
+<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <input
+    type="text"
+    [(ngModel)]="searchKeyword"
+    (input)="searchApplications()"
+    class="form-control w-50"
+    placeholder="Search by Job Title or Motivation Letter..."
+  >
+  <button *ngIf="isSearching" class="btn btn-secondary ms-2" (click)="clearSearch()">Clear</button>
+</div>
+
+<div class="application-table-container" *ngIf="!isLoading && filteredApplications.length > 0">
+  <table class="table table-hover table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Job Offer Title</th>
+        <th>Motivation Letter</th>
+        <th>CV (Attachment)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let application of filteredApplications">
+        <td>{{ application.jobOffer?.title || 'No title' }}</td>
+        <td>{{ application.motivationAttachment || 'No motivation letter' }}</td>
+        <td>
+          <button class="btn btn-primary btn-sm" (click)="downloadAttachment(application.cvAttachment)">Download CV</button>
+          <button class="btn btn-success btn-sm ms-1" (click)="processCV(application)">Process CV</button>
+
+          <div *ngIf="application.cvScore" class="mt-1">
+            <strong>Score:</strong> {{ application.cvScore }}
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div *ngIf="!isLoading && filteredApplications.length === 0" class="no-data">
+  No applications found.
+</div>
