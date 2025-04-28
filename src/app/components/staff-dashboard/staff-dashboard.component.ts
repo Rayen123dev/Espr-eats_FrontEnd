@@ -262,6 +262,9 @@ export class StaffDashboardComponent implements OnInit {
       this.validatedMenus = this.totalValidatedMenus;
       this.validationRate = this.totalMenus > 0 ? Math.round((this.totalValidatedMenus / this.totalMenus) * 100) : 0;
       this.updateLineChartData();
+      console.log('Menus:', menus);
+      console.log('Menus validés:', this.totalValidatedMenus);
+      console.log('Taux de validation:', this.validationRate);
     });
 
     this.regimeService.getAllRegimes().subscribe(regimes => {

@@ -612,3 +612,42 @@ p {
     gap: 1rem;
   }
 }
+
+/* Additional CSS to help with the dishes layout */
+.dish-category {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+  color: #333;
+  font-size: 1.2rem;
+}
+
+.dishes-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+/* Ensuring the dish cards align properly */
+@media (min-width: 768px) {
+  .dishes-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 767px) and (min-width: 576px) {
+  .dishes-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 575px) {
+  .dishes-container {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+}

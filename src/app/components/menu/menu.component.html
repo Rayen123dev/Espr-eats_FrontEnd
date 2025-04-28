@@ -1,4 +1,4 @@
-<div>
+<div class="menu-page">
   <!-- Hero Section -->
   <section class="hero-section">
     <div class="hero-content">
@@ -58,51 +58,60 @@
         
         <!-- Entrée Section -->
         <div class="dishes-section">
-          <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'entree')">
-            <div class="dish-image">
-              <img [src]="plat.imagePath" alt="{{ plat.nom }}">
-            </div>
-            <div class="dish-content">
-              <div class="rating">
-                <span class="star-icon">★</span>
-                <span>Espreat's</span>
+          <h4 class="dish-category">Entrées</h4>
+          <div class="dishes-container">
+            <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'entree')">
+              <div class="dish-image">
+                <img [src]="plat.imagePath" alt="{{ plat.nom }}">
               </div>
-              <h4 class="dish-title">{{ plat.nom }}</h4>
-              <p class="dish-desc">{{ plat.description }}</p>
+              <div class="dish-content">
+                <div class="rating">
+                  <span class="star-icon">★</span>
+                  <span>Espreat's</span>
+                </div>
+                <h4 class="dish-title">{{ plat.nom }}</h4>
+                <p class="dish-desc">{{ plat.description }}</p>
+              </div>
             </div>
           </div>
         </div>
         
         <!-- Plat Principal Section -->
         <div class="dishes-section">
-          <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'plat_principal')">
-            <div class="dish-image">
-              <img [src]="plat.imagePath" alt="{{ plat.nom }}">
-            </div>
-            <div class="dish-content">
-              <div class="rating">
-                <span class="star-icon">★</span>
-                <span>Espreat's</span>
+          <h4 class="dish-category">Main Courses</h4>
+          <div class="dishes-container">
+            <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'plat_principal')">
+              <div class="dish-image">
+                <img [src]="plat.imagePath" alt="{{ plat.nom }}">
               </div>
-              <h4 class="dish-title">{{ plat.nom }}</h4>
-              <p class="dish-desc">{{ plat.description }}</p>
+              <div class="dish-content">
+                <div class="rating">
+                  <span class="star-icon">★</span>
+                  <span>Espreat's</span>
+                </div>
+                <h4 class="dish-title">{{ plat.nom }}</h4>
+                <p class="dish-desc">{{ plat.description }}</p>
+              </div>
             </div>
           </div>
         </div>
         
         <!-- Dessert Section -->
         <div class="dishes-section">
-          <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'dessert')">
-            <div class="dish-image">
-              <img [src]="plat.imagePath" alt="{{ plat.nom }}">
-            </div>
-            <div class="dish-content">
-              <div class="rating">
-                <span class="star-icon">★</span>
-                <span>Espreat's</span>
+          <h4 class="dish-category">Desserts</h4>
+          <div class="dishes-container">
+            <div class="dish-card" *ngFor="let plat of getPlatsByType(menu, 'dessert')">
+              <div class="dish-image">
+                <img [src]="plat.imagePath" alt="{{ plat.nom }}">
               </div>
-              <h4 class="dish-title">{{ plat.nom }}</h4>
-              <p class="dish-desc">{{ plat.description }}</p>
+              <div class="dish-content">
+                <div class="rating">
+                  <span class="star-icon">★</span>
+                  <span>Espreat's</span>
+                </div>
+                <h4 class="dish-title">{{ plat.nom }}</h4>
+                <p class="dish-desc">{{ plat.description }}</p>
+              </div>
             </div>
           </div>
         </div>
