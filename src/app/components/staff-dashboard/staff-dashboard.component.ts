@@ -91,10 +91,11 @@ export class StaffDashboardComponent implements OnInit {
       {
         data: [],
         label: 'Nombre de plats',
-        backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD', '#D4A5A5'],
-        borderColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD', '#D4A5A5'],
+        backgroundColor: ['#000000', '#B91C1C', '#F97316', '#6B7280', '#EF4444', '#9CA3AF'],
+        borderColor: ['#000000', '#B91C1C', '#F97316', '#6B7280', '#EF4444', '#9CA3AF'],
         borderWidth: 1
       }
+      
     ]
   };
 

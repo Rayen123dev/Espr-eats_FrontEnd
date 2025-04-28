@@ -175,7 +175,7 @@
     }
 
     .category-btn.active {
-      background-color: #F44336;
+      background-color: #f92c1d;
       color: white;
       border-color: #F44336;
       box-shadow: 0 4px 10px rgba(255, 107, 61, 0.3);
@@ -222,7 +222,7 @@
     .badge {
       font-size: 0.9rem;
       padding: 0.4rem 0.8rem;
-      background-color: #F44336;
+      background-color: #f33426;
       color: white;
       border-radius: 10px;
     }
@@ -242,11 +242,11 @@
     }
 
     .section-title {
-      color: #2980b9;
+      color: #b92929;
       font-weight: 600;
       margin-bottom: 1rem;
       padding-bottom: 0.25rem;
-      border-bottom: 2px solid #3498db;
+      border-bottom: 2px solid #db5534;
       font-size: 1.1rem;
     }
 
