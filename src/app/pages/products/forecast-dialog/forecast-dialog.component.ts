@@ -154,7 +154,7 @@ export class ForecastDialogComponent {
               font: {
                 family: "'Poppins', sans-serif",
                 size: 16,
-                weight: '600'
+                weight: 600
               },
               color: '#2c3e50',
               padding: {
@@ -184,7 +184,7 @@ export class ForecastDialogComponent {
               font: {
                 family: "'Poppins', sans-serif",
                 size: 16,
-                weight: '600'
+                weight: 600
               },
               color: '#2c3e50',
               padding: {

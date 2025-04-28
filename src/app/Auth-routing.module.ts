@@ -5,13 +5,19 @@ import { SignupComponent } from './signup/signup.component';
 import { ForgetPasswordComponent } from './forget-password/forgot-password.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { HomeComponent } from './home/home.component';
+import { JobOfferManagementComponent } from './admin/components/job-offer-management/job-offer-management.component';
+import { JobOfferListComponent } from './components/job-offer-list/job-offer-list.component';
 
 const authRoutes: Routes = [
   { path: 'login', component: LoginComponent },   
   { path: 'signup', component: SignupComponent },   
   { path: 'forgot-password', component: ForgetPasswordComponent },
   { path: 'reset-password', component: ResetPasswordComponent }, // Assuming the same component handles both
-  { path: 'home', component:HomeComponent}
+  { path: 'home', component:HomeComponent},
+
+  
+  
+
 ];
 
 @NgModule({

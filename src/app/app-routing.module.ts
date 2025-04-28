@@ -36,6 +36,9 @@ import { PostDetailsComponent } from './components/post-details/post-details.com
 import { PostManagementComponent } from './admin/components/post-management/post-management.component';
 import { AddPostComponent } from './components/add-post/add-post.component';
 import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
+import { JobOfferListComponent } from './components/job-offer-list/job-offer-list.component';
+import { JobOfferManagementComponent } from './admin/components/job-offer-management/job-offer-management.component';
+import { JobApplicationManagementComponent } from './admin/components/job-application-management/job-application-management.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -104,13 +107,7 @@ const routes: Routes = [
 
   { path: 'verify-email', component: EmailVerificationComponent },
 
-  { path: 'profil-nutritionnel', component: ProfilNutritionnelComponent },
-  { path: 'profil-nutritionnel/create', component: ProfilNutritionnelFormComponent },
-  { path: 'profil-nutritionnel/mon-profil', component: ProfilNutritionnelDetailComponent },
-  { path: 'consulter-medecin', component: ConsulterMedecinComponent },
-  { path: 'mes-consultations', component: MesConsultationsComponent },
-  { path: 'visio/:id', component: VisioComponent },
-  { path: 'analyse-plat', component: AnalysePlatComponent },
+ 
 
 
 
@@ -139,18 +136,36 @@ const routes: Routes = [
   { path: 'abonnement-details', component: AbonnementDetailsComponent },
   { path: 'abonnement-report', component: AbonnementReportComponent },
 
+  
 
   { path: 'posts', component: PostListComponent, canActivate: [AuthGuard]  },
   { path: 'posts/post-details/:postID', component: PostDetailsComponent, canActivate: [AuthGuard]  },
   { path: 'posts/add-post', component: AddPostComponent, canActivate: [AuthGuard]  },
   { path: 'admin', component: PostManagementComponent, canActivate: [AuthGuard] ,
     data: { expectedRoles: ['Admin'] } },
-
-
+  
+   {
+      path: 'job-offers',
+      component: JobOfferListComponent,
+      data: { expectedRoles: ['User'] }
+    },
+    
     {
       path: 'admin-layout',
       component: AdminLayoutComponent,
       children: [
+        {
+          path: 'job-offer-management',
+          component: JobOfferManagementComponent,
+          data: { expectedRoles: ['Admin'] }
+        },
+        {
+          path: 'job-application-management',
+          component: JobApplicationManagementComponent,
+          canActivate: [AuthGuard],
+          data: { expectedRoles: ['Admin'] }
+        },
+        
         { path: 'gestionuser', component: GestionUsersComponent },
         { path: 'staffdashboard', component: StaffDashboardComponent },
         { path: 'produits-dashboard', component: ProduitDashboardComponent },
