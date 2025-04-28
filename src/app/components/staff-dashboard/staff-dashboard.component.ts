@@ -91,10 +91,11 @@ export class StaffDashboardComponent implements OnInit {
       {
         data: [],
         label: 'Nombre de plats',
-        backgroundColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD', '#D4A5A5'],
-        borderColor: ['#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEEAD', '#D4A5A5'],
+        backgroundColor: ['#000000', '#B91C1C', '#F97316', '#6B7280', '#EF4444', '#9CA3AF'],
+        borderColor: ['#000000', '#B91C1C', '#F97316', '#6B7280', '#EF4444', '#9CA3AF'],
         borderWidth: 1
       }
+      
     ]
   };
 
@@ -262,6 +263,9 @@ export class StaffDashboardComponent implements OnInit {
       this.validatedMenus = this.totalValidatedMenus;
       this.validationRate = this.totalMenus > 0 ? Math.round((this.totalValidatedMenus / this.totalMenus) * 100) : 0;
       this.updateLineChartData();
+      console.log('Menus:', menus);
+      console.log('Menus validés:', this.totalValidatedMenus);
+      console.log('Taux de validation:', this.validationRate);
     });
 
     this.regimeService.getAllRegimes().subscribe(regimes => {

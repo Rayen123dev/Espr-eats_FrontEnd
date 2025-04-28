@@ -23,40 +23,32 @@ export class ForecastDialogComponent {
     });
   
     const values = this.data.forecast.map(f => f.yhat);
-    
-    // Ensure valid values are present
-    const validValues = values.filter(v => v != null && !isNaN(v)); // Filter out null or NaN values
+  
+    const validValues = values.filter(v => v != null && !isNaN(v));
     const minY = Math.min(...validValues);
     const maxY = Math.max(...validValues);
     const range = maxY - minY || 1;
     const padding = range * 0.15;
-    
-    // Get context for gradient and handle null case
+  
     const ctx = this.canvas.nativeElement.getContext('2d');
-    
-    // Create gradients only if ctx is not null
-    let gradientFill: CanvasGradient | string = 'rgba(25, 118, 210, 0.2)';
-    let gradientStroke: CanvasGradient | string = '#1976d2';
+  
+    let gradientFill: CanvasGradient | string = 'rgba(230, 57, 70, 0.2)'; // light red background
+    let gradientStroke: CanvasGradient | string = '#E63946'; // solid red stroke
   
     if (ctx) {
       // Create gradient for the background fill
       gradientFill = ctx.createLinearGradient(0, 0, 0, 400);
-      gradientFill.addColorStop(0, 'rgba(25, 118, 210, 0.2)');
-      gradientFill.addColorStop(1, 'rgba(17, 82, 147, 0.05)');
-    
+      gradientFill.addColorStop(0, 'rgba(230, 57, 70, 0.2)'); // lighter red
+      gradientFill.addColorStop(1, 'rgba(230, 57, 70, 0.05)'); // very light red
+  
       // Create gradient for the line stroke
       gradientStroke = ctx.createLinearGradient(0, 0, 800, 0);
-      gradientStroke.addColorStop(0, '#1976d2');
-      gradientStroke.addColorStop(1, '#115293');
+      gradientStroke.addColorStop(0, '#E63946'); // red
+      gradientStroke.addColorStop(1, '#B71C1C'); // darker red
     }
-    
   
-   
     const thresholdExceeded = values.some(v => v < this.data.seuil_alerte);
-   /*  if (thresholdExceeded) {
-      alert('Warning: Some values are below the threshold!');
-    } */
-
+  
     new Chart(this.canvas.nativeElement, {
       type: 'line',
       data: {
@@ -69,7 +61,7 @@ export class ForecastDialogComponent {
             backgroundColor: gradientFill,
             borderWidth: 3,
             pointBackgroundColor: values.map(y =>
-              y < this.data.seuil_alerte ? '#e74c3c' : '#2ecc71' // Red for values below threshold
+              y < this.data.seuil_alerte ? '#e74c3c' : '#2ecc71'
             ),
             pointBorderColor: 'white',
             pointBorderWidth: 2,
@@ -79,21 +71,20 @@ export class ForecastDialogComponent {
             tension: 0.3,
             cubicInterpolationMode: 'monotone'
           },
-          // Add the threshold line dataset
           {
             label: 'Threshold Alert',
-            data: Array(labels.length).fill(this.data.seuil_alerte),  // Constant value for the threshold line
-            borderColor: '#e74c3c', 
+            data: Array(labels.length).fill(this.data.seuil_alerte),
+            borderColor: '#e74c3c',
             borderWidth: 2,
-            borderDash: [5, 5],  
-            pointRadius: 0,      
-            fill: false          
+            borderDash: [5, 5],
+            pointRadius: 0,
+            fill: false
           }
         ]
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false, 
+        maintainAspectRatio: false,
         animation: {
           duration: 1500,
           easing: 'easeOutQuart'
@@ -116,9 +107,9 @@ export class ForecastDialogComponent {
               family: "'Poppins', sans-serif",
               size: 16
             },
-            borderColor: '#1976d2',
-            titleColor: '#0d47a1',
-            bodyColor: '#115293',           
+            borderColor: '#E63946', // changed tooltip border color to red
+            titleColor: '#B71C1C', // darker red for title
+            bodyColor: '#B71C1C',  // darker red for body
             borderWidth: 1,
             cornerRadius: 8,
             padding: 12,
@@ -153,8 +144,7 @@ export class ForecastDialogComponent {
               text: 'Date',
               font: {
                 family: "'Poppins', sans-serif",
-                size: 16,
-                weight: 600
+                size: 16
               },
               color: '#2c3e50',
               padding: {
@@ -176,15 +166,14 @@ export class ForecastDialogComponent {
               },
               color: '#7f8c8d',
               padding: 12,
-              stepSize: Math.max(1, Math.ceil(range / 6)) 
+              stepSize: Math.max(1, Math.ceil(range / 6))
             },
             title: {
               display: true,
               text: 'Quantity',
               font: {
                 family: "'Poppins', sans-serif",
-                size: 16,
-                weight: 600
+                size: 16
               },
               color: '#2c3e50',
               padding: {
@@ -205,9 +194,11 @@ export class ForecastDialogComponent {
         },
         interaction: {
           intersect: false,
-          mode: 'index' 
+          mode: 'index'
         }
       }
     });
   }
 }
+  
+  

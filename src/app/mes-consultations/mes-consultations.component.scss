@@ -40,9 +40,9 @@
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 
         &:hover {
-          background-color: #1a73e8;
+          background-color: #c8102e;
           color: #fff;
-          border-color: #1a73e8;
+          border-color: #c8102e;
         }
 
         &:disabled {
@@ -121,7 +121,7 @@
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
     margin-bottom: 20px;
-    border-left: 6px solid #1a73e8;
+    border-left: 6px solid #c8102e;
     transition: 0.3s;
 
     &:hover {
@@ -186,17 +186,20 @@
   }
 
   .pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px auto 20px;
+    gap: 12px;
     text-align: center;
-    margin-top: 30px;
 
     button {
-      padding: 8px 16px;
-      margin: 0 8px;
+      padding: 8px 18px;
+      background-color: #c8102e;
+      color: white;
       border: none;
       border-radius: 6px;
-      background-color: #1a73e8;
-      color: white;
-      font-weight: bold;
+      font-weight: 600;
       cursor: pointer;
       transition: 0.3s ease;
 
@@ -208,6 +211,7 @@
 
     span {
       font-weight: 500;
+      font-size: 15px;
     }
   }
 }
@@ -222,7 +226,7 @@
 .join-meet-btn {
   display: inline-block;
   margin-top: 12px;
-  background-color: #1a73e8;
+  background-color: #c8102e;
   color: #fff;
   padding: 8px 16px;
   border-radius: 6px;
@@ -231,7 +235,7 @@
   transition: 0.3s ease;
 
   &:hover {
-    background-color: #0f5dc2;
+    background-color: #a50d27;
   }
 }
 
@@ -323,10 +327,3 @@
     opacity: 1;
   }
 }
-
-.toast-message {
-  margin-bottom: 20px;
-}
-
-
-

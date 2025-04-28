@@ -8,7 +8,8 @@ import { switchMap, tap } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ProductService {
-  private apiUrl = 'http://localhost:8081/produit'; // Base API URL
+  private apiUrl = 'http://localhost:8081/produit';
+  private apiUrl2 = 'http://localhost:8081'; // Base API URL
   private productsSubject = new BehaviorSubject<Produit[]>([]); // Holds the list of products
   products$ = this.productsSubject.asObservable(); // Observable to share product list
 

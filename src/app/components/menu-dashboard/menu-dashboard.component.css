@@ -42,22 +42,22 @@
 }
 
 .btn-generate {
-  background-color: #6c5ce7;
+  background: linear-gradient(90deg,  #500202,#f07575);
   color: white;
 }
 
 .btn-generate:hover {
-  background-color: #5a4cd1;
+  background: linear-gradient(90deg, #f07575,#500202);
   transform: translateY(-1px);
 }
 
 .btn-regenerate {
-  background-color: #00cec9;
+  background: linear-gradient(90deg,  #500202,#ff0000);
   color: white;
 }
 
 .btn-regenerate:hover {
-  background-color: #00b7b3;
+  background: linear-gradient(90deg, #ff0000,#500202);
   transform: translateY(-1px);
 }
 
@@ -91,7 +91,7 @@
   align-items: center;
   padding: 1rem;
   background-color: #f8f9fa;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #c12d2d;
 }
 
 .menu-date {
@@ -100,7 +100,7 @@
 }
 
 .menu-regime .badge {
-  background-color: #6c5ce7;
+  background-color: #ba1c1c;
   color: white;
   padding: 0.3rem 0.6rem;
   border-radius: 12px;

@@ -115,10 +115,13 @@
   <!-- Gestion des plats -->
   <div class="management-section" id="plats" *ngIf="userRole === 'Staff'|| userRole === 'Admin'">
     <h2>Gestion des Plats</h2>
-    <button class="btn-add" (click)="toggleAddPlatForm()" *ngIf="userRole === 'Staff'">Ajouter un Plat</button>
-    <button class="btn-pdf" (click)="generatePdfRecommendations()">
-        <i class="fas fa-file-pdf"></i> IA Recommandation
+    
+    <div class="button-container">
+      <button class="btn-add" (click)="toggleAddPlatForm()" *ngIf="userRole === 'Staff'">Ajouter un Plat</button>
+      <button class="btn-pdf" (click)="generatePdfRecommendations()" aria-label="Générer un PDF des recommandations IA" *ngIf="userRole === 'Staff'">
+        <i class="fas fa-file-pdf"></i> Recommandations IA
       </button>
+    </div>
 
     <div class="form-container" *ngIf="showAddPlatForm" >
       <form [formGroup]="addPlatForm" (ngSubmit)="submitPlat()" >

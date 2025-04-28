@@ -1,513 +1,527 @@
 /* Conteneur principal */
 .dashboard-container {
   padding: 40px 30px;
-  background: #f4f7fb;
+  background: #f0f2f5; /* Gris plus léger pour le fond */
   font-family: 'Segoe UI', sans-serif;
   min-height: 100vh;
-  }
+}
 
-  /* Titre et sous-titre */
-  .dashboard-header {
-    text-align: left;
-    margin-bottom: 2rem;
-  }
+/* Titre et sous-titre */
+.dashboard-header {
+  text-align: left;
+  margin-bottom: 2rem;
+}
 
-  .dashboard-header h1 {
-    font-size: 2rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-  }
+.dashboard-header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #393e46; /* Gris foncé pour le titre */
+  margin-bottom: 0.5rem;
+}
 
-  .dashboard-header p {
-    font-size: 1rem;
-    color: #7f8c8d;
-  }
+.dashboard-header p {
+  font-size: 1rem;
+  color: #777777; /* Gris moyen pour le sous-titre */
+}
 
-  /* Cartes de statistiques */
+/* Cartes de statistiques */
+.stats-cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-top: 3px solid #e63946; /* Bordure rouge en haut */
+}
+
+.stat-icon {
+  font-size: 1.5rem;
+  color: #e63946; /* Icône en rouge */
+}
+
+.stat-info h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #393e46; /* Gris foncé */
+  margin-bottom: 0.25rem;
+}
+
+.stat-info p {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0;
+}
+
+.stat-info p span {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 400;
+  color: #777777; /* Gris moyen */
+}
+
+/* Sections principales */
+.main-sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.section {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #e63946; /* Bordure rouge à gauche */
+}
+
+.section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #393e46; /* Gris foncé */
+  margin-bottom: 0.5rem;
+}
+
+.section p {
+  font-size: 0.9rem;
+  color: #777777; /* Gris moyen */
+  margin-bottom: 1rem;
+}
+
+.chart-placeholder {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed #bdc3c7; /* Bordure grise plus foncée */
+  border-radius: 10px;
+  color: #777777; /* Gris moyen */
+}
+
+/* Gestion des plats et régimes */
+.management-section {
+  background: #ffffff;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.management-section h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #393e46; /* Gris foncé */
+  margin-bottom: 1rem;
+}
+
+.btn-add {
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  background: linear-gradient(90deg, #ff0000,#500202);
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+}
+
+.btn-add:hover {
+  background-color: #d62839; /* Rouge plus foncé au survol */
+  transform: translateY(-1px);
+}
+
+/* Formulaire d'ajout de plat */
+.form-container {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  color: #393e46; /* Gris foncé */
+  margin-bottom: 0.5rem;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: #444;
+  transition: all 0.2s ease;
+}
+
+.form-control:focus {
+  border-color: #e63946; /* Rouge pour le focus */
+  outline: none;
+  box-shadow: 0 3px 6px rgba(230, 57, 70, 0.3); /* Ombre rouge légère */
+}
+
+.form-control[textarea] {
+  height: 100px;
+  resize: vertical;
+}
+
+.image-preview {
+  margin-top: 0.5rem;
+}
+
+.image-preview img {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.error {
+  color: #e63946; /* Rouge pour les erreurs */
+  font-size: 0.85rem;
+  margin-top: 0.25rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn-submit, .btn-cancel {
+  padding: 0.8rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-submit {
+  background-color: #e63946; /* Rouge pour soumettre */
+  color: white;
+}
+
+.btn-submit:hover {
+  background-color: #d62839; /* Rouge plus foncé au survol */
+  transform: translateY(-1px);
+}
+
+.btn-submit:disabled {
+  background-color: #fab3b8; /* Rouge pâle pour désactivé */
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background-color: #6c757d; /* Gris pour annuler */
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #5a6268; /* Gris plus foncé au survol */
+  transform: translateY(-1px);
+}
+
+/* Tableaux */
+.management-table {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 1.5rem;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #dee2e6; /* Gris clair pour la bordure */
+}
+
+th {
+  background: #f1f3f5; /* Gris très clair pour l'en-tête */
+  font-weight: 600;
+  color: #393e46; /* Gris foncé */
+}
+
+td {
+  color: #666; /* Gris moyen */
+}
+
+/* Alternance de couleurs pour les lignes du tableau */
+tr:nth-child(even) {
+  background-color: #f8f9fa; /* Gris très clair */
+}
+
+tr:hover {
+  background-color: #f0f2f5; /* Gris clair au survol */
+}
+
+.plat-image {
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.btn-edit, .btn-delete, .btn-assign, .btn-unassign {
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  margin-right: 0.5rem;
+  transition: all 0.2s ease;
+}
+.btn-edit {
+  background: linear-gradient(90deg, #ffbb00, #c47c00);
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #2471a3;
+}
+
+.btn-delete {
+  background: linear-gradient(90deg, #ff0033, #c40000);
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+
+.btn-assign {
+  background: linear-gradient(90deg, #f2a469,#d00707);
+  color: white;
+}
+
+.btn-assign:hover {
+  background-color: #00b7b3;
+}
+
+.btn-unassign {
+  background: linear-gradient(90deg, #e36c0b, #500202); /* Orange pour différencier */
+  color: white;
+  margin-top: 0.5rem;
+  width: 100%; /* S'étend sur toute la largeur de la mini-carte */
+}
+
+.btn-unassign:hover {
+  background: linear-gradient(90deg, #ff7700, #500202);
+}
+
+
+/* Modale */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 10px;
+  width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  border-top: 4px solid #e63946; /* Bordure rouge en haut */
+}
+
+.modal-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #393e46; /* Gris foncé */
+  margin-bottom: 1rem;
+}
+
+.plat-list {
+  margin: 10px 0;
+}
+
+.plat-list label {
+  display: block;
+  margin: 5px 0;
+  color: #444;
+}
+
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Section des régimes harmonisée */
+.regime-container {
+  padding: 1.5rem 0;
+  background-color: transparent;
+}
+
+.regime-card {
+  margin-bottom: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  border: 1px solid #dee2e6; /* Bordure grise */
+}
+
+.regime-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.regime-card mat-card-title {
+  background: linear-gradient(90deg, #c50303, #efb8b8);/* Rouge pour le titre */
+  color: white;
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.regime-card mat-card-title:hover {
+  background: linear-gradient(90deg, #ec8989, #c50303);
+}
+
+.regime-card mat-card-content {
+  padding: 1rem;
+  background-color: #ffffff;
+}
+
+/* Mini-cartes pour les plats recommandés */
+.plat-mini-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.mini-card {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  width: 190px;
+  padding: 0.5rem;
+  transition: all 0.2s ease;
+  border-bottom: 3px solid #e63946; /* Bordure rouge en bas */
+}
+
+.mini-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.mini-card-img {
+  width: 100%;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 0.5rem;
+}
+
+.mini-card-content {
+  text-align: center;
+}
+
+.mini-card-content h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #393e46; /* Gris foncé */
+  margin: 0 0 0.25rem 0;
+}
+
+.mini-card-content p {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
   .stats-cards {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: repeat(2, 1fr);
   }
-
-  .stat-card {
-    background: #ffffff;
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-  }
-
-  .stat-icon {
-    font-size: 1.5rem;
-  }
-
-  .stat-info h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0.25rem;
-  }
-
-  .stat-info p {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #2c3e50;
-    margin: 0;
-  }
-
-  .stat-info p span {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 400;
-    color: #7f8c8d;
-  }
-
-  /* Sections principales */
   .main-sections {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    grid-template-columns: 1fr;
+  }
+  .plat-mini-cards {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 576px) {
+  .stats-cards {
+    grid-template-columns: 1fr;
+  }
+  .dashboard-header h1 {
+    font-size: 1.5rem;
+  }
+  .section h2, .management-section h2 {
+    font-size: 1.2rem;
+  }
+  .modal-content {
+    width: 90%;
+  }
+  .mini-card {
+    width: 150px;
+  }
+  .mini-card-img {
+    height: 80px;
+  }
+}
+/* Styles pour les graphiques */
+.chart-container {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .main-sections {
+    flex-direction: column;
   }
 
   .section {
-    background: #ffffff;
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  }
-
-  .section h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-  }
-
-  .section p {
-    font-size: 0.9rem;
-    color: #7f8c8d;
-    margin-bottom: 1rem;
-  }
-
-  .chart-placeholder {
-    height: 200px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px dashed #ddd;
-    border-radius: 10px;
-    color: #7f8c8d;
-  }
-
-  /* Gestion des plats et régimes */
-  .management-section {
-    background: #ffffff;
-    border-radius: 15px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    margin-bottom: 2rem;
-  }
-
-  .management-section h2 {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 1rem;
-  }
-
-  .btn-add {
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    background-color: #6c5ce7;
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    margin-bottom: 1rem;
-  }
-
-  .btn-add:hover {
-    background-color: #5a4cd1;
-    transform: translateY(-1px);
-  }
-
-  /* Formulaire d'ajout de plat */
-  .form-container {
-    background: #f8f9fa;
-    padding: 1.5rem;
-    border-radius: 10px;
-    margin-bottom: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  }
-
-  .form-group {
-    margin-bottom: 1rem;
-  }
-
-  .form-group label {
-    display: block;
-    font-weight: 500;
-    color: #2c3e50;
-    margin-bottom: 0.5rem;
-  }
-
-  .form-control {
     width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    color: #444;
-    transition: all 0.2s ease;
   }
 
-  .form-control:focus {
-    border-color: #6c5ce7;
-    outline: none;
-    box-shadow: 0 3px 6px rgba(108, 92, 231, 0.3);
-  }
-
-  .form-control[textarea] {
-    height: 100px;
-    resize: vertical;
-  }
-
-  .image-preview {
-    margin-top: 0.5rem;
-  }
-
-  .image-preview img {
-    max-width: 200px;
-    max-height: 200px;
-    border-radius: 8px;
-    object-fit: cover;
-  }
-
-  .error {
-    color: #e74c3c;
-    font-size: 0.85rem;
-    margin-top: 0.25rem;
-  }
-
-  .form-actions {
-    display: flex;
-    gap: 1rem;
-  }
-
-  .btn-submit, .btn-cancel {
-    padding: 0.8rem 1.5rem;
-    border-radius: 12px;
-    font-weight: 500;
-    font-size: 0.95rem;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s ease;
-  }
-
-  .btn-submit {
-    background-color: #6c5ce7;
-    color: white;
-  }
-
-  .btn-submit:hover {
-    background-color: #5a4cd1;
-    transform: translateY(-1px);
-  }
-
-  .btn-submit:disabled {
-    background-color: #a29bfe;
-    cursor: not-allowed;
-  }
-
-  .btn-cancel {
-    background-color: #e74c3c;
-    color: white;
-  }
-
-  .btn-cancel:hover {
-    background-color: #c0392b;
-    transform: translateY(-1px);
-  }
-
-  /* Tableaux */
-  .management-table {
-    width: 100%;
-    overflow-x: auto;
-    margin-bottom: 1.5rem;
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th, td {
-    padding: 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid #eee;
-  }
-
-  th {
-    background: #f8f9fa;
-    font-weight: 600;
-    color: #2c3e50;
-  }
-
-  td {
-    color: #666;
-  }
-
-  .plat-image {
-    max-width: 100px;
-    max-height: 100px;
-    border-radius: 5px;
-    object-fit: cover;
-  }
-
-  .btn-edit, .btn-delete, .btn-assign, .btn-unassign {
-    padding: 0.5rem 1rem;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    border: none;
-    cursor: pointer;
-    margin-right: 0.5rem;
-    transition: all 0.2s ease;
-  }
-
-  .btn-edit {
-    background-color: #2980b9;
-    color: white;
-  }
-
-  .btn-edit:hover {
-    background-color: #2471a3;
-  }
-
-  .btn-delete {
-    background-color: #e74c3c;
-    color: white;
-  }
-
-  .btn-delete:hover {
-    background-color: #c0392b;
-  }
-
-  .btn-assign {
-    background-color: #00cec9;
-    color: white;
-  }
-
-  .btn-assign:hover {
-    background-color: #00b7b3;
-  }
-
-  .btn-unassign {
-    background-color: #f39c12; /* Orange pour différencier */
-    color: white;
-    margin-top: 0.5rem;
-    width: 100%; /* S'étend sur toute la largeur de la mini-carte */
-  }
-
-  .btn-unassign:hover {
-    background-color: #e67e22;
-  }
-
-  /* Modale */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .modal-content {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    width: 400px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  }
-
-  .modal-content h3 {
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 1rem;
-  }
-
-  .plat-list {
-    margin: 10px 0;
-  }
-
-  .plat-list label {
-    display: block;
-    margin: 5px 0;
-    color: #444;
-  }
-
-  .modal-actions {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-  }
-
-  /* Section des régimes harmonisée */
-  .regime-container {
-    padding: 1.5rem 0;
-    background-color: transparent;
-  }
-
-  .regime-card {
-    margin-bottom: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s ease;
-  }
-
-  .regime-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .regime-card mat-card-title {
-    background-color: #6c5ce7;
-    color: white;
-    padding: 1rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-  }
-
-  .regime-card mat-card-title:hover {
-    background-color: #5a4cd1;
-  }
-
-  .regime-card mat-card-content {
-    padding: 1rem;
-    background-color: #ffffff;
-  }
-
-  /* Mini-cartes pour les plats recommandés */
-  .plat-mini-cards {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-  }
-
-  .mini-card {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    width: 190px;
-    padding: 0.5rem;
-    transition: all 0.2s ease;
-  }
-
-  .mini-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  }
-
-  .mini-card-img {
-    width: 100%;
-    height: 100px;
-    object-fit: cover;
-    border-radius: 5px;
-    margin-bottom: 0.5rem;
-  }
-
-  .mini-card-content {
-    text-align: center;
-  }
-
-  .mini-card-content h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #2c3e50;
-    margin: 0 0 0.25rem 0;
-  }
-
-  .mini-card-content p {
-    font-size: 0.85rem;
-    color: #666;
-    margin: 0;
-  }
-
-  /* Responsive Design */
-  @media (max-width: 992px) {
-    .stats-cards {
-      grid-template-columns: repeat(2, 1fr);
-    }
-    .main-sections {
-      grid-template-columns: 1fr;
-    }
-    .plat-mini-cards {
-      justify-content: center;
-    }
-  }
-
-  @media (max-width: 576px) {
-    .stats-cards {
-      grid-template-columns: 1fr;
-    }
-    .dashboard-header h1 {
-      font-size: 1.5rem;
-    }
-    .section h2, .management-section h2 {
-      font-size: 1.2rem;
-    }
-    .modal-content {
-      width: 90%;
-    }
-    .mini-card {
-      width: 150px;
-    }
-    .mini-card-img {
-      height: 80px;
-    }
-  }
-  /* Styles pour les graphiques */
   .chart-container {
-    position: relative;
-    width: 100%;
-    height: 300px;
-    margin: 0 auto;
+    height: 250px;
   }
-
-  @media (max-width: 768px) {
-    .main-sections {
-      flex-direction: column;
-    }
-
-    .section {
-      width: 100%;
-    }
-
-    .chart-container {
-      height: 250px;
-    }
-  }
-  /* Styles pour la barre de navigation */
+}
+/* Styles pour la barre de navigation */
 .section-nav {
-    background: linear-gradient(135deg, #ffffff, #f5f7fa);
-
-  padding: 25px 0 ;
+  background: linear-gradient(135deg, #ffffff, #f5f7fa);
+  padding: 25px 0;
   position: sticky; /* Fixe la barre en haut lors du défilement */
   top: 0;
   z-index: 1000; /* S'assure que la barre reste au-dessus des autres éléments */
@@ -515,6 +529,8 @@
   margin: 0 auto;
   display: flex;
   justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-bottom: 2px solid #e63946; /* Bordure rouge en bas */
 }
 
 .section-nav ul {
@@ -532,7 +548,7 @@
 
 .section-nav a {
   text-decoration: none;
-  color: #333; /* Couleur des liens */
+  color: #495057; /* Gris foncé pour les liens */
   font-size: 13.5px;
   font-weight: 500;
   padding: 10px 15px;
@@ -543,12 +559,12 @@
 
 .section-nav a:hover {
   background-color: #f0f0f0; /* Fond gris clair au survol */
-  color: #007bff; /* Couleur bleue au survol */
+  color: #e63946; /* Rouge au survol */
 }
 
 /* Style actif (optionnel, si vous voulez indiquer la section active) */
 .section-nav a.active {
-  background-color: #007bff;
+  background-color: #e63946; /* Rouge pour actif */
   color: #ffffff;
 }
 
@@ -582,12 +598,12 @@
 }
 
 .notification-banner.success {
-  background-color: #2ecc71;
+  background-color: #28a745; /* Vert pour succès */
   color: white;
 }
 
 .notification-banner.error {
-  background-color: #e74c3c;
+  background-color: #e63946; /* Rouge pour erreur */
   color: white;
 }
 
@@ -654,38 +670,34 @@
   font-weight: 500;
   font-size: 0.95rem;
   background-color: #ffffff;
-  color: #444;
-  border: 1px solid #ddd;
+  color: #495057; /* Gris foncé */
+  border: 1px solid #dee2e6; /* Bordure grise */
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: none;
 }
 
 .btn-pagination:hover:not(:disabled) {
-  background-color: #f1f3f5;
+  background-color: #f1f3f5; /* Gris très clair */
   transform: translateY(-1px);
+  color: #e63946; /* Rouge au survol */
 }
 
 .btn-pagination:disabled {
-  background-color: #e9ecef;
+  background-color: #e9ecef; /* Gris clair */
   color: #999;
   cursor: not-allowed;
 }
 
 .page-info {
   font-size: 0.95rem;
-  color: #2c3e50;
+  color: #495057; /* Gris foncé */
   font-weight: 500;
 }
+
 .material-icons {
   font-size: 18px;
   vertical-align: middle;
-}
-
-/* Autres styles existants */
-.btn-add, .btn-edit, .btn-delete, .btn-assign {
-  padding: 5px 10px;
-  margin: 0 5px;
 }
 
 /* Modern Dashboard Navigation */
@@ -698,6 +710,7 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
   padding: 0;
   margin-bottom: 2rem;
+  border-bottom: 3px solid #e63946; /* Bordure rouge en bas */
 }
 
 .nav-container {
@@ -715,7 +728,7 @@
 .back-link {
   display: flex;
   align-items: center;
-  color: #2c3e50;
+  color: #495057; /* Gris foncé */
   text-decoration: none;
   font-weight: 500;
   padding: 0.5rem;
@@ -725,7 +738,7 @@
 
 .back-link:hover {
   background-color: #f5f7fa;
-  color: #6c5ce7;
+  color: #e63946; /* Rouge au survol */
 }
 
 .back-link i {
@@ -749,7 +762,7 @@
   display: flex;
   align-items: center;
   padding: 1.25rem 1.5rem;
-  color: #2c3e50;
+  color: #495057; /* Gris foncé */
   font-weight: 500;
   text-decoration: none;
   cursor: pointer;
@@ -762,7 +775,7 @@
 }
 
 .nav-link:hover {
-  color: #6c5ce7;
+  color: #e63946; /* Rouge au survol */
 }
 
 .nav-link::after {
@@ -773,7 +786,7 @@
   transform: translateX(-50%);
   width: 0;
   height: 3px;
-  background-color: #6c5ce7;
+  background-color: #e63946; /* Rouge pour la ligne */
   transition: width 0.3s ease;
 }
 
@@ -782,7 +795,7 @@
 }
 
 .nav-link.active {
-  color: #6c5ce7;
+  color: #e63946; /* Rouge pour actif */
 }
 
 .nav-link.active::after {
@@ -831,30 +844,37 @@
 }
 
 /* Styles for the AI Recommendation button */
+.button-container {
+  display: flex;
+  width: 100%; /* Ajustez selon le contexte */
+}
+
 .btn-pdf {
-  padding: 0.8rem 1.5rem;
-  border-radius: 12px;
-  font-weight: 500;
-  font-size: 0.95rem;
-  background-color: #34495e;
-  color: white;
+  background: linear-gradient(90deg, #ff0000, #500202);
+  color: #fff;
+  padding: 10px 20px;
   border: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-left: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin-left: auto;
 }
 
 .btn-pdf:hover {
-  background-color: #2c3e50;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(90deg,  #500202,#ff0000);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transform: scale(1.05);
 }
 
 .btn-pdf i {
-  font-size: 1rem;
+  vertical-align: middle;
 }
 
 /* For the responsive layout when both buttons are present */

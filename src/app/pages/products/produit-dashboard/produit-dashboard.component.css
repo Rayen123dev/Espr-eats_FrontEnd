@@ -35,11 +35,11 @@
 
 .dashboard-title i {
   margin-right: 12px;
-  color: #3498db;
+  color: #ff0000;
 }
 
 .dashboard-actions button {
-  background: #3498db;
+  background: #ff0000;
   color: #fff;
   border: none;
   padding: 10px 18px;
@@ -70,7 +70,7 @@
 }
 
 .dashboard-actions button:hover {
-  background: #2980b9;
+  background: #b93a29;
   transform: translateY(-3px);
   box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
 }
@@ -118,11 +118,11 @@
   left: 0;
   width: 4px;
   height: 100%;
-  background: #3498db;
+  background: #ff0000;
   transition: all 0.3s;
 }
 
-.stat-card.total-products::before { background: #3498db; }
+.stat-card.total-products::before { background: #ff0000; }
 .stat-card.avg-stock::before { background: #2ecc71; }
 .stat-card.low-stock::before { background: #f39c12; }
 .stat-card.out-of-stock::before { background: #e74c3c; }
@@ -141,7 +141,7 @@
   transform: scale(1.1);
 }
 
-.total-products .icon-large { color: #3498db; }
+.total-products .icon-large { color: #ff0000; }
 .avg-stock .icon-large { color: #2ecc71; }
 .low-stock .icon-large { color: #f39c12; }
 .out-of-stock .icon-large { color: #e74c3c; }
@@ -181,7 +181,7 @@
   transition: width 1s ease-in-out;
 }
 
-.fill-total { background: linear-gradient(to right, #3498db, #2980b9); }
+.fill-total { background: linear-gradient(to right, #ff0000, #2980b9); }
 .fill-avg { background: linear-gradient(to right, #2ecc71, #27ae60); }
 .fill-low { background: linear-gradient(to right, #f39c12, #e67e22); }
 .fill-out { background: linear-gradient(to right, #e74c3c, #c0392b); }
@@ -258,7 +258,7 @@
 .product-info i {
   margin-right: 12px;
   font-size: 16px;
-  color: #3498db;
+  color: #ff0000;
   width: 20px;
 }
 
@@ -403,7 +403,7 @@
   border-radius: 12px;
   text-align: center;
   font-weight: 600;
-  background: #3498db;
+  background: #ff0000;
   color: #fff;
   border: none;
   transition: all 0.3s;
@@ -430,7 +430,7 @@
 }
 
 .add-project-sidebar:hover {
-  background: #2980b9;
+  background: #b94629;
   transform: translateY(-3px);
   box-shadow: 0 8px 15px rgba(52, 152, 219, 0.4);
 }
@@ -467,7 +467,7 @@
 }
 
 .metismenu li a.active {
-  background: linear-gradient(90deg, #3498db, #2980b9);
+  background: linear-gradient(90deg, #ff0000, #b93a29);
   color: #fff;
   box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
 }
@@ -485,7 +485,7 @@
 }
 
 .metismenu li a:hover i {
-  color: #3498db;
+  color: #ff0000;
   transform: scale(1.1);
 }
 
@@ -507,7 +507,7 @@
   height: 0;
   top: 50%;
   left: 5px;
-  background: #3498db;
+  background: #ff0000;
   border-radius: 5px;
   transform: translateY(-50%);
   transition: height 0.3s ease;

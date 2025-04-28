@@ -29,7 +29,7 @@
   left: -15px;
   height: 100%;
   width: 4px;
-  background: linear-gradient(to bottom, #1976d2, #1565c0);
+  background: linear-gradient(to bottom, #d21919, #f06060);
   border-radius: 4px;
 }
 
@@ -62,7 +62,7 @@
 }
 
 .form-control:focus {
-  border-color: #1976d2;
+  border-color: #d21919;
   box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
   outline: none;
   background-color: #ffffff;
@@ -145,13 +145,13 @@ textarea.form-control {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #1976d2, #1565c0);
+  background: linear-gradient(135deg, #d21919, #f06060);
   color: white;
   box-shadow: 0 4px 10px rgba(25, 118, 210, 0.25);
 }
 
 .btn-primary:hover:not([disabled]) {
-  background: linear-gradient(135deg, #1565c0, #0d47a1);
+  background: linear-gradient(135deg, #f06060, #a1230d);
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(25, 118, 210, 0.3);
 }
@@ -162,7 +162,7 @@ textarea.form-control {
 }
 
 .btn-primary[disabled] {
-  background: linear-gradient(135deg, #64b5f6, #42a5f5);
+  background: linear-gradient(135deg, #f66464, #e01f1f);
   cursor: not-allowed;
   opacity: 0.7;
   box-shadow: none;
@@ -187,8 +187,8 @@ textarea.form-control {
 
 .alert-success {
   background-color: #e3f2fd;
-  color: #0d47a1;
-  border-left: 4px solid #1976d2;
+  color: #f37272;
+  border-left: 4px solid #d21919;
 }
 
 .alert-success::before {
@@ -252,6 +252,6 @@ input[type="number"]::-webkit-inner-spin-button {
 
 /* Add a subtle scale effect on form focus */
 .form-group:focus-within label {
-  color: #1976d2;
+  color: #d21919;
   transform: translateY(-1px);
 }
