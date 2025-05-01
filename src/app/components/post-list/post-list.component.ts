@@ -6,6 +6,11 @@ import { TranslationService } from 'src/app/services/translation.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { SearchService } from 'src/app/services/search.service';
 import { ImageDescriptionService } from 'src/app/services/image-description.service';
+import { AuthService } from 'src/app/services/auth.service';
+
+import { BadWordService } from 'src/app/services/bad-word.service';
+import { LoginService } from 'src/app/login.service';
+
 
 @Component({
   selector: 'app-post-list',
@@ -15,7 +20,7 @@ import { ImageDescriptionService } from 'src/app/services/image-description.serv
 export class PostListComponent implements OnInit, OnDestroy {
   posts: any[] = [];
   private postUpdateSubscription!: Subscription;
-  currentUserId: number = 1; // Replace 1 with the actual logic to get the current user ID
+  currentUserId: number | null = null; 
   selectedFile: File | null = null;
   updatedFile: File | null = null;
   replyingToPostId: number | null = null;
@@ -62,12 +67,20 @@ export class PostListComponent implements OnInit, OnDestroy {
      private translationService: TranslationService,
      private searchService: SearchService,
      private imageDescriptionService: ImageDescriptionService,
+     private authService: AuthService,
+     private loginService: LoginService,
+     private badWordService: BadWordService,
      private http: HttpClient) {}
 
   ngOnInit(): void {
     this.loadPosts();
     this.checkPostEngagements();
+    this.loadBannedWords();
     //setInterval(() => this.checkPostEngagements(), 30000); //30 secs 
+    
+
+    this.currentUserId = this.loginService.getUserIdFromToken();
+    console.log('LoginService current user ID:', this.currentUserId);
 
     // Listen for post updates
     this.postUpdateSubscription = this.postService.getPostsUpdatedListener()
@@ -76,49 +89,7 @@ export class PostListComponent implements OnInit, OnDestroy {
       });
   }
 
-  /*loadPosts(): void {
-    this.isSearching = false;
-    this.postService.getAllPosts().subscribe({
-      next: (data) => {
-        this.posts = data.map(post => ({
-          ...post,
-          editing: false,
-          updatedContent: post.content,
-          reactions: post.reactions || [] // Ensure reactions exists
-        }));
-        console.log('Loaded posts with reactions:', this.posts);
-      },
-      error: (err) => console.error(err)
-    });
-  }*/
-
-    /*loadPosts(page: number = 0, size: number = 5): void {
-      this.isSearching = false;
-      
-      this.postService.getAllPosts().subscribe({
-        next: (response: any) => {
-          this.posts = response.content.map((post: any) => ({
-            ...post,
-            editing: false,
-            updatedContent: post.content,
-            reactions: post.reactions || [] // Maintain reactions handling
-          }));
-          
-          // Pagination metadata
-          this.currentPage = response.number; // Current page number
-          this.totalPages = response.totalPages; // Total pages available
-          this.totalPosts = response.totalElements; // Total posts available
-          
-          console.log('Loaded posts with pagination:', {
-            posts: this.posts,
-            currentPage: this.currentPage,
-            totalPages: this.totalPages,
-            totalPosts: this.totalPosts
-          });
-        },
-        error: (err) => console.error('Error loading posts:', err)
-      });
-    }*/
+ 
 
     loadPosts(): void {
       this.postService.getAllPosts().subscribe({
@@ -126,9 +97,10 @@ export class PostListComponent implements OnInit, OnDestroy {
           this.allPosts = response.map((post: any) => ({
             ...post,
             editing: false,
+            filteredContent: this.filterContent(post.content),
             updatedContent: post.content,
             reactions: post.reactions || [],
-            gisTrendin: (post.reactions?.length || 0) > 3
+            isTrending: (post.reactions?.length || 0) > 3
           }));
     
           this.totalPosts = this.allPosts.length;
@@ -169,6 +141,10 @@ export class PostListComponent implements OnInit, OnDestroy {
     }
   
     if (confirm('Are you sure you want to delete this post?')) {
+      if (this.currentUserId === null) {
+        console.error('Cannot add reaction: User not logged in');
+        return;
+      }
       this.postService.deletePost(numericPostId, this.currentUserId).subscribe({
         next: () => {
           this.posts = this.posts.filter(post => post.postID === numericPostId);
@@ -220,6 +196,7 @@ export class PostListComponent implements OnInit, OnDestroy {
   }*/
   getMediaUrl(mediaPath: string): string {
     return `http://localhost:8081/forum-uploads/${mediaPath}`;
+    //return `http://localhost:8081/uploaded/documents/${mediaPath}`;
   }
 
   isImage(url: string): boolean {
@@ -310,6 +287,10 @@ export class PostListComponent implements OnInit, OnDestroy {
 
   
   addReaction(postId: number, emojiType: string): void {
+    if (this.currentUserId === null) {
+      console.error('Cannot add reaction: User not logged in');
+      return;
+    }
     this.reactionService.toggleReaction(postId, this.currentUserId, emojiType)
       .subscribe({
         next: (response) => {
@@ -439,7 +420,7 @@ checkPostEngagements() {
 }*/
 
 checkPostEngagements() {
-  this.http.get('http://localhost:8081/engagement/check', { responseType: 'text' }).subscribe({
+  this.http.get('http://localhost:8089/forum/engagement/check', { responseType: 'text' }).subscribe({
     next: (response) => console.log("Engagement check triggered successfully:", response),
     error: (err: any) => console.error("Error checking engagement:", err)
   });
@@ -546,7 +527,7 @@ describeImage(post: any): void {
   }
 
 
-  const fullImageUrl = `http://localhost:8081/forum-uploads/${post.mediaURL}`;
+  const fullImageUrl = `http://localhost:8089/forum/forum-uploads/${post.mediaURL}`;
 
 
 this.http.post<any>('http://localhost:5000/generate-description', {
@@ -559,6 +540,31 @@ this.http.post<any>('http://localhost:5000/generate-description', {
     console.error(err);
   }
 );
+}
+
+//bad-word
+bannedWords: string[] = [];
+newBannedWord = '';
+showBannedWordsPanel = false;
+
+loadBannedWords(): void {
+  this.bannedWords = this.badWordService.getBannedWords();
+}
+
+
+toggleBannedWordsPanel(): void {
+  this.showBannedWordsPanel = !this.showBannedWordsPanel;
+}
+  
+filterContent(content: string): string {
+  const bannedWords = this.badWordService.getBannedWords();
+  
+  bannedWords.forEach(word => {
+    const regex = new RegExp(word, 'gi');
+    content = content.replace(regex, '*'.repeat(word.length));
+  });
+  
+  return content;
 }
 
 

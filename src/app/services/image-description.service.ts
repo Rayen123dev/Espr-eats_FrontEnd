@@ -11,7 +11,7 @@ export class ImageDescriptionService {
   getImageDescription(image: File) {
     const formData = new FormData();
     formData.append('image', image);
-    return this.http.post<{ description: string }>('http://localhost:5000/describe', formData);
+    return this.http.post<{ description: string }>('http://172.20.10.2:5012/describe', formData);
   }
 
 describeImageFile(file: File) {

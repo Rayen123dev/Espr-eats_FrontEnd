@@ -1,7 +1,8 @@
 <!-- Toast Notification -->
-<!-- Toast Notification -->
 <div class="toast" *ngIf="showToast" [ngClass]="toastType">
   <div class="toast-icon">
+    <i *ngIf="toastType === 'success'" class="fas fa-check-circle"></i>
+    <i *ngIf="toastType === 'error'" class="fas fa-exclamation-circle"></i>
     <svg
       *ngIf="toastType === 'success'"
       width="24"
@@ -15,7 +16,6 @@
     >
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
-
     <svg
       *ngIf="toastType === 'error'"
       width="24"
@@ -38,35 +38,27 @@
   </div>
 </div>
 
-
-
-
 <!-- Confirmation Container -->
 <div class="confirmation-container" *ngIf="subscriptionDetails; else loading">
   <!-- Left Panel -->
   <div class="left-panel">
     <div class="header">
-      <h2>Subscribe to {{ subscriptionDetails.typeAbonnement | titlecase }}</h2>
-      <h1>{{ subscriptionDetails.cout.toFixed(2) }} Dt</h1>
     </div>
+    <h3>Subscribe to {{ subscriptionDetails.typeAbonnement | titlecase }}</h3>
+    <h2>{{ subscriptionDetails.cout.toFixed(2) }} Dt</h2>
     <div class="details">
       <div class="detail-row">
-        <span>Start Date</span>
+        <span><i class="fas fa-calendar-alt"></i> Start Date</span>
         <span>{{ subscriptionDetails.dateDebut }}</span>
       </div>
       <div class="detail-row">
-        <span>Remaining Days</span>
+        <span><i class="fas fa-clock"></i> Remaining Days</span>
         <span>{{ subscriptionDetails.remainingDays }}</span>
       </div>
       <div class="detail-row">
-        <span>Confirmed</span>
+        <span><i class="fas fa-check"></i> Confirmed</span>
         <span>{{ subscriptionDetails.isConfirmed ? 'Yes' : 'No' }}</span>
       </div>
-    </div>
-    <div class="footer">
-      Powered by Stripe | 
-      <a href="#">Terms</a> | 
-      <a href="#">Privacy</a>
     </div>
   </div>
 
@@ -76,12 +68,10 @@
     <hr/>
     <div style="display: flex; justify-content: space-between;">
       <div style="display: flex; flex-direction: column;">
-    <b>{{ subscriptionDetails.typeAbonnement | titlecase }}</b>
-    votre plan va etre expiré le {{ subscriptionDetails.dateFin }}<br/>
-    <p class="voir-plus" style="padding: 10px 0px; cursor: pointer;">Voir détails<i style="font-size: 13px; padding: 0px 2px;" class="fas fa-chevron-down"></i></p>
+        <b>{{ subscriptionDetails.typeAbonnement | titlecase }}</b>
+        votre plan va etre expiré le {{ subscriptionDetails.dateFin }}<br/>
+      </div>
     </div>
-    </div>
-
     <br/>
     <br/>
     <br/>
@@ -90,7 +80,7 @@
     <h3>Entrer Code de Verification</h3>
     <p>S'il Vous plait entrez le code de verification que vous avez reçu pour confirmer votre payment.</p>
     <form (ngSubmit)="submitCode()">
-      <label for="code">Code de Verification</label>
+      <label for="code"><i class="fas fa-lock"></i> Code de Verification</label>
       <input
         type="text"
         id="code"
@@ -100,20 +90,16 @@
         required
       />
       <button type="submit" class="pay-button" [disabled]="submitting">
-        {{ submitting ? 'Submitting...' : 'Soumettre Code' }}
+        <i class="fas fa-credit-card"></i> {{ submitting ? 'Submitting...' : 'Soumettre Code' }}
       </button>
     </form>
-    
-
-    <!-- Footer -->
-    
-
   </div>
-
 </div>
 
 <div class="custom-toast" *ngIf="showToast" [ngClass]="{'success': toastType === 'success', 'error': toastType === 'error'}">
   <div class="toast-icon">
+    <i *ngIf="toastType === 'success'" class="fas fa-check-circle"></i>
+    <i *ngIf="toastType === 'error'" class="fas fa-exclamation-circle"></i>
     <svg *ngIf="toastType === 'success'" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="20 6 9 17 4 12"></polyline>
     </svg>
@@ -134,4 +120,3 @@
 <ng-template #loading>
   Loading subscription details...
 </ng-template>
-

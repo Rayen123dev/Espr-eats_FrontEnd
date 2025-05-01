@@ -174,7 +174,7 @@ export class ProductListComponent implements OnInit {
       reader.onload = (e: any) => {
         const imageData = e.target.result;
         codeReader.decodeFromImageUrl(imageData)
-          .then(result => {
+          .then((result: { getText: () => string; }) => {
             const barcode = result.getText().trim();
         
             this.productService.getProductByBarcode(barcode).subscribe(
@@ -214,7 +214,7 @@ export class ProductListComponent implements OnInit {
               }
             );
           })
-          .catch(error => {
+          .catch((error: any) => {
             console.error('Error decoding barcode:', error);
           });
       };
