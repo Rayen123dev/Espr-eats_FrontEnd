@@ -1,6 +1,7 @@
 {
   "name": "pi",
   "version": "0.0.0",
+  "homepage": "https://rayen123dev.github.io/Espr-eats_FrontEnd",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
